@@ -1,0 +1,6 @@
+id,received_date,source,type,from,title,status,notes
+INB-001,2026-04-22,Telegram,message,Minh Nguyen,Send proposal draft,new,Needs follow-up after draft is ready
+INB-002,2026-04-23,Google Sheets,lead,An Pham,Interested in Biomedia SI,triaged,Potential pilot customer
+INB-003,2026-04-24,Email,document,Linh Tran,Share clinical reference list,new,Turn into resource note later
+INB-004,2026-04-25,Telegram,idea,Self,Automate weekly follow-up digest,processed,Candidate n8n workflow
+INB-005,2026-04-26,Manual,note,Self,Personal OS dashboard cleanup,new,Keep simple until integrations are live

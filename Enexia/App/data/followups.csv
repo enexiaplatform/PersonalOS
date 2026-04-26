@@ -1,0 +1,6 @@
+id,contact,due_date,status,channel,topic,last_touch
+FUP-001,Minh Nguyen,2026-04-26,due,Telegram,Proposal draft,2026-04-22
+FUP-002,An Pham,2026-04-28,scheduled,Email,Biomedia SI pilot,2026-04-23
+FUP-003,Linh Tran,2026-04-30,scheduled,Email,Clinical reference list,2026-04-24
+FUP-004,Dr. Hoang Le,2026-05-03,scheduled,Telegram,BioWiki collaboration,2026-04-20
+FUP-005,Self,2026-04-25,overdue,Manual,Weekly dashboard review,2026-04-18

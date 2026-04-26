@@ -1,0 +1,6 @@
+id,title,status,priority,due_date,owner,source
+TSK-001,Map n8n inbox workflow,open,high,2026-04-28,You,Manual
+TSK-002,Create Google Sheets schema,in-progress,high,2026-04-29,You,Google Sheets
+TSK-003,Review Telegram command list,open,medium,2026-05-01,You,Telegram
+TSK-004,Clean sample contact records,done,low,2026-04-24,You,Manual
+TSK-005,Define follow-up status values,open,medium,2026-04-30,You,Manual

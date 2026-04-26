@@ -1,0 +1,6 @@
+id,name,organization,role,email,telegram,source,status,last_contact
+CON-001,Minh Nguyen,Independent,Advisor,minh@example.com,@minh_nguyen,Telegram,active,2026-04-22
+CON-002,An Pham,Biomedia,Commercial Lead,an.pham@example.com,@anpham,Google Sheets,prospect,2026-04-23
+CON-003,Linh Tran,University Lab,Researcher,linh.tran@example.com,,Email,active,2026-04-24
+CON-004,Dr. Hoang Le,BioWiki Network,Collaborator,hoang.le@example.com,@drhoangle,Manual,warm,2026-04-20
+CON-005,Ops Bot,Personal OS,Automation,,@personal_os_bot,Telegram,system,2026-04-26
