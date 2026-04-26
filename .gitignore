@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+ENV/
+env/
+.env
+
+# Data
+Enexia/App/data/jobs.json
+Enexia/App/data/logs.json
+
+# IDEs and Tools
+.vscode/
+.idea/
+.gemini/
+.DS_Store
+
+# Vault (Optional: Uncomment if you don't want to push your personal notes)
+# Enexia/Vault/
