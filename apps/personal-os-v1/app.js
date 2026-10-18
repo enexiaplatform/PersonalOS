@@ -117,7 +117,7 @@ function renderMonthly(){
  '<label>Next-month decisions<textarea name="next" placeholder="Continue / Accelerate / Pause"></textarea></label>'+
  '<label>Capacity & sustainability<textarea name="capacity" placeholder="Workload, MBA, health, relationships"></textarea></label>'+
  '<div class="section-header"><h3>Optional measured metrics</h3></div>'+
- '<div class="form-grid"><label>Saving rate (%)<input type="number" min="-100" max="100" step=".1" name="saving" placeholder="Ví dụ 28.5"></label><label>Workout sessions<input type="number" min="0" max="100" step="1" name="workouts" placeholder="Số buổi thực tế"></label><label>MBA study hours<input type="number" min="0" max="300" step=".5" name="study" placeholder="Nếu đang học"></label><label>Energy (1–5)<input type="number" min="1" max="5" step="1" name="energy" placeholder="Tùy chọn"></label></div>'+
+ '<div class="form-grid"><label>Servicebio revenue attainment (%)<input type="number" min="0" step=".1" name="revenue" placeholder="Chỉ dùng số liệu được phép"></label><label>Qualified pipeline coverage (×)<input type="number" min="0" step=".1" name="pipeline" placeholder="Target ≥3×"></label><label>Forecast error (%)<input type="number" min="0" step=".1" name="forecast" placeholder="Q2 ≤20%, Q4 ≤15%"></label><label>Productive distributors<input type="number" min="0" step="1" name="partners" placeholder="Theo scorecard thực tế"></label><label>MBA study hours<input type="number" min="0" max="300" step=".5" name="study" placeholder="MBA Apr–May"></label><label>Saving rate (%)<input type="number" min="-100" max="100" step=".1" name="saving" placeholder="Base 25%, stretch 35%"></label><label>Emergency reserve (months)<input type="number" min="0" step=".1" name="reserve" placeholder="Mục tiêu 6 tháng"></label><label>Workout sessions<input type="number" min="0" max="100" step="1" name="workouts" placeholder="Mục tiêu ≥3/tuần"></label><label>Energy (1–5)<input type="number" min="1" max="5" step="1" name="energy" placeholder="Tùy chọn"></label></div>'+
  '<div class="action-row"><button class="btn primary" type="submit">Lưu Monthly Review</button></div></form></div>'+
  '<div><div class="section-header"><h3>Monthly scoreboard · '+now+'</h3></div><div class="card">'+(monthMetrics||'<p class="info">Chưa có số liệu tháng này</p>')+'</div>'+heading("Monthly history")+historyHtml("monthly",15)+'</div></div>';
 }
@@ -169,6 +169,11 @@ async function signIn(mode){
 }
 async function addMetrics(month,form){
  const values=[
+ ["Revenue attainment",form.get("revenue"),"%","career"],
+ ["Qualified pipeline coverage",form.get("pipeline"),"x","career"],
+ ["Forecast error",form.get("forecast"),"%","career"],
+ ["Productive distributors",form.get("partners"),"partners","career"],
+ ["Emergency reserve coverage",form.get("reserve"),"months","finance"],
  ["Saving rate",form.get("saving"),"%","finance"],
  ["Training sessions",form.get("workouts"),"sessions","health"],
  ["MBA study hours",form.get("study"),"hours","education"],
