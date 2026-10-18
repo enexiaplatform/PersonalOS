@@ -12,7 +12,7 @@ const PILLARS=[
 ["growth","Personal Growth & Creativity","✳","#fff2d7"]];
 const viewNames={notion:"Notion Review",blueprint:"2027 Blueprint",overview:"Your Command Center",weekly:"Weekly Pulse",monthly:"Monthly Review",evidence:"Evidence Log",decision:"Decision Log",settings:"Settings & Export"};
 let selectedYear=Number(localStorage.getItem("henry-os-year"))===2027?2027:2026;
-let yearPlan=null;
+let yearPlan=null,loadingData=false,loadError="",refreshSequence=0;
 let notionWeeks=[];
 let user=null,entries=[],metrics=[],settings=null,currentView="overview",busy=false;
 const $=s=>document.querySelector(s);
@@ -28,19 +28,27 @@ function notifyError(error){toast("Có lỗi: "+(error?.message||String(error)))
 function stateLogin(on){$("#auth").classList.toggle("hidden",on);$("#shell").classList.toggle("hidden",!on);if(on)$("#identity").textContent=user?.email||"";}
 async function refresh(){
  if(!user)return;
- const loadOwner=user.id,loadYear=selectedYear;
- const [a,b,c]=await Promise.all([
+ const loadOwner=user.id,loadYear=selectedYear,sequence=++refreshSequence;
+ loadingData=true;loadError="";render();
+ try{
+ const results=await Promise.allSettled([
  db.from("personal_os_entries").select("*").order("period_start",{ascending:false}).limit(250),
  db.from("personal_os_metrics").select("*").order("month_start",{ascending:false}).limit(200),
- db.from("personal_os_settings").select("*").eq("owner_id",user.id).eq("year",selectedYear).maybeSingle()]);
- if(user?.id!==loadOwner||selectedYear!==loadYear)return;
- if(a.error||b.error||c.error){notifyError(a.error||b.error||c.error);return;}
- entries=a.data||[];metrics=b.data||[];settings=c.data||null;
- const nw=await db.from("personal_os_notion_weeks").select("*").eq("owner_id",user.id).order("week_start",{ascending:false}).limit(1000);
- if(nw.error){notionWeeks=[];notifyError(nw.error);}else notionWeeks=nw.data||[];
- const yp=await db.from("personal_os_year_plans").select("*").eq("owner_id",loadOwner).eq("year",loadYear).maybeSingle();
- if(user?.id!==loadOwner||selectedYear!==loadYear)return;
- yearPlan=yp.error?null:yp.data; if(yp.error)notifyError(yp.error);render();
+ db.from("personal_os_settings").select("*").eq("owner_id",loadOwner).eq("year",loadYear).maybeSingle(),
+ db.from("personal_os_notion_weeks").select("*").eq("owner_id",loadOwner).order("week_start",{ascending:false}).limit(1000),
+ db.from("personal_os_year_plans").select("*").eq("owner_id",loadOwner).eq("year",loadYear).maybeSingle()
+ ]);
+ if(user?.id!==loadOwner||selectedYear!==loadYear||sequence!==refreshSequence)return;
+ const data=results.map(r=>r.status==='fulfilled'?r.value:{error:r.reason});
+ if(!data[0].error)entries=data[0].data||[];
+ if(!data[1].error)metrics=data[1].data||[];
+ if(!data[2].error)settings=data[2].data||null;
+ if(!data[3].error)notionWeeks=data[3].data||[];
+ if(!data[4].error)yearPlan=data[4].data||null;
+ const failures=data.filter(r=>r.error);
+ if(failures.length){loadError=failures.map(r=>r.error.message||'Không tải được dữ liệu').join(' · ');notifyError(failures[0].error);}
+ }catch(error){if(sequence===refreshSequence){loadError=error.message||'Không tải được dữ liệu';notifyError(error);}}
+ finally{if(sequence===refreshSequence&&user?.id===loadOwner){loadingData=false;render();}}
 }
 async function saveEntry(type,date,pillar,title,content){
  if(busy)return;
@@ -126,7 +134,7 @@ function annualEvidence(axis,quarter){
  return notionWeeks.filter(w=>w.week_start.startsWith(String(selectedYear))&&w.coverage!=='conflict'&&Math.floor((Number(w.week_start.slice(5,7))-1)/3)===quarter).flatMap(w=>(w.items||[]).filter(i=>normalizePillar(i.pillar)===axis&&i.status==='reported_done').map(i=>({...i,week:w.week_start,source_url:i.source_url||w.source_url})));
 }
 function renderYearPlan(){
- if(!yearPlan)return '<div class="empty">Chưa tải được Objectives '+selectedYear+'. Hãy tải lại dữ liệu.</div>';
+ if(!yearPlan)return '<div class="empty" role="status">'+(loadingData?'Đang tải Objectives '+selectedYear+'…':loadError?'Không tải được dữ liệu: '+safe(loadError):'Chưa tìm thấy Objectives '+selectedYear+' cho tài khoản này.')+(loadingData?'':'<br/><button class="btn soft" id="retry-year">Tải lại Objectives</button>')+'</div>';
  const p=yearPlan.plan,q=Number.isInteger(window._annualQuarter)?window._annualQuarter:Math.floor(new Date().getMonth()/3);
  const cards=p.axes.map(a=>{const evidence=annualEvidence(a.id,q);return '<details class="goal-card" '+(a.id==='career'?'open':'')+'><summary><span><strong>'+safe(a.name)+'</strong><small>'+evidence.length+' task/ghi nhận thực hiện trong Q'+(q+1)+'</small></span></summary><div class="goal-detail"><div class="goal-north">'+safe(a.objective)+'</div><div class="goal-mini-title">KEY RESULTS · SOURCE OF TRUTH</div><ul>'+a.krs.map(k=>'<li>'+safe(k)+'</li>').join('')+'</ul><div class="goal-mini-title">Q'+(q+1)+' · NỘI DUNG NGUYÊN BẢN</div><div class="quarter-detail preserve-lines">'+safe(a.quarters[q])+'</div><div class="goal-mini-title">ĐỐI CHIẾU · CHƯA PHẢI KẾT LUẬN ĐẠT KR</div><p>'+safe(a.assessment)+'</p><div class="goal-mini-title">GHI NHẬN THỰC HIỆN TỪ NOTION</div>'+(evidence.length?evidence.slice(0,10).map(i=>'<p>• '+safe(i.text)+' <a class="inline-link" target="_blank" rel="noopener noreferrer" href="'+safe(notionUrl(i.source_url))+'">Nguồn ↗</a></p>').join('')+(evidence.length>10?'<p class="info">Xem các ghi nhận còn lại trong Notion Review.</p>':''):'<p>Chưa có bằng chứng được nhập cho quý này. Không mặc định là chưa làm.</p>')+'</div></details>';}).join('');
  return '<div class="hero"><div><div class="eyebrow">2026 / LIVE DATA PILOT</div><h3>A real year.<br/>An honest review.</h3><p>Giữ nguyên 8 trục năm 2026 từ OneNote. Đối chiếu với Notion và ghi rõ khoảng trống dữ liệu.</p></div><div class="hero-stamp"><b>2026</b><small>8 trục nguyên bản</small></div></div><div class="source-banner"><div><b>'+safe(yearPlan.source_title)+'</b><p>Đã đọc bảng OneNote; màu highlight và hình ảnh chưa được dùng để xác định hoàn thành.</p></div><a class="btn soft" href="'+safe(yearPlan.source_url)+'" target="_blank" rel="noopener noreferrer">Mở OneNote ↗</a></div>'+heading('Cam kết và lịch sử theo quý','Q1–Q3 được bảo toàn')+'<div class="quarter-tabs">'+[0,1,2,3].map(n=>'<button class="quarter-tab '+(q===n?'selected':'')+'" data-annual-quarter="'+n+'">Q'+(n+1)+'</button>').join('')+'</div><div class="goal-list" style="margin-top:20px">'+cards+'</div><div class="closing-note"><b>CẦN ĐỐI CHIẾU</b>'+p.warnings.map(w=>'<p>'+safe(w)+'</p>').join('')+'</div>';
@@ -254,7 +262,7 @@ function reviewBrief(){
  return "Notion imports (nguồn tự ghi nhận; không suy đoán hoàn thành KR):\n"+JSON.stringify(notionWeeks.filter(w=>w.week_start.startsWith(String(selectedYear))))+"\n\n"+"Bạn là Lumi, trợ lý và mentor. Đây là dữ liệu Personal OS do tôi tự lựa chọn chia sẻ. Hãy phân tích tiến độ, rủi ro, các quyết định, lệch kế hoạch và 3 ưu tiên tiếp theo. Không suy đoán số liệu còn thiếu. OneNote Objectives năm "+selectedYear+" là Source of Truth. Chỉ đối chiếu dữ liệu cùng năm; không suy đoán hoàn thành KR từ task. Các trục: "+yearPillars().map(p=>p[1]).join(", ")+". Bản mục tiêu: "+JSON.stringify(selectedYear===2026?yearPlan?.plan:BLUEPRINT)+".\n\n"+sections;
 }
 document.addEventListener("click",async e=>{
- if(e.target.closest("#reload-notion")){await refresh();return;}
+ if(e.target.closest("#reload-notion, #retry-year")){await refresh();return;}
  const aq=e.target.closest("[data-annual-quarter]");if(aq){window._annualQuarter=Number(aq.dataset.annualQuarter);render();return;}
  const mt=e.target.closest("[data-review-month]");if(mt){window._notionPeriod=mt.dataset.reviewMonth;window._notionMode='month';currentView='notion';render();return;}
  const qt=e.target.closest("[data-quarter]");if(qt){window._blueprintQuarter=Number(qt.dataset.quarter);render();return;}
@@ -291,10 +299,12 @@ document.addEventListener("submit",async e=>{
 $("#signup-button").addEventListener("click",()=>signIn("signup"));
 $("#reset-button").addEventListener("click",()=>signIn("reset"));
 $("#logout-button").addEventListener("click",async()=>{await db.auth.signOut();user=null;entries=[];metrics=[];notionWeeks=[];yearPlan=null;stateLogin(false);});
-db.auth.onAuthStateChange(async(event,session)=>{
+// Keep the auth callback synchronous: authenticated queries must run after
+// Supabase releases its auth lock, otherwise getSession and data loads can deadlock.
+db.auth.onAuthStateChange((event,session)=>{
  const was=user?.id;user=session?.user||null;stateLogin(Boolean(user));
- if(user && was!==user.id){currentView="overview";await refresh();}
+ if(user&&was!==user.id){currentView="overview";setTimeout(()=>{void refresh();},0);}
 });
-(async()=>{const {data,error}=await db.auth.getSession();if(error)notifyError(error);user=data?.session?.user||null;stateLogin(Boolean(user));if(user)await refresh()})();
+(async()=>{const {data,error}=await db.auth.getSession();if(error)notifyError(error);user=data?.session?.user||null;stateLogin(Boolean(user));if(user)void refresh()})();
 
 document.addEventListener("change",e=>{if(e.target.id==="os-year"){selectedYear=Number(e.target.value)===2027?2027:2026;localStorage.setItem("henry-os-year",selectedYear);window._notionPeriod=monthNow();window._annualQuarter=undefined;yearPlan=null;settings=null;refresh();return;}if(e.target.id==="notion-mode"){window._notionMode=e.target.value;render();}if(e.target.id==="notion-period"&&/^\d{4}-\d{2}$/.test(e.target.value)){if(!e.target.value.startsWith(String(selectedYear))){toast("Chọn năm ở thanh trên để chuyển toàn bộ workspace.");e.target.value=window._notionPeriod||monthNow();return;}window._notionPeriod=e.target.value;render();}});
