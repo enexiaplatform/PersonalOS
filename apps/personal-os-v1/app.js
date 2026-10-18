@@ -10,7 +10,8 @@ const PILLARS=[
 ["health","Health & Performance","♥","#ffe9e6"],
 ["relationships","Relationships & Family","♧","#f5e5f1"],
 ["growth","Personal Growth & Creativity","✳","#fff2d7"]];
-const viewNames={blueprint:"2027 Blueprint",overview:"Your Command Center",weekly:"Weekly Pulse",monthly:"Monthly Review",evidence:"Evidence Log",decision:"Decision Log",settings:"Settings & Export"};
+const viewNames={notion:"Notion Review",blueprint:"2027 Blueprint",overview:"Your Command Center",weekly:"Weekly Pulse",monthly:"Monthly Review",evidence:"Evidence Log",decision:"Decision Log",settings:"Settings & Export"};
+let notionWeeks=[];
 let user=null,entries=[],metrics=[],settings=null,currentView="overview",busy=false;
 const $=s=>document.querySelector(s);
 const safe=s=>String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
@@ -29,7 +30,9 @@ async function refresh(){
  db.from("personal_os_metrics").select("*").order("month_start",{ascending:false}).limit(200),
  db.from("personal_os_settings").select("*").eq("owner_id",user.id).maybeSingle()]);
  if(a.error||b.error||c.error){notifyError(a.error||b.error||c.error);return;}
- entries=a.data||[];metrics=b.data||[];settings=c.data||null;render();
+ entries=a.data||[];metrics=b.data||[];settings=c.data||null;
+ const nw=await db.from("personal_os_notion_weeks").select("*").eq("owner_id",user.id).order("week_start",{ascending:false}).limit(1000);
+ if(nw.error){notionWeeks=[];notifyError(nw.error);}else notionWeeks=nw.data||[];render();
 }
 async function saveEntry(type,date,pillar,title,content){
  if(busy)return;busy=true;
@@ -84,6 +87,26 @@ function reviewRhythm(latest){
  const note=latest?'Weekly Pulse gần nhất: '+dtext(latest.period_start)+'. Một chút nhìn lại giúp tuần tới rõ hướng hơn.':'3 kết quả, 1 trở ngại, 3 ưu tiên. Chỉ ghi những trục có thay đổi.';
  return '<div class="review-rail"><div><strong>'+title+'</strong><p>'+note+'</p></div><button class="btn soft" data-view="weekly">Weekly Pulse · 10 phút ↗</button></div>';
 }
+function notionPeriodWeeks(){
+ const mode=window._notionMode||'month', period=window._notionPeriod||monthNow();
+ const y=Number(period.slice(0,4)),m=Number(period.slice(5,7));
+ return notionWeeks.filter(w=>{const wy=Number(w.week_start.slice(0,4)),wm=Number(w.week_start.slice(5,7));return wy===y&&(mode==='year'||(mode==='quarter'?Math.ceil(wm/3)===Math.ceil(m/3):wm===m));});
+}
+function renderNotion(){
+ const selected=notionPeriodWeeks(),all=selected.filter(w=>w.coverage!=='conflict').flatMap(w=>(w.items||[]).map(i=>({...i,week:w.week_start,source_url:i.source_url||w.source_url})));
+ const statusNames={plan:'Kế hoạch',reported_done:'Đã ghi nhận thực hiện',blocked:'Trở ngại',unknown:'Cần làm rõ'};
+ const mode=window._notionMode||'month';
+ const counts=Object.keys(statusNames).map(k=>'<div class="card"><span class="kicker">'+statusNames[k]+'</span><b class="value">'+all.filter(i=>i.status===k).length+'</b><p>Số ghi nhận trong các nguồn đã nhập.</p></div>').join('');
+ const pillars=PILLARS.map(p=>{const list=all.filter(i=>i.pillar===p[0]);const goal=BLUEPRINT.find(b=>b.id===p[0]);const targetYear=(window._notionPeriod||monthNow()).slice(0,4);const ref=goal&&targetYear==='2027'?'<div class="quarter-detail"><b>Mục tiêu 2027</b><p>'+safe(goal.objective)+'</p><small>Ghi nhận chưa tự xác nhận hoàn thành các KR bên dưới.</small><ul>'+goal.krs.map(k=>'<li>'+safe(k)+'</li>').join('')+'</ul></div>':'';return '<details class="goal-card"><summary><span class="goal-icon">'+p[2]+'</span><span><strong>'+safe(p[1])+'</strong><small>'+list.length+' ghi nhận từ Notion</small></span></summary><div class="goal-detail">'+ref+(list.length?list.map(i=>'<div class="entry"><span class="small-pill">'+safe(statusNames[i.status]||'Cần làm rõ')+'</span><p>'+safe(i.text)+'</p><small>'+safe(i.context||'Chưa xác định')+' · Tuần '+dtext(i.week)+'</small> · <a class="inline-link" href="'+safe(notionUrl(i.source_url))+'" target="_blank" rel="noopener noreferrer">Nguồn ↗</a></div>').join(''):'Chưa có dữ liệu cho trục này trong phạm vi đã nhập.')+'</div></details>';}).join('');
+ const sources=selected.map(w=>'<article class="entry"><div class="row"><h4>'+safe(w.title)+'</h4><span class="small-pill">'+safe({complete:'Đủ nguồn',partial:'Đọc một phần',page_only:'Phần chữ của page',conflict:'Trùng / cần xác nhận'}[w.coverage]||w.coverage)+'</span></div><p>'+safe(w.summary)+'</p><p class="info">'+(w.warnings||[]).map(safe).join(' · ')+'</p><time>Kiểm tra gần nhất: '+safe(new Date(w.synced_at).toLocaleString('vi-VN'))+'</time> · <a class="inline-link" href="'+safe(notionUrl(w.source_url))+'" target="_blank" rel="noopener noreferrer">Mở trang tuần ↗</a></article>').join('');
+ return '<div class="hero"><div><div class="eyebrow">NOTION → PERSONAL OS</div><h3>Your weeks.<br/>A clearer direction.</h3><p>Tiếp tục viết trên Notion. Xem kế hoạch, kết quả tự ghi nhận và trở ngại theo 7 trục tại đây.</p></div><div class="hero-stamp"><b>'+selected.length+'</b><small>Trang tuần trong kỳ</small></div></div>'+
+ '<div class="source-banner"><div><b>Đồng bộ qua lịch ChatGPT · sáng thứ Hai</b><p>Tự tìm page Weekly Planner mới qua kết nối Notion. Nút bên cạnh chỉ tải lại dữ liệu đã nhập; chưa kết nối trực tiếp n8n/VPS.</p></div><button class="btn soft" id="reload-notion">Tải lại dữ liệu</button></div>'+
+ '<div class="section-header"><h3>Review theo kỳ</h3><div class="toolbar"><label>Kỳ<select id="notion-mode">'+[['month','Tháng'],['quarter','Quý'],['year','Năm']].map(([v,n])=>'<option value="'+v+'" '+(mode===v?'selected':'')+'>'+n+'</option>').join('')+'</select></label><label>Mốc tham chiếu<input id="notion-period" type="month" value="'+safe(window._notionPeriod||monthNow())+'"></label></div></div>'+
+ '<p class="info">Tuần được xếp theo ngày bắt đầu tuần. '+(mode==='quarter'?'Đang xem Q'+Math.ceil(Number((window._notionPeriod||monthNow()).slice(5,7))/3)+'. ':'')+'Không cộng dồn doanh thu, thói quen hoặc cùng một kết quả được nhắc lại. Số ghi nhận không phải % hoàn thành KR. Dữ liệu 2026 tách khỏi mục tiêu 2027.</p>'+
+ '<div class="cards notion-counts">'+counts+'</div>'+heading('7 trục · Kết quả và khoảng trống','Ghi nhận từ nguồn, chưa xác minh độc lập')+'<div class="goal-list">'+pillars+'</div>'+heading('Nguồn và độ đầy đủ',selected.length+' trang tuần')+'<div class="history">'+(sources||'<div class="empty">Chưa có trang tuần được nhập cho kỳ này. Không có dữ liệu không có nghĩa là không tiến triển.</div>')+'</div>';
+}
+function notionUrl(value){try{const u=new URL(value);return u.protocol==='https:'&&['app.notion.com','www.notion.so','notion.so'].includes(u.hostname)?u.href:'#';}catch{return '#';}}
+
 function renderOverview(){
  const latest=items("weekly")[0],month=monthNow();
  const active=entries.filter(x=>x.period_start.slice(0,7)===month).length;
@@ -159,7 +182,7 @@ function render(){
  if(!user)return;
  $("#page-title").textContent=viewNames[currentView]||viewNames.overview;
  document.querySelectorAll("#nav [data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===currentView));
- const fn={blueprint:renderBlueprint,overview:renderOverview,weekly:renderWeekly,monthly:renderMonthly,evidence:renderEvidence,decision:renderDecision,settings:renderSettings}[currentView]||renderOverview;
+ const fn={notion:renderNotion,blueprint:renderBlueprint,overview:renderOverview,weekly:renderWeekly,monthly:renderMonthly,evidence:renderEvidence,decision:renderDecision,settings:renderSettings}[currentView]||renderOverview;
  $("#view-content").innerHTML=fn();
 }
 async function signIn(mode){
@@ -194,9 +217,10 @@ async function addMetrics(month,form){
 function reviewBrief(){
  const lastW=items("weekly").slice(0,4),lastM=items("monthly").slice(0,2),lastE=items("evidence").slice(0,7),lastD=items("decision").slice(0,7);
  const sections=[["Weekly",lastW],["Monthly",lastM],["Evidence",lastE],["Decisions",lastD]].map(([name,data])=>name+"\n"+data.map(x=>"- "+x.period_start+" ["+pName(x.pillar)+"] "+x.title+" "+JSON.stringify(x.content)).join("\n")).join("\n\n");
- return "Bạn là Lumi, trợ lý và mentor. Đây là dữ liệu Personal OS do tôi tự lựa chọn chia sẻ. Hãy phân tích tiến độ, rủi ro, các quyết định, lệch kế hoạch và 3 ưu tiên tiếp theo. Không suy đoán số liệu còn thiếu. OneNote 2027 Objectives là Source of Truth; chỉ đề xuất sửa khi được tôi đồng ý. Theo dõi theo 7 trục: Servicebio (P&L, channel, team, pipeline), MBA Apr-May, Chinese HSK4, one venture, savings rate base 25% stretch 35%, health, family, creative recovery.\n\n"+sections;
+ return "Notion imports (nguồn tự ghi nhận; không suy đoán hoàn thành KR):\n"+JSON.stringify(notionWeeks)+"\n\n"+"Bạn là Lumi, trợ lý và mentor. Đây là dữ liệu Personal OS do tôi tự lựa chọn chia sẻ. Hãy phân tích tiến độ, rủi ro, các quyết định, lệch kế hoạch và 3 ưu tiên tiếp theo. Không suy đoán số liệu còn thiếu. OneNote 2027 Objectives là Source of Truth; chỉ đề xuất sửa khi được tôi đồng ý. Theo dõi theo 7 trục: Servicebio (P&L, channel, team, pipeline), MBA Apr-May, Chinese HSK4, one venture, savings rate base 25% stretch 35%, health, family, creative recovery.\n\n"+sections;
 }
 document.addEventListener("click",async e=>{
+ if(e.target.closest("#reload-notion")){await refresh();return;}
  const qt=e.target.closest("[data-quarter]");if(qt){window._blueprintQuarter=Number(qt.dataset.quarter);render();return;}
  const nav=e.target.closest("[data-view]");if(nav){currentView=nav.dataset.view;render();window.scrollTo(0,0);return;}
  const del=e.target.closest("[data-delete]");if(del){
@@ -207,7 +231,7 @@ document.addEventListener("click",async e=>{
  try{await navigator.clipboard.writeText(reviewBrief());toast("Đã sao chép. Bạn có thể dán vào ChatGPT để Lumi review.");}
  catch{toast("Trình duyệt chặn clipboard. Thử bằng HTTPS.");}return;}
  if(e.target.closest("#export-data")){
- const payload={format:"henry-personal-os-v1",exported_at:new Date().toISOString(),entries,metrics,settings};
+ const payload={notionWeeks,format:"henry-personal-os-v1",exported_at:new Date().toISOString(),entries,metrics,settings};
  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
  const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="personal-os-backup-"+dateNow()+".json";a.click();URL.revokeObjectURL(url);toast("Đã tạo bản sao lưu. Lưu ở vị trí an toàn.");return;}
 });
@@ -230,9 +254,11 @@ document.addEventListener("submit",async e=>{
 });
 $("#signup-button").addEventListener("click",()=>signIn("signup"));
 $("#reset-button").addEventListener("click",()=>signIn("reset"));
-$("#logout-button").addEventListener("click",async()=>{await db.auth.signOut();user=null;entries=[];metrics=[];stateLogin(false);});
+$("#logout-button").addEventListener("click",async()=>{await db.auth.signOut();user=null;entries=[];metrics=[];notionWeeks=[];stateLogin(false);});
 db.auth.onAuthStateChange(async(event,session)=>{
  const was=user?.id;user=session?.user||null;stateLogin(Boolean(user));
  if(user && was!==user.id){currentView="overview";await refresh();}
 });
 (async()=>{const {data,error}=await db.auth.getSession();if(error)notifyError(error);user=data?.session?.user||null;stateLogin(Boolean(user));if(user)await refresh()})();
+
+document.addEventListener("change",e=>{if(e.target.id==="notion-mode"){window._notionMode=e.target.value;render();}if(e.target.id==="notion-period"&&/^\d{4}-\d{2}$/.test(e.target.value)){window._notionPeriod=e.target.value;render();}});
