@@ -11,7 +11,7 @@ const PILLARS=[
 ["relationships","Relationships & Family","♧","#f5e5f1"],
 ["growth","Personal Growth & Creativity","✳","#fff2d7"]];
 const viewNames={blueprint:"2027 Blueprint",overview:"Your Command Center",weekly:"Weekly Pulse",monthly:"Monthly Review",evidence:"Evidence Log",decision:"Decision Log",settings:"Settings & Export"};
-let user=null,entries=[],metrics=[],settings=null,currentView="blueprint",busy=false;
+let user=null,entries=[],metrics=[],settings=null,currentView="overview",busy=false;
 const $=s=>document.querySelector(s);
 const safe=s=>String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
 const dateNow=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)};
@@ -55,15 +55,16 @@ function heading(text,subtitle=""){return '<div class="section-header"><h3>'+tex
 
 function renderBlueprint(){
  const year=2027;
+ if(!Number.isInteger(window._blueprintQuarter)) window._blueprintQuarter=new Date().getFullYear()===2027?Math.floor(new Date().getMonth()/3):0;
  const quarterSelect=['Q1','Q2','Q3','Q4'].map((q,i)=>'<button class="quarter-tab'+(window._blueprintQuarter===i?' selected':'')+'" data-quarter="'+i+'">'+q+'</button>').join('');
  const q=Number.isInteger(window._blueprintQuarter)?window._blueprintQuarter:0;
  const recent=entries.filter(x=>x.entry_type==="evidence");
  const pillars=BLUEPRINT.map(b=>{
    const evidence=recent.filter(x=>x.pillar===b.id).length;
-   return '<details class="goal-card" '+(b.id==="career"||b.id==="education"?'open':'')+'><summary><span><strong>'+safe(b.name)+'</strong><small>'+safe(b.priority)+'</small></span><span class="goal-count">'+evidence+' evidence</span></summary>'+
-   '<div class="goal-detail"><div class="goal-north">'+safe(b.north)+'</div><p>'+safe(b.objective)+'</p><div class="goal-mini-title">KEY RESULTS · ONENOTE REFERENCE (not completed)</div><ul>'+b.krs.map(k=>'<li>'+safe(k)+'</li>').join('')+'</ul><div class="goal-mini-title">CURRENT QUARTER PLAN</div><div class="quarter-detail">'+safe(b.q[q])+'</div><div class="goal-mini-title">METRICS TO TRACK</div><div class="metric-chips">'+b.metrics.map(m=>'<span title="'+safe(m[2])+'">'+safe(m[0])+'</span>').join('')+'</div><button class="btn soft small" data-view="evidence">Ghi nhận bằng chứng ↗</button></div></details>';
+   return '<details class="goal-card" style="--pillar:'+['#477e86','#8d78a3','#b39255','#65875c','#b57564','#aa7d91','#9d905b'][BLUEPRINT.indexOf(b)]+';--tint:'+PILLARS.find(p=>p[0]===b.id)?.[3]+'" '+(b.id==="career"||b.id==="education"?'open':'')+'><summary><span class="goal-icon" aria-hidden="true">'+(PILLARS.find(p=>p[0]===b.id)?.[2]||'◇')+'</span><span><strong>'+safe(b.name)+'</strong><small>'+safe(b.priority)+'</small></span><span class="goal-count">'+evidence+' evidence</span></summary>'+
+   '<div class="goal-detail"><div class="goal-north">'+safe(b.north)+'</div><p>'+safe(b.objective)+'</p><div class="goal-mini-title">KEY RESULTS · MỤC TIÊU THAM CHIẾU</div><ul>'+b.krs.map(k=>'<li>'+safe(k)+'</li>').join('')+'</ul><div class="goal-mini-title">CAM KẾT TRONG QUÝ</div><div class="quarter-detail">'+safe(b.q[q])+'</div><div class="goal-mini-title">CHỈ SỐ THEO DÕI</div><div class="metric-chips">'+b.metrics.map(m=>'<span title="'+safe(m[2])+'">'+safe(m[0])+'</span>').join('')+'</div><button class="btn soft small" data-view="evidence">Ghi nhận bằng chứng ↗</button></div></details>';
  }).join('');
- return '<div class="hero"><div><div class="eyebrow">HENRY · 2027 → GM 2031</div><h3>Country builder.<br/>Whole-life leader.</h3><p>Đây là bản tham chiếu cá nhân hóa từ OneNote 2027 Objectives, không phải dashboard thành tích đã đạt.</p></div><div class="hero-stamp"><b>07</b><small>Life pillars</small></div></div>'+
+ return '<div class="hero"><div><div class="eyebrow">HENRY · 2027 → GM 2031</div><h3>Seven pillars.<br/>One intentional life.</h3><p>Servicebio, MBA và một cuộc sống vững vàng. Mỗi mục tiêu đều cần một hành động tiếp theo, một bằng chứng thực tế.</p></div><div class="hero-stamp"><b>07</b><small>Life pillars</small></div></div>'+
  '<div class="source-banner"><div><b>2027 Objectives · Canonical Source</b><p>Snapshot được đối chiếu '+safe(SOURCE.reviewed)+'. Không tự động đồng bộ; nếu OneNote thay đổi, mục tiêu trên đây cần được cập nhật có kiểm chứng.</p></div><a href="'+safe(SOURCE.url)+'" target="_blank" rel="noopener noreferrer" class="btn soft">Mở OneNote ↗</a></div>'+
  heading("Your 2027 operating thesis","Ba ưu tiên lớn nhất")+
  '<div class="cards"><div class="card"><span class="kicker">01 / PRIMARY GAME</span><b class="value">Servicebio</b><p>National Sales Manager → country P&L, channel, people, operations và HQ influence. Quyền điều hành toàn phần là giả định kế hoạch.</p></div>'+
@@ -74,9 +75,15 @@ function renderBlueprint(){
  '<div class="capacity-banner"><b>'+CAPACITY[q].quarter+' · '+CAPACITY[q].level+' capacity</b><span>'+safe(CAPACITY[q].rule)+'</span></div>'+
  heading("Seven pillars · Real Objectives","Evidence count = số bản ghi, không phải % hoàn thành")+
  '<div class="goal-list">'+pillars+'</div>'+
- '<div class="closing-note"><b>GM 2031 GAP</b><p>2027: country economics + delegated people/operations leadership. 2028–2030: managing managers, working capital, governance, succession & capital allocation. 2031: GM scope over title.</p></div>';
+ '<div class="closing-note"><b>GM 2031 GAP</b><p>2027: country economics + delegated people/operations leadership. 2028–2030: managing managers, working capital, governance, succession & capital allocation. 2031: GM scope over title.</p><div class="journey"><span><b>2027 / BUILD</b>Country economics · MBA · people</span><span><b>2028–2030 / EXPAND</b>Managing managers · capital allocation</span><span><b>2031 / LEAD</b>GM / Country Manager scope</span></div></div>';
 }
 
+function reviewRhythm(latest){
+ const age=latest?Math.floor((new Date(dateNow()+'T00:00:00')-new Date(latest.period_start+'T00:00:00'))/86400000):null;
+ const title=age===null?'Bắt đầu nhịp review của bạn':age<0?'Có bản review cho ngày sắp tới':age<=7?'Bạn đang giữ nhịp tốt':'Đến lúc dành 10 phút cho bản thân';
+ const note=latest?'Weekly Pulse gần nhất: '+dtext(latest.period_start)+'. Một chút nhìn lại giúp tuần tới rõ hướng hơn.':'3 kết quả, 1 trở ngại, 3 ưu tiên. Chỉ ghi những trục có thay đổi.';
+ return '<div class="review-rail"><div><strong>'+title+'</strong><p>'+note+'</p></div><button class="btn soft" data-view="weekly">Weekly Pulse · 10 phút ↗</button></div>';
+}
 function renderOverview(){
  const latest=items("weekly")[0],month=monthNow();
  const active=entries.filter(x=>x.period_start.slice(0,7)===month).length;
@@ -84,13 +91,14 @@ function renderOverview(){
  const total=entries.length;
  const pillarsHtml=PILLARS.map(p=>{
  const count=entries.filter(x=>x.pillar===p[0]).length;
- return '<div class="pillar" style="border-top:4px solid '+p[3]+'"><span class="emoji">'+p[2]+'</span><strong>'+p[1]+'</strong><div class="sub">'+count+' ghi nhận · Không suy đoán tiến độ</div></div>';
+ return '<div class="pillar" style="border-top:4px solid '+p[3]+'"><span class="emoji">'+p[2]+'</span><strong>'+p[1]+'</strong><div class="sub">'+count+' bản ghi trong hành trình</div></div>';
  }).join("");
  let recent=latest?'<div class="card"><div class="kicker">Latest Weekly Pulse · '+dtext(latest.period_start)+'</div><p>'+safe(latest.content?.wins||"Chưa có thành tựu được ghi")+'</p><div class="section-header"><span class="small-pill">Next</span></div><p>'+safe(latest.content?.next||"Chưa cập nhật")+'</p></div>':'<div class="card"><b>Start small</b><p>10 phút mỗi tuần: 3 wins, 1 blocker, 3 next priorities. Không cần điền mọi trục.</p><button class="btn primary" data-view="weekly" style="margin-top:18px">Tạo Weekly Pulse</button></div>';
  const m=metrics.filter(x=>x.month_start.slice(0,7)===month);
  const ms=m.length?m.map(x=>'<div class="metric-row"><span>'+safe(x.metric_key)+'</span><strong>'+safe(x.metric_value)+' '+safe(x.unit)+'</strong></div>').join(""):'<p>Chưa có chỉ số tháng này. Chỉ nhập kết quả đã đo được.</p>';
- return '<div class="hero"><div><div class="eyebrow">2027 PERSONAL EXECUTIVE OS</div><h3>Build the country.<br/>Build the leader.</h3><p>OneNote giữ mục tiêu chính thức. Ứng dụng này giữ evidence, decisions và nhịp review hằng tuần.</p></div><div class="hero-stamp"><b>2031</b><small>'+safe(settings?.north_star||"GM / Country Manager")+'</small></div></div>'+
- heading("Execution snapshot","Dữ liệu thực tế · không hiển thị progress giả")+
+ return '<div class="hero"><div><div class="eyebrow">HENRY / YOUR PERSONAL COMMAND CENTER</div><h3>Build the country.<br/>Build the leader.</h3><p>Chào Henry. Xây Servicebio Vietnam, trưởng thành qua MBA và giữ vững những điều quan trọng. Bắt đầu từ tuần này.</p><div class="hero-actions"><button class="btn primary" data-view="weekly">Cập nhật tuần này ↗</button><button class="btn ghost" data-view="blueprint">Xem mục tiêu 2027</button></div></div><div class="hero-stamp"><b>2031</b><small>'+safe(settings?.north_star||"GM / Country Manager")+'</small></div></div>'+
+ reviewRhythm(latest)+
+ heading("Your execution, at a glance","Những gì bạn đã thực sự ghi nhận")+
  '<div class="cards"><div class="card"><span class="kicker">Updates · this month</span><b class="value">'+active+'</b><p>Weekly, monthly, evidence và decision entries.</p></div><div class="card"><span class="kicker">Monthly reviews</span><b class="value">'+nMonthly+'</b><p>Lịch sử review đã lưu.</p></div><div class="card"><span class="kicker">Records</span><b class="value">'+total+'</b><p>Tổng số bản ghi cá nhân gần đây.</p></div></div>'+
  heading("Seven life pillars","Nội dung được phân loại khi ghi nhận")+'<div class="pillars">'+pillarsHtml+'</div>'+
  heading("Latest weekly pulse","Tuần gần nhất")+'<div class="two-col">'+recent+'<div class="card"><div class="kicker">Monthly metrics · '+month+'</div>'+ms+'<button class="btn soft" data-view="monthly" style="margin-top:13px">Review tháng này</button></div></div>'+
@@ -225,6 +233,6 @@ $("#reset-button").addEventListener("click",()=>signIn("reset"));
 $("#logout-button").addEventListener("click",async()=>{await db.auth.signOut();user=null;entries=[];metrics=[];stateLogin(false);});
 db.auth.onAuthStateChange(async(event,session)=>{
  const was=user?.id;user=session?.user||null;stateLogin(Boolean(user));
- if(user && was!==user.id){currentView="blueprint";await refresh();}
+ if(user && was!==user.id){currentView="overview";await refresh();}
 });
 (async()=>{const {data,error}=await db.auth.getSession();if(error)notifyError(error);user=data?.session?.user||null;stateLogin(Boolean(user));if(user)await refresh()})();
