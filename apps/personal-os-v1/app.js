@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.58.0";
+import { SOURCE, BLUEPRINT, CAPACITY } from "./goals.js";
 import { PROJECT_URL, PUBLISHABLE_KEY } from "./config.js";
 const db=createClient(PROJECT_URL,PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const PILLARS=[
@@ -9,8 +10,8 @@ const PILLARS=[
 ["health","Health & Performance","♥","#ffe9e6"],
 ["relationships","Relationships & Family","♧","#f5e5f1"],
 ["growth","Personal Growth & Creativity","✳","#fff2d7"]];
-const viewNames={overview:"Your Command Center",weekly:"Weekly Pulse",monthly:"Monthly Review",evidence:"Evidence Log",decision:"Decision Log",settings:"Settings & Export"};
-let user=null,entries=[],metrics=[],settings=null,currentView="overview",busy=false;
+const viewNames={blueprint:"2027 Blueprint",overview:"Your Command Center",weekly:"Weekly Pulse",monthly:"Monthly Review",evidence:"Evidence Log",decision:"Decision Log",settings:"Settings & Export"};
+let user=null,entries=[],metrics=[],settings=null,currentView="blueprint",busy=false;
 const $=s=>document.querySelector(s);
 const safe=s=>String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
 const dateNow=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)};
@@ -51,6 +52,31 @@ function entryCard(x){
 }
 function historyHtml(type,limit=10){const list=items(type).slice(0,limit);return list.length?'<div class="history">'+list.map(entryCard).join("")+'</div>':'<div class="empty">Chưa có bản cập nhật. Bắt đầu khi bạn sẵn sàng.</div>';}
 function heading(text,subtitle=""){return '<div class="section-header"><h3>'+text+'</h3><span class="muted">'+subtitle+'</span></div>';}
+
+function renderBlueprint(){
+ const year=2027;
+ const quarterSelect=['Q1','Q2','Q3','Q4'].map((q,i)=>'<button class="quarter-tab'+(window._blueprintQuarter===i?' selected':'')+'" data-quarter="'+i+'">'+q+'</button>').join('');
+ const q=Number.isInteger(window._blueprintQuarter)?window._blueprintQuarter:0;
+ const recent=entries.filter(x=>x.entry_type==="evidence");
+ const pillars=BLUEPRINT.map(b=>{
+   const evidence=recent.filter(x=>x.pillar===b.id).length;
+   return '<details class="goal-card" '+(b.id==="career"||b.id==="education"?'open':'')+'><summary><span><strong>'+safe(b.name)+'</strong><small>'+safe(b.priority)+'</small></span><span class="goal-count">'+evidence+' evidence</span></summary>'+
+   '<div class="goal-detail"><div class="goal-north">'+safe(b.north)+'</div><p>'+safe(b.objective)+'</p><div class="goal-mini-title">KEY RESULTS · ONENOTE REFERENCE (not completed)</div><ul>'+b.krs.map(k=>'<li>'+safe(k)+'</li>').join('')+'</ul><div class="goal-mini-title">CURRENT QUARTER PLAN</div><div class="quarter-detail">'+safe(b.q[q])+'</div><div class="goal-mini-title">METRICS TO TRACK</div><div class="metric-chips">'+b.metrics.map(m=>'<span title="'+safe(m[2])+'">'+safe(m[0])+'</span>').join('')+'</div><button class="btn soft small" data-view="evidence">Ghi nhận bằng chứng ↗</button></div></details>';
+ }).join('');
+ return '<div class="hero"><div><div class="eyebrow">HENRY · 2027 → GM 2031</div><h3>Country builder.<br/>Whole-life leader.</h3><p>Đây là bản tham chiếu cá nhân hóa từ OneNote 2027 Objectives, không phải dashboard thành tích đã đạt.</p></div><div class="hero-stamp"><b>07</b><small>Life pillars</small></div></div>'+
+ '<div class="source-banner"><div><b>2027 Objectives · Canonical Source</b><p>Snapshot được đối chiếu '+safe(SOURCE.reviewed)+'. Không tự động đồng bộ; nếu OneNote thay đổi, mục tiêu trên đây cần được cập nhật có kiểm chứng.</p></div><a href="'+safe(SOURCE.url)+'" target="_blank" rel="noopener noreferrer" class="btn soft">Mở OneNote ↗</a></div>'+
+ heading("Your 2027 operating thesis","Ba ưu tiên lớn nhất")+
+ '<div class="cards"><div class="card"><span class="kicker">01 / PRIMARY GAME</span><b class="value">Servicebio</b><p>National Sales Manager → country P&L, channel, people, operations và HQ influence. Quyền điều hành toàn phần là giả định kế hoạch.</p></div>'+
+ '<div class="card"><span class="kicker">02 / STRATEGIC INVESTMENT</span><b class="value">MBA · Apr–May</b><p>Business Chinese + 2 applied management cases; admission và chi phí vẫn cần xác nhận.</p></div>'+
+ '<div class="card"><span class="kicker">03 / LONG-TERM FOUNDATION</span><b class="value">25% → 35%</b><p>Base / stretch savings rate, quỹ MBA, sáu tháng liquidity, sức khỏe và các quan hệ được bảo vệ.</p></div></div>'+
+ heading("Quarterly commitments","Chọn quý để xem hành động và giới hạn tải")+
+ '<div class="quarter-tabs">'+quarterSelect+'</div>'+
+ '<div class="capacity-banner"><b>'+CAPACITY[q].quarter+' · '+CAPACITY[q].level+' capacity</b><span>'+safe(CAPACITY[q].rule)+'</span></div>'+
+ heading("Seven pillars · Real Objectives","Evidence count = số bản ghi, không phải % hoàn thành")+
+ '<div class="goal-list">'+pillars+'</div>'+
+ '<div class="closing-note"><b>GM 2031 GAP</b><p>2027: country economics + delegated people/operations leadership. 2028–2030: managing managers, working capital, governance, succession & capital allocation. 2031: GM scope over title.</p></div>';
+}
+
 function renderOverview(){
  const latest=items("weekly")[0],month=monthNow();
  const active=entries.filter(x=>x.period_start.slice(0,7)===month).length;
@@ -68,10 +94,10 @@ function renderOverview(){
  '<div class="cards"><div class="card"><span class="kicker">Updates · this month</span><b class="value">'+active+'</b><p>Weekly, monthly, evidence và decision entries.</p></div><div class="card"><span class="kicker">Monthly reviews</span><b class="value">'+nMonthly+'</b><p>Lịch sử review đã lưu.</p></div><div class="card"><span class="kicker">Records</span><b class="value">'+total+'</b><p>Tổng số bản ghi cá nhân gần đây.</p></div></div>'+
  heading("Seven life pillars","Nội dung được phân loại khi ghi nhận")+'<div class="pillars">'+pillarsHtml+'</div>'+
  heading("Latest weekly pulse","Tuần gần nhất")+'<div class="two-col">'+recent+'<div class="card"><div class="kicker">Monthly metrics · '+month+'</div>'+ms+'<button class="btn soft" data-view="monthly" style="margin-top:13px">Review tháng này</button></div></div>'+
- heading("Review with Lumi","Không tự gửi dữ liệu cho AI")+'<div class="card"><p>Chọn “Sao chép review brief” để lấy một bản tóm tắt có nguồn dữ liệu và nhờ Lumi đánh giá trong ChatGPT.</p><button class="btn primary" id="copy-brief">Sao chép review brief</button> '+(settings?.onenote_url?'<a class="inline-link" href="'+safe(settings.onenote_url)+'" rel="noopener noreferrer" target="_blank">Mở OneNote Source of Truth ↗</a>':'<button class="btn soft" data-view="settings">Liên kết OneNote</button>')+'</div>';
+ heading("Review with Lumi","Không tự gửi dữ liệu cho AI")+'<div class="card"><p>Chọn “Sao chép review brief” để lấy một bản tóm tắt có nguồn dữ liệu và nhờ Lumi đánh giá trong ChatGPT.</p><button class="btn primary" id="copy-brief">Sao chép review brief</button> '+((settings?.onenote_url||SOURCE.url)?'<a class="inline-link" href="'+safe(settings?.onenote_url||SOURCE.url)+'" rel="noopener noreferrer" target="_blank">Mở OneNote Source of Truth ↗</a>':'<button class="btn soft" data-view="settings">Liên kết OneNote</button>')+'</div>';
 }
 function renderWeekly(){
- return '<div class="two-col"><div class="form-card"><h3>Weekly Pulse · 10 minutes</h3><p class="tagline">Ghi việc thật sự thay đổi, không cần liệt kê mọi nhiệm vụ.</p><form id="weekly-form">'+
+ return '<div class="two-col"><div class="form-card"><h3>Weekly Pulse · 10 minutes</h3><p class="tagline">Ví dụ: Servicebio market map, HQ budget, MBA admission, Chinese, tiết kiệm hoặc recovery. Không cần điền mọi trục.</p><form id="weekly-form">'+
  '<div class="form-grid"><label>Ngày review<input required name="date" type="date" value="'+dateNow()+'"></label><label>Trục chính<select name="pillar">'+opt()+'</select></label></div>'+
  '<label>3 wins / achievements<textarea required name="wins" placeholder="Điều gì đã tiến triển? Kết quả/bằng chứng?"></textarea></label>'+
  '<label>Biggest blocker<textarea name="blocker" placeholder="Một trở ngại đáng xử lý"></textarea></label>'+
@@ -83,7 +109,7 @@ function renderWeekly(){
 function renderMonthly(){
  const now=monthNow();
  const monthMetrics=metrics.filter(x=>x.month_start.slice(0,7)===now).map(x=>'<div class="metric-row"><span>'+safe(x.metric_key)+'</span><strong>'+safe(x.metric_value)+' '+safe(x.unit)+'</strong></div>').join("");
- return '<div class="two-col"><div class="form-card"><h3>Monthly Review · 30 minutes</h3><p class="tagline">Một lần mỗi tháng. Chỉ dùng số liệu thật và note ngắn.</p><form id="monthly-form">'+
+ return '<div class="two-col"><div class="form-card"><h3>Monthly Review · 30 minutes</h3><p class="tagline">Review theo kế hoạch 2027: business economics, MBA, Chinese, cash reserve, training, relationships và capacity.</p><form id="monthly-form">'+
  '<label>Tháng review<input type="month" name="month" value="'+now+'" required></label>'+
  '<label>Trục ưu tiên<select name="pillar">'+opt()+'</select></label>'+
  '<label>Progress & evidence<textarea name="progress" required placeholder="Các kết quả quan trọng, bằng chứng và điểm lệch kế hoạch"></textarea></label>'+
@@ -116,7 +142,7 @@ function renderDecision(){
 }
 function renderSettings(){
  return '<div class="two-col"><div class="form-card"><h3>Source-of-Truth Settings</h3><p class="tagline">OneNote không tự đồng bộ. Các thay đổi Objectives chỉ thực hiện sau khi bạn phê duyệt.</p><form id="settings-form">'+
- '<label>OneNote 2027 Objectives URL<input name="onenote_url" type="url" placeholder="https://..." value="'+safe(settings?.onenote_url||"")+'"></label>'+
+ '<label>OneNote 2027 Objectives URL<input name="onenote_url" type="url" placeholder="https://..." value="'+safe(settings?.onenote_url||SOURCE.url)+'"></label>'+
  '<label>North Star<input name="north_star" type="text" value="'+safe(settings?.north_star||"GM / Country Manager 2031")+'"></label>'+
  '<div class="action-row"><button class="btn primary" type="submit">Lưu Settings</button></div></form></div>'+
  '<div class="stack"><div class="card"><h3>Personal data export</h3><p>Xuất dữ liệu thành JSON để tự lưu bản sao lưu. File này chứa nội dung riêng tư, hãy bảo quản cẩn thận.</p><button class="btn soft" id="export-data">Tải bản sao dữ liệu</button></div><div class="card danger-zone"><h3>Security boundary</h3><p>Chia sẻ cùng Supabase project với Memoire nhưng dùng bảng Personal OS riêng, RLS theo user và không sử dụng service-role key phía trình duyệt.</p><p>Không có AI tự động xử lý dữ liệu: chỉ sao chép dữ liệu bạn chủ động chọn để review.</p></div></div></div>';
@@ -125,7 +151,7 @@ function render(){
  if(!user)return;
  $("#page-title").textContent=viewNames[currentView]||viewNames.overview;
  document.querySelectorAll("#nav [data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===currentView));
- const fn={overview:renderOverview,weekly:renderWeekly,monthly:renderMonthly,evidence:renderEvidence,decision:renderDecision,settings:renderSettings}[currentView]||renderOverview;
+ const fn={blueprint:renderBlueprint,overview:renderOverview,weekly:renderWeekly,monthly:renderMonthly,evidence:renderEvidence,decision:renderDecision,settings:renderSettings}[currentView]||renderOverview;
  $("#view-content").innerHTML=fn();
 }
 async function signIn(mode){
@@ -155,9 +181,10 @@ async function addMetrics(month,form){
 function reviewBrief(){
  const lastW=items("weekly").slice(0,4),lastM=items("monthly").slice(0,2),lastE=items("evidence").slice(0,7),lastD=items("decision").slice(0,7);
  const sections=[["Weekly",lastW],["Monthly",lastM],["Evidence",lastE],["Decisions",lastD]].map(([name,data])=>name+"\n"+data.map(x=>"- "+x.period_start+" ["+pName(x.pillar)+"] "+x.title+" "+JSON.stringify(x.content)).join("\n")).join("\n\n");
- return "Bạn là Lumi, trợ lý và mentor. Đây là dữ liệu Personal OS do tôi tự lựa chọn chia sẻ. Hãy phân tích tiến độ, rủi ro, các quyết định, lệch kế hoạch và 3 ưu tiên tiếp theo. Không suy đoán số liệu còn thiếu. OneNote 2027 Objectives là Source of Truth; chỉ đề xuất sửa khi được tôi đồng ý.\n\n"+sections;
+ return "Bạn là Lumi, trợ lý và mentor. Đây là dữ liệu Personal OS do tôi tự lựa chọn chia sẻ. Hãy phân tích tiến độ, rủi ro, các quyết định, lệch kế hoạch và 3 ưu tiên tiếp theo. Không suy đoán số liệu còn thiếu. OneNote 2027 Objectives là Source of Truth; chỉ đề xuất sửa khi được tôi đồng ý. Theo dõi theo 7 trục: Servicebio (P&L, channel, team, pipeline), MBA Apr-May, Chinese HSK4, one venture, savings rate base 25% stretch 35%, health, family, creative recovery.\n\n"+sections;
 }
 document.addEventListener("click",async e=>{
+ const qt=e.target.closest("[data-quarter]");if(qt){window._blueprintQuarter=Number(qt.dataset.quarter);render();return;}
  const nav=e.target.closest("[data-view]");if(nav){currentView=nav.dataset.view;render();window.scrollTo(0,0);return;}
  const del=e.target.closest("[data-delete]");if(del){
  if(!confirm("Xóa bản ghi này? Thao tác không thể hoàn tác."))return;
@@ -193,6 +220,6 @@ $("#reset-button").addEventListener("click",()=>signIn("reset"));
 $("#logout-button").addEventListener("click",async()=>{await db.auth.signOut();user=null;entries=[];metrics=[];stateLogin(false);});
 db.auth.onAuthStateChange(async(event,session)=>{
  const was=user?.id;user=session?.user||null;stateLogin(Boolean(user));
- if(user && was!==user.id){currentView="overview";await refresh();}
+ if(user && was!==user.id){currentView="blueprint";await refresh();}
 });
 (async()=>{const {data,error}=await db.auth.getSession();if(error)notifyError(error);user=data?.session?.user||null;stateLogin(Boolean(user));if(user)await refresh()})();
