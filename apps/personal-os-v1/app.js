@@ -158,7 +158,7 @@ function statusPill(i){return '<span class="status status-'+safe(STATUSES[i.stat
 function detailKey(i){const k=[i.page_id||i.week_start,i.key||i.text,i.occurred_on||''].join('|');detailRegistry.set(k,i);return k;}
 function itemRow(i){return '<article class="record-row"><div>'+statusPill(i)+'<p>'+safe(i.text)+'</p><small>'+safe(pName(i.pillar))+(explicitDate(i)?' · '+dtext(i.occurred_on):' · Chưa có ngày thực hiện')+'</small></div><button class="icon-button record-detail" data-detail="'+safe(detailKey(i))+'" aria-label="Mở chi tiết ghi nhận">'+icon('chevron')+'</button></article>';}
 function weekItems(w){return w?uniqueItems([w]):[];}
-function weekPicker(){const weeks=canonicalWeeks(notionWeeks).filter(w=>w.week_start.startsWith(String(selectedYear)));return '<label class="week-picker"><span>Tuần đang xem</span><select id="week-select"><option value="">'+(selectedYear===Number(dateNow().slice(0,4))?'Tuần hiện tại':'Tuần gần nhất có nguồn')+'</option>'+weeks.map(w=>'<option value="'+safe(w.week_start)+'" '+(window._weekStart===w.week_start?'selected':'')+'>'+dtext(w.week_start)+' – '+dtext(w.week_end)+'</option>').join('')+'</select></label>';}
+function weekPicker(){const weeks=canonicalWeeks(notionWeeks).filter(w=>w.week_start.startsWith(String(selectedYear)));return '<label class="week-picker"><span>Tuần đang xem</span><select id="week-select" aria-label="Tuần đang xem"><option value="">'+(selectedYear===Number(dateNow().slice(0,4))?'Tuần hiện tại':'Tuần gần nhất có nguồn')+'</option>'+weeks.map(w=>'<option value="'+safe(w.week_start)+'" '+(window._weekStart===w.week_start?'selected':'')+'>'+dtext(w.week_start)+' – '+dtext(w.week_end)+'</option>').join('')+'</select></label>';}
 function dataBanner(w){
  if(loadingData&&!w)return '<div class="sync-line" role="status"><span class="sync-dot pending"></span>Đang tải dữ liệu…</div>';
  if(loadError)return '<div class="data-banner warning" role="alert">'+icon('note')+'<span>Không tải đủ nguồn. Dữ liệu đang giữ có thể cũ. '+safe(loadError)+'</span><button class="btn small" id="retry-year">Thử lại</button></div>';
@@ -167,6 +167,7 @@ function dataBanner(w){
 }
 function focusPanel(){const state=focusTimer.state();return '<section class="focus-panel" aria-labelledby="focus-title"><div class="focus-top"><h3 id="focus-title">Một khoảng tập trung</h3>'+icon('clock')+'</div><div class="focus-time" id="focus-time" role="timer" aria-label="Thời gian tập trung còn lại">'+formatTimer(state.remaining)+'</div><p>Chọn một việc. Dành trọn sự chú ý.</p><div class="focus-controls"><button class="btn primary" id="focus-toggle">'+icon(state.running?'pause':'play')+'<span>'+(state.running?'Tạm dừng':state.remaining<1500&&state.remaining>0?'Tiếp tục':'Bắt đầu')+'</span></button><button class="icon-button focus-reset" id="focus-reset" aria-label="Đặt lại đồng hồ 25 phút" title="Đặt lại 25 phút">'+icon('reset')+'</button></div><small class="focus-caption">25 phút · đồng hồ cá nhân</small></section>';}
 function renderOverview(){
+ if(loadingData&&!notionWeeks.length)return '<section class="page-intro"><h1>Tuần của tôi</h1><p>Đang tải kế hoạch từ nguồn của bạn.</p></section><section class="panel loading-state" role="status">'+icon('refresh','loading-spin')+'<span>Đang đọc dữ liệu…</span></section>';
  const w=selectedWeek(),list=weekItems(w),range=w?{start:w.week_start,end:w.week_end}:weekRange();
  if(!w&&selectedYear!==Number(dateNow().slice(0,4)))return '<section class="page-intro"><h1>Tuần của tôi</h1><p>Năm '+selectedYear+'</p></section>'+(loadingData?dataBanner(null):loadError?dataBanner(null):'')+'<section class="panel year-empty">'+icon('calendar')+'<h3>Chưa có dữ liệu tuần cho năm '+selectedYear+'</h3><p class="info">Các tuần sẽ xuất hiện sau khi Weekly Planner được đồng bộ.</p><button class="btn primary" data-view="blueprint">Xem mục tiêu '+selectedYear+'</button></section>';
  const wins=list.filter(i=>i.kind==='must_win'||i.must_win===true).slice(0,3);
@@ -367,7 +368,9 @@ document.addEventListener("submit",async e=>{
 });
 $("#signup-button").addEventListener("click",()=>signIn("signup"));
 $("#reset-button").addEventListener("click",()=>signIn("reset"));
-$("#logout-button").addEventListener("click",async()=>{await db.auth.signOut();user=null;entries=[];metrics=[];notionWeeks=[];yearPlan=null;detailRegistry.clear();focusTimer.reset();stateLogin(false);});
+async function logout(){await db.auth.signOut();user=null;entries=[];metrics=[];notionWeeks=[];yearPlan=null;detailRegistry.clear();focusTimer.reset();stateLogin(false);}
+$("#logout-button").addEventListener("click",logout);
+$("#mobile-logout").addEventListener("click",logout);
 // Keep the auth callback synchronous: authenticated queries must run after
 // Supabase releases its auth lock, otherwise getSession and data loads can deadlock.
 db.auth.onAuthStateChange((event,session)=>{
