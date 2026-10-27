@@ -163,6 +163,7 @@ function dataBanner(w){
 }
 function renderOverview(){
  const w=selectedWeek(),list=weekItems(w),range=w?{start:w.week_start,end:w.week_end}:weekRange();
+ if(!w&&selectedYear!==Number(dateNow().slice(0,4)))return '<section class="page-intro"><h1>Tuần của tôi</h1><p>Năm '+selectedYear+'</p></section>'+(loadingData?'<div class="data-banner" role="status">Đang tải dữ liệu…</div>':loadError?dataBanner(null):'')+'<section class="panel"><h3>Chưa có dữ liệu tuần cho năm '+selectedYear+'</h3><p class="info">Các tuần sẽ xuất hiện tại đây sau khi Weekly Planner được đồng bộ. Bạn có thể xem mục tiêu năm trong lúc chờ dữ liệu.</p><button class="btn primary" data-view="blueprint">Xem mục tiêu '+selectedYear+'</button></section>';
  const wins=list.filter(i=>i.kind==='must_win'||i.must_win===true).slice(0,3);
  const blockers=list.filter(i=>i.kind==='risk'||i.status==='blocked').slice(0,3);
  const stops=list.filter(i=>i.kind==='stop');
