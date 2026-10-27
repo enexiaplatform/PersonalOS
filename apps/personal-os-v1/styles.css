@@ -17,14 +17,14 @@ p{overflow-wrap:anywhere}
 .brand{display:flex;align-items:center;flex-direction:row;padding:5px 12px 35px;gap:11px}
 .brand b{font:700 22px/1 "Segoe UI",Arial,sans-serif;background:#e8f2ef;color:#17685b;border-radius:10px;width:36px;height:36px;display:grid;place-items:center}
 .brand span{font:700 13px/1.4 "Segoe UI",Arial,sans-serif;letter-spacing:.015em;color:#233238}
-.nav-item{background:none;border:0;color:#5a6b73;width:100%;display:flex;align-items:center;gap:13px;padding:14px 15px;margin:4px 0;border-radius:5px;text-align:left;font-size:14px;font-weight:500;line-height:1.5}
+.nav-item{white-space:nowrap;background:none;border:0;color:#5a6b73;width:100%;display:flex;align-items:center;gap:13px;padding:14px 15px;margin:4px 0;border-radius:5px;text-align:left;font-size:13px;font-weight:500;line-height:1.5}
 .nav-item svg{display:block;width:19px;height:19px}
 .nav-item:hover{background:#f3f7f5;color:#17685b}
 .nav-item.active{background:#e8f3ef;color:#17685b;font-weight:650}
 .side-manifesto{margin:auto 8px 0;border-top:1px solid var(--line);padding:20px 0 0;font:500 13px/1.7 "Segoe UI",Arial,sans-serif;color:#60736b}
 .side-manifesto small{display:block;font:11px/1.6 'Segoe UI',Arial,sans-serif;letter-spacing:0;margin-top:6px;color:#80928b}
 .main{width:100%;max-width:1360px;margin:0 auto;padding:0 36px 32px;min-width:0}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;min-height:76px;border-bottom:1px solid var(--line)}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;min-height:64px;border-bottom:1px solid var(--line)}
 .topbar h2{font-size:14px;font-weight:500;margin:0;color:#6a7c83}
 .top-actions{display:flex;align-items:center;gap:10px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid #ccd5dc;border-radius:6px;padding:10px 15px;background:#fff;color:#23363b;font-size:13px;font-weight:600;line-height:1.5;text-decoration:none;white-space:nowrap}
@@ -36,13 +36,13 @@ p{overflow-wrap:anywhere}
 .link{border:0;background:transparent;padding:8px 0;color:var(--teal);font-size:12px}
 .top-actions>.link{color:#77828a;font-size:11px}
 .year-picker select{padding:9px 12px;min-width:85px;background:#fff}
-.page-intro{margin:27px 0 22px}
-.page-intro h1{font:650 32px/1.35 "Segoe UI",Arial,sans-serif;letter-spacing:0;color:#20332e;margin:0 0 8px}
+.page-intro{margin:20px 0 18px}
+.page-intro h1{font:650 30px/1.35 "Segoe UI",Arial,sans-serif;letter-spacing:0;color:#20332e;margin:0 0 8px}
 .page-intro>p,.intro-bottom>p{color:#7b848f;font-size:14px;margin:0}
 .intro-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px}
 .week-picker{display:flex;gap:10px;align-items:center;font-size:11px}
 .week-picker select{width:auto;max-width:235px;padding:8px 10px;font-size:11px}
-.data-banner{display:flex;align-items:center;justify-content:space-between;gap:15px;background:#fff;border:1px solid var(--line);padding:10px 15px;border-radius:6px;font-size:12px;margin:0 0 20px;color:#35544e}
+.data-banner{display:flex;align-items:center;justify-content:space-between;gap:15px;background:#fff;border:1px solid var(--line);padding:7px 15px;border-radius:8px;font-size:12px;margin:0 0 18px;color:#35544e}
 .data-banner.warning{background:#fafbf9;border-color:#e1e6dd;color:#637061}.data-banner.warning b{color:#8c6525}.data-banner .sync-dot{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:50%;background:#bc9555}
 .data-banner b{font-weight:600}
 .data-banner .btn{padding:7px 12px}
@@ -50,7 +50,7 @@ p{overflow-wrap:anywhere}
 .panel{background:white;border:1px solid var(--line);border-radius:12px;padding:24px;min-width:0}
 .panel h3{font:650 18px/1.5 "Segoe UI",Arial,sans-serif;letter-spacing:0;margin:0 0 8px;color:#243a34}
 .section-note{font-size:13px;margin:0 0 10px;line-height:1.7}
-.outcome-row{display:flex;gap:16px;padding:20px 0;border-bottom:1px solid var(--line);align-items:flex-start}
+.outcome-row{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);align-items:flex-start}
 .outcome-row:last-of-type{border-bottom:0}
 .outcome-no{font:600 12px/1 "Segoe UI",Arial,sans-serif;background:#f0f5f3;color:#527769;min-width:30px;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;margin-top:2px}
 .outcome-row p{font-size:15px;line-height:1.75;margin:0 0 10px;color:#31463d}
@@ -189,3 +189,6 @@ to{opacity:1;transform:none}
 @media(max-width:650px){.shell{display:block}.sidebar{position:static;height:auto;padding:14px 16px 6px;border-right:0;border-bottom:1px solid var(--line)}.brand{padding:0 0 12px;gap:10px}.brand b{width:30px;height:30px;font-size:20px}.brand span{font-size:12px}.side-manifesto{display:none}#nav{display:flex;overflow:auto;gap:4px;padding-bottom:7px}.nav-item{min-width:max-content;width:auto;padding:10px 12px;margin:0;font-size:13px;gap:8px}.nav-item svg{width:17px;height:17px}.main{padding:0 16px 30px}.topbar{min-height:64px;gap:8px;flex-wrap:wrap}.topbar h2{font-size:12px}.top-actions{gap:7px}.top-actions .btn{font-size:12px;padding:7px 9px}.top-actions>.link{font-size:11px}.year-picker select{font-size:12px;min-width:65px;padding:7px}.page-intro{margin:22px 0 18px}.page-intro h1{font-size:27px;line-height:1.4}.page-intro>p,.intro-bottom>p{font-size:14px}.intro-bottom{flex-direction:column;gap:15px;align-items:stretch}.week-picker{justify-content:space-between;font-size:12px}.week-picker select{max-width:225px;font-size:12px}.data-banner{align-items:flex-start;gap:10px;padding:12px;font-size:12px;flex-wrap:wrap}.data-banner .btn{font-size:12px}.panel{padding:20px;border-radius:10px}.panel h3{font-size:18px}.section-note{font-size:13px}.outcome-row{gap:12px;padding:18px 0}.outcome-row p{font-size:15px;line-height:1.8}.outcome-no{min-width:28px;width:28px;height:28px;font-size:11px}.risk-row p,.plain-list li{font-size:14px}.day-tab{font-size:11px;padding:11px 1px}.day-tab small{font-size:11px}.day-content{padding:10px}.record-row p{font-size:14px}.record-row small{font-size:11px}.source-link{font-size:11px}.rhythm-band{padding:20px;flex-direction:column;align-items:flex-start;gap:16px}.rhythm-band h3{font-size:19px}.rhythm-band p{font-size:13px}.cards,.notion-counts,.form-grid,.life-grid,.journey{grid-template-columns:1fr}.section-header{flex-wrap:wrap;align-items:flex-start;gap:12px}.section-header label{width:100%}.form-card{padding:20px}.source-step{grid-template-columns:1fr;gap:5px}.goal-card summary{padding:18px}.goal-card summary strong{font-size:15px}.goal-count{display:none}.goal-detail{padding:0 18px 20px}.hero{display:block;padding:10px 0}.hero h3{font-size:27px}.capacity-banner{flex-direction:column;align-items:flex-start;gap:8px}.auth-shell{grid-template-columns:1fr}.auth-intro{min-height:260px;padding:28px}.auth-intro h1{font-size:35px;margin:20px 0 8px}.auth-intro small{display:none}.auth-intro p{font-size:14px}.auth-card{padding:30px 26px 40px}.auth-card h2{font-size:27px}.toast{left:16px;right:16px;bottom:16px}.review-option{padding:20px}.review-option small{font-size:13px}.footer{font-size:11px}.empty-action{margin-top:12px}}
 
 .empty-day{padding:14px 4px}.empty-day .quiet{margin:7px 0 14px}.week-picker span{white-space:nowrap}
+
+.mobile-navigation{display:none}
+@media(max-width:650px){.sidebar{display:flex;flex-direction:row;align-items:center;gap:12px;padding:14px 16px}.brand{flex:1;padding:0}.brand span{font-size:11px}.brand b{min-width:30px}#nav{display:none}.mobile-navigation{display:block;width:178px;max-width:54%}.mobile-navigation select{background:#eff6f3;border-color:#dce9e1;color:#23624f;font-size:13px;font-weight:600;padding:10px 9px}.data-banner{flex-wrap:nowrap;align-items:center;gap:8px}.data-banner>span{flex:1;min-width:0;line-height:1.8}.data-banner .btn{padding:6px 8px;font-size:11px}.page-intro{margin-top:20px}.outcome-row{padding:16px 0}}

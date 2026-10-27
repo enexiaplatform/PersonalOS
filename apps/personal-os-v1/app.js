@@ -132,7 +132,7 @@ function renderNotion(){
 }
 function notionUrl(value){try{const u=new URL(value);return u.protocol==='https:'&&['app.notion.com','www.notion.so','notion.so'].includes(u.hostname)?u.href:'#';}catch{return '#';}}
 
-const YEAR_AXES=[['career','Sự nghiệp'],['business','Business'],['freelance','Freelance'],['education','Learning'],['health','Sức khỏe & thể thao'],['finance','Finance'],['growth','Đời sống & sáng tạo'],['relationships','Quan hệ & gia đình']];
+const YEAR_AXES=[['career','Sự nghiệp'],['business','Business cá nhân'],['freelance','Freelance'],['education','Học tập'],['health','Sức khỏe & thể thao'],['finance','Tài chính'],['growth','Đời sống & sáng tạo'],['relationships','Quan hệ & gia đình']];
 const yearPillars=()=>selectedYear===2026?YEAR_AXES.map(([id,name],i)=>[id,name,['◈','◇','↗','✦','♥','▤','✳','♧'][i],['#dcebf8','#fff0dc','#ffe8d6','#ebe4f9','#ffe9e6','#e2f3e7','#fff2d7','#f5e5f1'][i]]):PILLARS;
 const sourceForYear=()=>selectedYear===2026?yearPlan?.source_url||'':SOURCE.url;
 const normalizePillar=id=>selectedYear===2026&&id==='entrepreneurship'?'business':id;
@@ -251,8 +251,9 @@ function renderSettings(){
 }
 function render(){
  if(!user)return;
- $("#page-title").textContent=currentView==='overview'?"Không gian của Henry":viewNames[currentView]||"Personal OS";
+ $("#page-title").textContent="Không gian của Henry";
  $('#os-year').value=String(selectedYear);
+ if($('#mobile-view'))$('#mobile-view').value=['notion','weekly','monthly','evidence','decision'].includes(currentView)?'review':currentView;
  $('#blueprint-label').textContent='Mục tiêu '+selectedYear;
  document.querySelectorAll("#nav [data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===currentView||b.dataset.view==='review'&&['notion','weekly','monthly','evidence','decision'].includes(currentView)));
  const fn={life:renderLife,business:renderBusiness,review:renderReviewHub,notion:renderNotion,blueprint:renderBlueprint,overview:renderOverview,weekly:renderWeekly,monthly:renderMonthly,evidence:renderEvidence,decision:renderDecision,settings:renderSettings}[currentView]||renderOverview;
@@ -341,7 +342,7 @@ db.auth.onAuthStateChange((event,session)=>{
 });
 (async()=>{const {data,error}=await db.auth.getSession();if(error)notifyError(error);user=data?.session?.user||null;stateLogin(Boolean(user));if(user)void refresh()})();
 
-document.addEventListener("change",e=>{if(e.target.id==="week-select"){window._weekStart=e.target.value;window._selectedDay=null;render();return;}if(e.target.id==="life-date"){if(!e.target.value.startsWith(String(selectedYear))){toast('Chọn năm ở thanh trên để xem dữ liệu năm khác.');render();return;}window._lifeDay=e.target.value;render();return;}if(e.target.id==="os-year"){selectedYear=Number(e.target.value)===2027?2027:2026;localStorage.setItem("henry-os-year",selectedYear);window._notionPeriod=monthNow();window._annualQuarter=undefined;window._weekStart=null;window._lifeDay=null;yearPlan=null;settings=null;refresh();return;}if(e.target.id==="notion-mode"){window._notionMode=e.target.value;render();}if(e.target.id==="notion-period"&&/^\d{4}-\d{2}$/.test(e.target.value)){if(!e.target.value.startsWith(String(selectedYear))){toast("Chọn năm ở thanh trên để chuyển toàn bộ workspace.");e.target.value=window._notionPeriod||monthNow();return;}window._notionPeriod=e.target.value;render();}});
+document.addEventListener("change",e=>{if(e.target.id==="mobile-view"){currentView=e.target.value;render();window.scrollTo(0,0);return;}if(e.target.id==="week-select"){window._weekStart=e.target.value;window._selectedDay=null;render();return;}if(e.target.id==="life-date"){if(!e.target.value.startsWith(String(selectedYear))){toast('Chọn năm ở thanh trên để xem dữ liệu năm khác.');render();return;}window._lifeDay=e.target.value;render();return;}if(e.target.id==="os-year"){selectedYear=Number(e.target.value)===2027?2027:2026;localStorage.setItem("henry-os-year",selectedYear);window._notionPeriod=monthNow();window._annualQuarter=undefined;window._weekStart=null;window._lifeDay=null;yearPlan=null;settings=null;refresh();return;}if(e.target.id==="notion-mode"){window._notionMode=e.target.value;render();}if(e.target.id==="notion-period"&&/^\d{4}-\d{2}$/.test(e.target.value)){if(!e.target.value.startsWith(String(selectedYear))){toast("Chọn năm ở thanh trên để chuyển toàn bộ workspace.");e.target.value=window._notionPeriod||monthNow();return;}window._notionPeriod=e.target.value;render();}});
 
 setInterval(()=>{if(user&&!document.hidden&&!loadingData&&['overview','life','business','notion'].includes(currentView)&&!document.activeElement?.matches('input,textarea,select'))void refresh(true);},60000);
 document.addEventListener('visibilitychange',()=>{if(user&&!document.hidden&&!loadingData&&!document.activeElement?.matches('input,textarea,select'))void refresh();});
