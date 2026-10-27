@@ -7,3 +7,11 @@ export function createFocusTimer({duration=1500,now=()=>Date.now()}={}){
  return {state,start(){if(endsAt!==null)return;if(remaining<=0)remaining=duration;endsAt=now()+remaining*1000;},pause(){remaining=state().remaining;endsAt=null;},reset(){remaining=duration;endsAt=null;},tick(){if(endsAt!==null&&state().remaining<=0){remaining=0;endsAt=null;return true;}return false;}};
 }
 export function filterRecords(records,query){const needle=query.trim().normalize('NFC').toLocaleLowerCase('vi');if(!needle)return [];return records.filter(i=>[i.text,i.context,i.pillar].join(' ').normalize('NFC').toLocaleLowerCase('vi').includes(needle)).slice(0,12);}
+
+export function statementParts(text){
+ const value=String(text||'').trim();
+ const comma=value.indexOf(','),period=value.indexOf('. '),colon=value.indexOf(':');
+ const at=comma>30&&comma<95?comma:period>30?period:colon>20?colon:-1;
+ if(at<0)return {title:value,detail:''};
+ return {title:value.slice(0,at).trim(),detail:value.slice(at+1).trim()};
+}
