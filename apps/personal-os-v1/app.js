@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.58.0";
 import { STATUSES, todayVN, weekRange, canonicalWeeks, uniqueItems, currentSnapshot, periodItems, explicitDate, dailyEvidence } from "./model.mjs";
+import { icon, createFocusTimer, formatTimer, filterRecords } from "./experience.mjs";
 import { SOURCE, BLUEPRINT, CAPACITY } from "./goals.js";
 import { PROJECT_URL, PUBLISHABLE_KEY } from "./config.js";
 const db=createClient(PROJECT_URL,PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
@@ -17,6 +18,8 @@ let yearPlan=null,loadingData=false,loadError="",refreshSequence=0;
 let notionWeeks=[];
 let user=null,entries=[],metrics=[],settings=null,currentView="overview",busy=false;
 const $=s=>document.querySelector(s);
+const detailRegistry=new Map();
+const focusTimer=createFocusTimer();
 const safe=s=>String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
 const dateNow=()=>todayVN();
 const monthNow=()=>selectedYear+dateNow().slice(4,7);
@@ -152,18 +155,20 @@ function selectedWeek(){
 }
 function sourceLink(w,label="Mở Notion"){return w?'<a class="btn ghost" href="'+safe(notionUrl(w.source_url))+'" target="_blank" rel="noopener noreferrer">'+label+'</a>':'';}
 function statusPill(i){return '<span class="status status-'+safe(STATUSES[i.status]?i.status:'unknown')+'">'+safe(STATUSES[i.status]||'Chưa rõ')+(i.kind==='activity'?' · hoạt động':'')+'</span>';}
-function itemRow(i){return '<article class="record-row"><div>'+statusPill(i)+'<p>'+safe(i.text)+'</p><small>'+safe(pName(i.pillar))+(explicitDate(i)?' · '+dtext(i.occurred_on):' · Chưa có ngày thực hiện')+'</small></div><a class="source-link" aria-label="Mở nguồn Notion" href="'+safe(notionUrl(i.source_url))+'" target="_blank" rel="noopener noreferrer">Nguồn ↗</a></article>';}
+function detailKey(i){const k=[i.page_id||i.week_start,i.key||i.text,i.occurred_on||''].join('|');detailRegistry.set(k,i);return k;}
+function itemRow(i){return '<article class="record-row"><div>'+statusPill(i)+'<p>'+safe(i.text)+'</p><small>'+safe(pName(i.pillar))+(explicitDate(i)?' · '+dtext(i.occurred_on):' · Chưa có ngày thực hiện')+'</small></div><button class="icon-button record-detail" data-detail="'+safe(detailKey(i))+'" aria-label="Mở chi tiết ghi nhận">'+icon('chevron')+'</button></article>';}
 function weekItems(w){return w?uniqueItems([w]):[];}
 function weekPicker(){const weeks=canonicalWeeks(notionWeeks).filter(w=>w.week_start.startsWith(String(selectedYear)));return '<label class="week-picker"><span>Tuần đang xem</span><select id="week-select"><option value="">'+(selectedYear===Number(dateNow().slice(0,4))?'Tuần hiện tại':'Tuần gần nhất có nguồn')+'</option>'+weeks.map(w=>'<option value="'+safe(w.week_start)+'" '+(window._weekStart===w.week_start?'selected':'')+'>'+dtext(w.week_start)+' – '+dtext(w.week_end)+'</option>').join('')+'</select></label>';}
 function dataBanner(w){
- if(loadingData)return '<div class="data-banner" role="status">Đang tải dữ liệu…</div>';
- if(loadError)return '<div class="data-banner warning" role="alert">Không tải đủ nguồn. Nội dung đang giữ có thể cũ. '+safe(loadError)+' <button class="btn ghost" id="retry-year">Thử lại</button></div>';
- if(!w)return '<div class="data-banner warning"><span>Chưa có bản cập nhật cho tuần này. Xem lịch sử hoặc mở Notion để kiểm tra.</span><button class="btn ghost" data-view="notion">Xem dữ liệu nguồn</button></div>';
- return '<div class="data-banner '+(w.coverage==='complete'?'':'warning')+'"><span><span class="sync-dot" aria-hidden="true"></span><b>'+({complete:'Đã đọc nguồn',partial:'Dữ liệu một phần',page_only:'Đã đọc nội dung trang'}[w.coverage]||'Cần đối chiếu')+'</b> · Đồng bộ '+safe(new Date(w.synced_at).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit'}))+'</span>'+sourceLink(w)+'</div>';
+ if(loadingData&&!w)return '<div class="sync-line" role="status"><span class="sync-dot pending"></span>Đang tải dữ liệu…</div>';
+ if(loadError)return '<div class="data-banner warning" role="alert">'+icon('note')+'<span>Không tải đủ nguồn. Dữ liệu đang giữ có thể cũ. '+safe(loadError)+'</span><button class="btn small" id="retry-year">Thử lại</button></div>';
+ if(!w)return '<div class="sync-line"><span class="sync-dot pending"></span>Chưa có bản cập nhật cho tuần đang xem <button class="text-button" data-view="notion">Xem nguồn '+icon('arrow')+'</button></div>';
+ return '<div class="sync-line"><span class="sync-dot '+(w.coverage==='complete'?'':'pending')+'"></span><span>'+safe({complete:'Đã đọc nguồn',partial:'Dữ liệu một phần',page_only:'Đã đọc nội dung trang'}[w.coverage]||'Cần đối chiếu')+' · Cập nhật '+safe(new Date(w.synced_at).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit'}))+'</span><button class="text-button sync-details" data-view="notion">Chi tiết nguồn '+icon('arrow')+'</button></div>';
 }
+function focusPanel(){const state=focusTimer.state();return '<section class="focus-panel" aria-labelledby="focus-title"><div class="focus-top"><h3 id="focus-title">Một khoảng tập trung</h3>'+icon('clock')+'</div><div class="focus-time" id="focus-time" role="timer" aria-label="Thời gian tập trung còn lại">'+formatTimer(state.remaining)+'</div><p>Chọn một việc. Dành trọn sự chú ý.</p><div class="focus-controls"><button class="btn primary" id="focus-toggle">'+icon(state.running?'pause':'play')+'<span>'+(state.running?'Tạm dừng':state.remaining<1500&&state.remaining>0?'Tiếp tục':'Bắt đầu')+'</span></button><button class="icon-button focus-reset" id="focus-reset" aria-label="Đặt lại đồng hồ 25 phút" title="Đặt lại 25 phút">'+icon('reset')+'</button></div><small class="focus-caption">25 phút · đồng hồ cá nhân</small></section>';}
 function renderOverview(){
  const w=selectedWeek(),list=weekItems(w),range=w?{start:w.week_start,end:w.week_end}:weekRange();
- if(!w&&selectedYear!==Number(dateNow().slice(0,4)))return '<section class="page-intro"><h1>Tuần của tôi</h1><p>Năm '+selectedYear+'</p></section>'+(loadingData?'<div class="data-banner" role="status">Đang tải dữ liệu…</div>':loadError?dataBanner(null):'')+'<section class="panel"><h3>Chưa có dữ liệu tuần cho năm '+selectedYear+'</h3><p class="info">Các tuần sẽ xuất hiện tại đây sau khi Weekly Planner được đồng bộ. Bạn có thể xem mục tiêu năm trong lúc chờ dữ liệu.</p><button class="btn primary" data-view="blueprint">Xem mục tiêu '+selectedYear+'</button></section>';
+ if(!w&&selectedYear!==Number(dateNow().slice(0,4)))return '<section class="page-intro"><h1>Tuần của tôi</h1><p>Năm '+selectedYear+'</p></section>'+(loadingData?dataBanner(null):loadError?dataBanner(null):'')+'<section class="panel year-empty">'+icon('calendar')+'<h3>Chưa có dữ liệu tuần cho năm '+selectedYear+'</h3><p class="info">Các tuần sẽ xuất hiện sau khi Weekly Planner được đồng bộ.</p><button class="btn primary" data-view="blueprint">Xem mục tiêu '+selectedYear+'</button></section>';
  const wins=list.filter(i=>i.kind==='must_win'||i.must_win===true).slice(0,3);
  const blockers=list.filter(i=>i.kind==='risk'||i.status==='blocked').slice(0,3);
  const stops=list.filter(i=>i.kind==='stop');
@@ -171,12 +176,12 @@ function renderOverview(){
  const day=window._selectedDay&&window._selectedDay>=range.start&&window._selectedDay<=range.end?window._selectedDay:(dateNow()>=range.start&&dateNow()<=range.end?dateNow():range.start);
  const dates=Array.from({length:7},(_,n)=>{const d=new Date(range.start+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10);});
  const daily=list.filter(i=>explicitDate(i)===day&&!['must_win','summary','risk','stop'].includes(i.kind));
- return '<section class="page-intro"><h1>Tuần của tôi</h1><div class="intro-bottom"><p>Tuần '+dtext(range.start)+' — '+dtext(range.end)+'</p>'+weekPicker()+'</div></section>'+dataBanner(w)+
- '<div class="command-grid"><section class="panel must-wins"><h3>Ưu tiên trong tuần</h3><p class="section-note">Tối đa 3 kết quả từ kế hoạch tuần trên Notion.</p>'+Array.from({length:3},(_,n)=>{const i=wins[n];return '<div class="outcome-row"><span class="outcome-no">0'+(n+1)+'</span><div>'+(i?'<p>'+safe(i.text)+'</p>'+statusPill(i):'<p class="muted">Chưa có kết quả được đồng bộ</p>')+'</div></div>';}).join('')+sourceLink(w,'Xem kế hoạch gốc ↗')+'</section>'+
- '<section class="panel blockers"><h3>Điểm cần gỡ</h3>'+(blockers.length?blockers.map(i=>'<div class="risk-row"><span class="risk-dot"></span><p>'+safe(i.text)+'</p></div>').join(''):'<p class="quiet">Chưa có blocker được đồng bộ.</p>')+'</section>'+
- '<section class="panel day-plan"><h3>Lịch & ghi nhận</h3><div class="day-tabs" role="group" aria-label="Chọn ngày">'+dates.map((d,n)=>'<button class="day-tab '+(day===d?'selected':'')+'" data-day="'+d+'" aria-pressed="'+(day===d)+'"><span>'+['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'][n]+'</span><small>'+d.slice(8)+'/'+d.slice(5,7)+'</small></button>').join('')+'</div><div class="day-content">'+(daily.length?daily.map(itemRow).join(''):'<div class="empty-day"><p class="quiet">Chưa có ghi nhận cho ngày '+dtext(day)+'.</p>'+(recentDay?'<button class="btn soft empty-action" data-day="'+recentDay+'">Xem ghi nhận gần nhất · '+dtext(recentDay)+'</button>':'')+'</div>')+'</div></section>'+
- '<section class="panel stop-list"><h3>Dừng / để sau</h3>'+(stops.length?'<ul class="plain-list">'+stops.map(i=>'<li>'+safe(i.text)+'</li>').join('')+'</ul>':'<p class="quiet">Chưa có quyết định trì hoãn từ Planner.</p>')+'</section></div>'+
- '<section class="rhythm-band"><div><h3>Nhịp check-in của bạn</h3><p>Daily Check-in 22:00 · Weekly Review thứ Bảy 09:00</p></div><button class="btn" data-view="life">Xem nhịp sống ↗</button></section>';
+ return '<section class="week-heading"><div><h1>Tuần của tôi</h1><p>'+dtext(range.start)+' — '+dtext(range.end)+'</p></div><div class="heading-actions">'+weekPicker()+(w?'<a class="btn primary" href="'+safe(notionUrl(w.source_url))+'" target="_blank" rel="noopener noreferrer">Mở Weekly Planner '+icon('arrow')+'</a>':'')+'</div></section>'+dataBanner(w)+
+ '<div class="day-tabs week-rail" role="group" aria-label="Chọn ngày">'+dates.map((d,n)=>'<button class="day-tab '+(day===d?'selected':'')+'" data-day="'+d+'" aria-label="'+['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'][n]+' '+d.slice(8)+'/'+d.slice(5,7)+'" aria-pressed="'+(day===d)+'"><span>'+['T2','T3','T4','T5','T6','T7','CN'][n]+'</span><b>'+d.slice(8)+'</b>'+(list.some(i=>explicitDate(i)===d)?'<i class="day-has-record" aria-hidden="true"></i>':'')+'</button>').join('')+'</div>'+
+ '<div class="work-grid"><div class="work-column"><section class="panel must-wins"><div class="panel-heading"><h3>Điều quan trọng tuần này</h3><span class="count-label">'+wins.length+' ưu tiên</span></div>'+(wins.length?wins.map((i,n)=>'<button class="priority-row" data-detail="'+safe(detailKey(i))+'"><span class="priority-number">0'+(n+1)+'</span><span class="priority-copy"><strong>'+safe(i.text)+'</strong><small>'+safe(pName(i.pillar))+' · Xem nội dung & nguồn</small></span>'+statusPill(i)+icon('chevron')+'</button>').join(''):'<div class="empty-state">'+icon('target')+'<p>Chưa có ưu tiên được đồng bộ.</p>'+sourceLink(w,'Mở kế hoạch gốc')+'</div>')+'</section>'+
+ '<section class="panel daily-panel"><div class="panel-heading"><h3>Ghi nhận ngày '+day.slice(8)+'/'+day.slice(5,7)+'</h3><span class="day-context">'+(day===dateNow()?'Hôm nay':dtext(day))+'</span></div>'+(daily.length?'<div class="day-content">'+daily.map(itemRow).join('')+'</div>':'<div class="empty-state">'+icon('note')+'<p>Ngày này chưa có ghi nhận.</p>'+(recentDay?'<button class="text-button coral" data-day="'+recentDay+'">Xem ngày gần nhất · '+recentDay.slice(8)+'/'+recentDay.slice(5,7)+' '+icon('arrow')+'</button>':'')+'</div>')+'</section></div>'+
+ '<div class="work-column">'+focusPanel()+'<section class="panel blockers"><div class="panel-heading"><h3>Đang chờ</h3><span class="count-label">'+blockers.length+'</span></div>'+(blockers.length?blockers.map(i=>'<button class="waiting-row" data-detail="'+safe(detailKey(i))+'"><span class="risk-dot"></span><span>'+safe(i.text)+'</span>'+icon('chevron')+'</button>').join(''):'<div class="empty-state small"><p>Chưa có điểm nghẽn từ nguồn.</p></div>')+'</section></div></div>'+
+ '<section class="panel stop-panel"><div class="panel-heading"><h3>Để sau tuần này</h3><span class="day-context">Theo Weekly Planner</span></div>'+(stops.length?stops.map(i=>'<button class="parked-row" data-detail="'+safe(detailKey(i))+'">'+icon('note')+'<span>'+safe(i.text)+'</span>'+icon('chevron')+'</button>').join(''):'<div class="empty-state small"><p>Chưa có quyết định trì hoãn trong nguồn.</p></div>')+'</section>';
 }
 function renderLife(){
  const fallback=selectedWeek(),recentDay=weekItems(fallback).map(explicitDate).filter(d=>d&&d<=dateNow()&&d.startsWith(String(selectedYear))).sort().at(-1),day=window._lifeDay||recentDay||(selectedYear===Number(dateNow().slice(0,4))?dateNow():fallback?.week_end||selectedYear+'-01-01');
@@ -252,13 +257,15 @@ function renderSettings(){
 }
 function render(){
  if(!user)return;
- $("#page-title").textContent="Không gian của Henry";
+ $("#page-title").textContent=currentView==='overview'?"Tổng quan":currentView==='blueprint'?"Mục tiêu "+selectedYear:viewNames[currentView]||"Personal OS";
  $('#os-year').value=String(selectedYear);
  if($('#mobile-view'))$('#mobile-view').value=['notion','weekly','monthly','evidence','decision'].includes(currentView)?'review':currentView;
  $('#blueprint-label').textContent='Mục tiêu '+selectedYear;
  document.querySelectorAll("#nav [data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===currentView||b.dataset.view==='review'&&['notion','weekly','monthly','evidence','decision'].includes(currentView)));
  const fn={life:renderLife,business:renderBusiness,review:renderReviewHub,notion:renderNotion,blueprint:renderBlueprint,overview:renderOverview,weekly:renderWeekly,monthly:renderMonthly,evidence:renderEvidence,decision:renderDecision,settings:renderSettings}[currentView]||renderOverview;
+ detailRegistry.clear();
  $("#view-content").innerHTML=fn();
+ updateFocusDisplay();
 }
 async function signIn(mode){
  const email=$("#email").value.trim(),password=$("#password").value;
@@ -294,7 +301,25 @@ function reviewBrief(){
  const sections=[["Weekly",lastW],["Monthly",lastM],["Evidence",lastE],["Decisions",lastD]].map(([name,data])=>name+"\n"+data.map(x=>"- "+x.period_start+" ["+pName(x.pillar)+"] "+x.title+" "+JSON.stringify(x.content)).join("\n")).join("\n\n");
  return "Notion imports (nguồn tự ghi nhận; không suy đoán hoàn thành KR):\n"+JSON.stringify(notionWeeks.filter(w=>w.week_start.startsWith(String(selectedYear))))+"\n\n"+"Bạn là Lumi, trợ lý và mentor. Đây là dữ liệu Personal OS do tôi tự lựa chọn chia sẻ. Hãy phân tích tiến độ, rủi ro, các quyết định, lệch kế hoạch và 3 ưu tiên tiếp theo. Không suy đoán số liệu còn thiếu. OneNote là nguồn mục tiêu năm, Notion là nguồn thực thi tuần. Mục tiêu năm "+selectedYear+" là Source of Truth. Chỉ đối chiếu dữ liệu cùng năm; không suy đoán hoàn thành KR từ task. Weekly phản tư không cộng thêm vào Daily. Đưa ra tối đa 3 Must-Win, 3 rủi ro, stop/defer và kế hoạch ngày có buffer; xin duyệt thay đổi cam kết quan trọng. Các trục: "+yearPillars().map(p=>p[1]).join(", ")+". Bản mục tiêu: "+JSON.stringify(selectedYear===2026?yearPlan?.plan:BLUEPRINT)+".\n\n"+sections;
 }
+function openDetail(key){const i=detailRegistry.get(key);if(!i){toast('Nguồn đã thay đổi. Hãy mở lại ghi nhận.');return;}
+ $('#detail-content').innerHTML='<div class="detail-kind">'+statusPill(i)+'</div><h2 id="detail-title">'+safe({must_win:'Ưu tiên trong tuần',risk:'Điểm cần gỡ',stop:'Để sau tuần này',activity:'Ghi nhận hoạt động',outcome:'Kết quả ghi nhận'}[i.kind]||'Chi tiết ghi nhận')+'</h2><p class="detail-body">'+safe(i.text)+'</p><dl class="detail-metadata"><div><dt>Trục</dt><dd>'+safe(pName(i.pillar))+'</dd></div><div><dt>Ngày thực hiện</dt><dd>'+safe(explicitDate(i)?dtext(i.occurred_on):'Chưa có ngày cụ thể từ nguồn')+'</dd></div><div><dt>Tuần</dt><dd>'+safe(dtext(i.week_start))+'</dd></div></dl><div class="detail-context"><b>Bối cảnh từ nguồn</b><p>'+safe(i.context||'Chưa có thêm bối cảnh.')+'</p></div><a class="btn primary" href="'+safe(notionUrl(i.source_url))+'" target="_blank" rel="noopener noreferrer">Mở nguồn Notion '+icon('arrow')+'</a><p class="info detail-footnote">Nội dung được giữ theo nguồn. Xem chi tiết không thay đổi kế hoạch hoặc trạng thái công việc.</p>';
+ if($('#command-dialog').open)$('#command-dialog').close();$('#detail-dialog').showModal();}
+function commandResults(){const query=$('#command-input').value.trim();const screens=[['overview','Tuần của tôi','calendar'],['life','Nhịp sống','sun'],['business','Business cá nhân','bag'],['blueprint','Mục tiêu '+selectedYear,'target'],['review','Review & bằng chứng','review'],['settings','Nguồn & cài đặt','settings']];
+ const matches=screens.filter(([,name])=>!query||name.toLocaleLowerCase('vi').includes(query.toLocaleLowerCase('vi')));
+ const records=filterRecords(periodItems(notionWeeks,selectedYear),query);
+ $('#command-results').innerHTML=(matches.length?'<div class="command-group-title">Mở màn hình</div>'+matches.map(([view,name,glyph])=>'<button class="command-result" data-view="'+view+'">'+icon(glyph)+'<span>'+safe(name)+'</span>'+icon('arrow')+'</button>').join(''):'')+(records.length?'<div class="command-group-title">Ghi nhận trong năm '+selectedYear+'</div>'+records.map(i=>'<button class="command-result result-record" data-detail="'+safe(detailKey(i))+'">'+icon('note')+'<span>'+safe(i.text)+'<small>'+safe(pName(i.pillar))+' · '+dtext(i.week_start)+'</small></span>'+icon('chevron')+'</button>').join(''):'')+(!matches.length&&!records.length?'<div class="empty-state small"><p>Không tìm thấy kết quả phù hợp.</p></div>':'');}
+function openCommand(){if(!user)return;$('#command-input').value='';commandResults();$('#command-dialog').showModal();$('#command-input').focus();}
+function updateFocusDisplay(){const state=focusTimer.state();const display=$('#focus-time'),button=$('#focus-toggle');if(display)display.textContent=formatTimer(state.remaining);if(button)button.innerHTML=icon(state.running?'pause':'play')+'<span>'+(state.running?'Tạm dừng':state.remaining<1500&&state.remaining>0?'Tiếp tục':'Bắt đầu')+'</span>';}
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCommand();}});
+document.addEventListener('input',e=>{if(e.target.id==='command-input')commandResults();});
+setInterval(()=>{const finished=focusTimer.tick();updateFocusDisplay();if(finished)toast('Đã xong 25 phút tập trung. Dành một chút thời gian nghỉ.');},1000);
 document.addEventListener("click",async e=>{
+ const closer=e.target.closest('[data-close-dialog]');if(closer){$('#'+closer.dataset.closeDialog).close();return;}
+ if(e.target.closest('#open-command')){openCommand();return;}
+ const detail=e.target.closest('[data-detail]');if(detail){openDetail(detail.dataset.detail);return;}
+ if(e.target.closest('#focus-toggle')){if(focusTimer.state().running)focusTimer.pause();else focusTimer.start();updateFocusDisplay();return;}
+ if(e.target.closest('#focus-reset')){focusTimer.reset();updateFocusDisplay();return;}
+
  const dayButton=e.target.closest('[data-day]');if(dayButton){window._selectedDay=dayButton.dataset.day;render();return;}
  if(e.target.closest('#copy-checkin')){try{await navigator.clipboard.writeText('Lumi, check-in hôm nay: 1. Kết quả thực tế nào đã tiến triển? 2. Việc gì còn vướng? 3. Học tập và vận động thế nào? 4. Năng lượng 1–5? 5. Ưu tiên số 1 ngày mai? Hãy đọc Weekly Planner hiện hành; sau khi tôi trả lời, ghi Notion và xác minh rồi đồng bộ cùng snapshot tuần trên Personal OS. Không tự đổi cam kết quan trọng.');toast('Đã sao chép câu hỏi. Dán vào ChatGPT để check-in.');}catch{toast('Không sao chép được. Hãy check-in trong ChatGPT.');}return;}
 
@@ -302,7 +327,7 @@ document.addEventListener("click",async e=>{
  const aq=e.target.closest("[data-annual-quarter]");if(aq){window._annualQuarter=Number(aq.dataset.annualQuarter);render();return;}
  const mt=e.target.closest("[data-review-month]");if(mt){window._notionPeriod=mt.dataset.reviewMonth;window._notionMode='month';currentView='notion';render();return;}
  const qt=e.target.closest("[data-quarter]");if(qt){window._blueprintQuarter=Number(qt.dataset.quarter);render();return;}
- const nav=e.target.closest("[data-view]");if(nav){currentView=nav.dataset.view;render();window.scrollTo(0,0);return;}
+ const nav=e.target.closest("[data-view]");if(nav){if($("#command-dialog").open)$("#command-dialog").close();currentView=nav.dataset.view;render();window.scrollTo(0,0);return;}
  const del=e.target.closest("[data-delete]");if(del){
  if(!confirm("Xóa bản ghi này? Thao tác không thể hoàn tác."))return;
  const {error}=await db.from("personal_os_entries").delete().eq("id",del.dataset.delete).eq("owner_id",user.id);
@@ -334,7 +359,7 @@ document.addEventListener("submit",async e=>{
 });
 $("#signup-button").addEventListener("click",()=>signIn("signup"));
 $("#reset-button").addEventListener("click",()=>signIn("reset"));
-$("#logout-button").addEventListener("click",async()=>{await db.auth.signOut();user=null;entries=[];metrics=[];notionWeeks=[];yearPlan=null;stateLogin(false);});
+$("#logout-button").addEventListener("click",async()=>{await db.auth.signOut();user=null;entries=[];metrics=[];notionWeeks=[];yearPlan=null;detailRegistry.clear();focusTimer.reset();stateLogin(false);});
 // Keep the auth callback synchronous: authenticated queries must run after
 // Supabase releases its auth lock, otherwise getSession and data loads can deadlock.
 db.auth.onAuthStateChange((event,session)=>{
@@ -347,5 +372,4 @@ document.addEventListener("change",e=>{if(e.target.id==="mobile-view"){currentVi
 
 setInterval(()=>{if(user&&!document.hidden&&!loadingData&&['overview','life','business','notion'].includes(currentView)&&!document.activeElement?.matches('input,textarea,select'))void refresh(true);},60000);
 document.addEventListener('visibilitychange',()=>{if(user&&!document.hidden&&!loadingData&&!document.activeElement?.matches('input,textarea,select'))void refresh();});
-const navIcons={calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>',bag:'<rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V4h8v3M3 12h18m-10 0v3h2v-3"/>',target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',review:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6m-6 5h6m-6 5h4"/>',settings:'<circle cx="12" cy="12" r="3"/><path d="m9 3-1 3-3 1-2 3 2 2-1 4 3 1 2 4 3-1 3 1 2-4 3-1-1-4 2-2-2-3-3-1-1-3-3 1Z"/>'};
-document.querySelectorAll('[data-icon]').forEach(el=>{el.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+navIcons[el.dataset.icon]+'</svg>';});
+document.querySelectorAll('[data-icon]').forEach(el=>{el.innerHTML=icon(el.dataset.icon);});
