@@ -308,9 +308,17 @@ function commandResults(){const query=$('#command-input').value.trim();const scr
  const matches=screens.filter(([,name])=>!query||name.toLocaleLowerCase('vi').includes(query.toLocaleLowerCase('vi')));
  const records=filterRecords(periodItems(notionWeeks,selectedYear),query);
  $('#command-results').innerHTML=(matches.length?'<div class="command-group-title">Mở màn hình</div>'+matches.map(([view,name,glyph])=>'<button class="command-result" data-view="'+view+'">'+icon(glyph)+'<span>'+safe(name)+'</span>'+icon('arrow')+'</button>').join(''):'')+(records.length?'<div class="command-group-title">Ghi nhận trong năm '+selectedYear+'</div>'+records.map(i=>'<button class="command-result result-record" data-detail="'+safe(detailKey(i))+'">'+icon('note')+'<span>'+safe(i.text)+'<small>'+safe(pName(i.pillar))+' · '+dtext(i.week_start)+'</small></span>'+icon('chevron')+'</button>').join(''):'')+(!matches.length&&!records.length?'<div class="empty-state small"><p>Không tìm thấy kết quả phù hợp.</p></div>':'');}
-function openCommand(){if(!user)return;$('#command-input').value='';commandResults();$('#command-dialog').showModal();$('#command-input').focus();}
+function openCommand(){if(!user)return;if($('#command-dialog').open){$('#command-input').focus();return;}$('#command-input').value='';commandResults();$('#command-dialog').showModal();$('#command-input').focus();}
 function updateFocusDisplay(){const state=focusTimer.state();const display=$('#focus-time'),button=$('#focus-toggle');if(display)display.textContent=formatTimer(state.remaining);if(button)button.innerHTML=icon(state.running?'pause':'play')+'<span>'+(state.running?'Tạm dừng':state.remaining<1500&&state.remaining>0?'Tiếp tục':'Bắt đầu')+'</span>';}
-document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCommand();}});
+document.addEventListener('keydown',e=>{
+ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCommand();return;}
+ if($('#command-dialog').open&&['ArrowDown','ArrowUp','Enter'].includes(e.key)){
+ const rows=[...document.querySelectorAll('#command-results button')];if(!rows.length)return;
+ const index=rows.indexOf(document.activeElement);
+ if(e.key==='Enter'&&document.activeElement===$('#command-input')){e.preventDefault();rows[0].click();return;}
+ if(e.key!=='Enter'){e.preventDefault();const next=e.key==='ArrowDown'?(index+1)%rows.length:(index<=0?rows.length-1:index-1);rows[next].focus();}
+ }
+});
 document.addEventListener('input',e=>{if(e.target.id==='command-input')commandResults();});
 setInterval(()=>{const finished=focusTimer.tick();updateFocusDisplay();if(finished)toast('Đã xong 25 phút tập trung. Dành một chút thời gian nghỉ.');},1000);
 document.addEventListener("click",async e=>{
