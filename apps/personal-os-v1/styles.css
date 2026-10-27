@@ -46,7 +46,7 @@ p{overflow-wrap:anywhere}
 .data-banner.warning{background:#fafbf9;border-color:#e1e6dd;color:#637061}.data-banner.warning b{color:#8c6525}.data-banner .sync-dot{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:50%;background:#bc9555}
 .data-banner b{font-weight:600}
 .data-banner .btn{padding:7px 12px}
-.command-grid{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(280px,1fr);gap:22px;align-items:stretch}
+.command-grid{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(280px,1fr);gap:22px;align-items:start}
 .panel{background:white;border:1px solid var(--line);border-radius:12px;padding:24px;min-width:0}
 .panel h3{font:650 18px/1.5 "Segoe UI",Arial,sans-serif;letter-spacing:0;margin:0 0 8px;color:#243a34}
 .section-note{font-size:13px;margin:0 0 10px;line-height:1.7}
