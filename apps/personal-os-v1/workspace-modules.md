@@ -19,3 +19,12 @@ For UI changes, rebuild the package in its private source repository, publish th
 ## Validation
 
 Run `node --experimental-vm-modules --test tests/*.test.mjs`. Tests cover source analytics and progress, module route allowlists, scoped gateway reads, lazy package loading, retained module state, logout cleanup and in-flight user changes. Database checks separately verify owner reads, zero rows for another user, denied anonymous table reads, wrong/cross-module capability rejection, deduplication and rejection of older replicas.
+
+
+## Henry OS visual identity
+
+The approved mark is `henry-os-mark.png`, based on the refined interwoven orbit selected 31 October 2026. It represents the whole operating system; its colors do not correspond to a fixed number of domains. Use the same mark for the common navigation and favicon. Navigation icons are consistent in weight and use the accent of their domain.
+
+Shared palette: deep ink `#172231`, lavender `#8578bb`, jade `#297d70`, champagne bronze `#ab7958`, paper `#f4f5f7`. Personal OS uses lavender, Servicebio uses jade, and Ventures uses bronze. Future domains can add distinct accessible accents without changing the mark. Data visualization colors represent status or category when indicated by the legend; never recolor them in a way that changes their meaning. Preserve keyboard focus visibility, readable contrast and reduced motion.
+
+The standalone private Site packages use the same mark and `app/henry-theme.css` in each source repository. Their own hosted copies keep the logo asset in `public/`; rebuild and republish the corresponding protected module when updating the shared identity.
