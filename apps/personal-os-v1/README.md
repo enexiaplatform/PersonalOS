@@ -52,7 +52,7 @@ Read-only quarterly timeline and gap review. `gantt.mjs` adapts the same canonic
 
 - Exact `occurred_on` dates render as observations; explicit `actual_start/end` or `planned_start/end` pairs render as spans. Missing dates stay a week-scope interval, never an inferred duration or deadline.
 - OneNote quarter text renders as a quarter window, not task progress. Q1–Q3 source text may combine plans and history.
-- Summary records are excluded. Source conflicts are excluded from counts. Legacy `learning` / `personal` axes normalize to education / growth while retaining original provenance.
+- Week-only records spanning quarter boundaries remain visible but are excluded from quarter evidence totals until dated. Summary records are excluded. Source conflicts are excluded from counts. Legacy `learning` / `personal` axes normalize to education / growth while retaining original provenance.
 - Optional `plan.quarter_reviews[quarter]` holds private, dated assistant interpretations and explicitly sourced milestone references. They render only while both the Notion source signature and quarter-plan signature still match. They never mark a KR complete or change source plans.
 - CSV exports the filtered observation set including source identity, precision, date meaning and diagnostics; spreadsheet formulas are escaped. Curated milestones and quarter baseline text are not included in that observation export.
 - Portrait mobile defaults to an agenda with the same data; timeline mode remains available. Native buttons support Tab/Enter/Space; the focused timeline scrolls with the keyboard. Reduced motion is respected.
