@@ -44,3 +44,17 @@ node --experimental-vm-modules --test tests/*.test.mjs
 ```
 
 Renderer tests use a synthetic SDK and data, not production authentication. Visual browser QA must be recorded separately from these tests.
+
+
+### Gantt Pro
+
+Read-only quarterly timeline and gap review. `gantt.mjs` adapts the same canonical Notion snapshots as the weekly dashboard; `gantt-view.mjs` renders the frozen task grid, calendar, source coverage and comparison matrix. There are no additional API credentials or scheduling dependencies.
+
+- Exact `occurred_on` dates render as observations; explicit `actual_start/end` or `planned_start/end` pairs render as spans. Missing dates stay a week-scope interval, never an inferred duration or deadline.
+- OneNote quarter text renders as a quarter window, not task progress. Q1–Q3 source text may combine plans and history.
+- Summary records are excluded. Source conflicts are excluded from counts. Legacy `learning` / `personal` axes normalize to education / growth while retaining original provenance.
+- Optional `plan.quarter_reviews[quarter]` holds private, dated assistant interpretations and explicitly sourced milestone references. They render only while both the Notion source signature and quarter-plan signature still match. They never mark a KR complete or change source plans.
+- CSV exports the filtered observation set including source identity, precision, date meaning and diagnostics; spreadsheet formulas are escaped. Curated milestones and quarter baseline text are not included in that observation export.
+- Portrait mobile defaults to an agenda with the same data; timeline mode remains available. Native buttons support Tab/Enter/Space; the focused timeline scrolls with the keyboard. Reduced motion is respected.
+
+Run `node --experimental-vm-modules --test tests/*.test.mjs` to verify date boundaries, quarter filters, ambiguity, snapshot deduplication, review invalidation, CSV safety and app-level drawer/navigation behavior.

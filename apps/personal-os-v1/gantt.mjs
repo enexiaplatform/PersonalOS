@@ -1,0 +1,47 @@
+import {canonicalWeeks,uniqueItems,weekRange} from './model.mjs';
+import {normalizeAxis,countsByStatus,shiftDate,STATUS_ORDER} from './analytics.mjs';
+const DAY=86400000;
+export const GANTT_COLORS={career:'#7561bd',business:'#209e92',entrepreneurship:'#209e92',freelance:'#b47b36',education:'#5a8ec7',health:'#cf7c89',finance:'#58937a',growth:'#9a82b0',relationships:'#b18d65',unassigned:'#7d8798'};
+export const validDate=x=>typeof x==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x)&&Number.isFinite(Date.parse(x+'T12:00:00Z'))&&new Date(x+'T12:00:00Z').toISOString().slice(0,10)===x;
+export const daysBetween=(a,b)=>Math.round((Date.parse(b+'T12:00:00Z')-Date.parse(a+'T12:00:00Z'))/DAY);
+export function quarterRange(year,q){q=Math.max(0,Math.min(3,Number(q)||0));const start=year+'-'+String(q*3+1).padStart(2,'0')+'-01';const end=new Date(Date.UTC(year,q*3+3,0,12)).toISOString().slice(0,10);return {year,q,start,end,days:daysBetween(start,end)+1};}
+export function quarterSources(weeks,range){return weeks.filter(w=>validDate(w.week_start)&&validDate(w.week_end)&&w.week_start<=range.end&&w.week_end>=range.start);}
+export function sourceSignature(weeks,range){return quarterSources(weeks,range).map(w=>[w.page_id,w.source_edited_at||w.synced_at||'',w.coverage,w.items?.length||0].join('|')).sort().join(';');}
+export function planSignature(refs,quarter,year){const value=JSON.stringify([year,quarter,refs.map(r=>[r.id,r.objective,r.krs,year===2026?r.quarters?.[quarter]:r.q?.[quarter]])]);let hash=2166136261;for(let i=0;i<value.length;i++){hash^=value.charCodeAt(i);hash=Math.imul(hash,16777619);}return (hash>>>0).toString(16);}
+export function normalizeGanttTask(i,week,year){
+ const status=STATUS_ORDER.includes(i.status)?i.status:'unknown';
+ const date=validDate(i.occurred_on)?i.occurred_on:null;
+ const actualStart=validDate(i.actual_start)?i.actual_start:null,actualEnd=validDate(i.actual_end)?i.actual_end:null;
+ const plannedStart=validDate(i.planned_start)?i.planned_start:null,plannedEnd=validDate(i.planned_end)?i.planned_end:null;
+ let start=date,end=date,precision=date?'day':'week',dateMeaning=date?'Ngày ghi nhận từ nguồn':'Chỉ biết thuộc tuần; không phải thời lượng thực hiện';
+ const diagnostics=[];
+ if(!date&&actualStart&&actualEnd&&actualStart<=actualEnd){start=actualStart;end=actualEnd;precision='actual_span';dateMeaning='Khoảng thực tế được ghi rõ trong nguồn';}
+ else if(!date&&plannedStart&&plannedEnd&&plannedStart<=plannedEnd){start=plannedStart;end=plannedEnd;precision='planned_span';dateMeaning='Khoảng kế hoạch được ghi rõ trong nguồn';}
+ else if(!date){start=week.week_start;end=week.week_end;}
+ if(i.occurred_on&&!date)diagnostics.push('Ngày ghi nhận không hợp lệ; giữ phạm vi tuần.');
+ if((plannedStart&&plannedEnd&&plannedStart>plannedEnd)||(actualStart&&actualEnd&&actualStart>actualEnd))diagnostics.push('Khoảng ngày đảo ngược bị bỏ qua.');
+ if(date&&(date<week.week_start||date>week.week_end))diagnostics.push('Ngày nguồn nằm ngoài tuần chứa bản ghi; ưu tiên ngày ghi rõ.');
+ return {id:[i.page_id,i.source_id||i.task_id||i.key||i.text,i.occurred_on||''].join('|'),source:i,sourceId:i.source_id||i.key||i.page_id,sourceSystem:'Notion',name:i.text,axis:normalizeAxis(i.pillar,year),kind:i.kind||'activity',status,start,end,precision,dateMeaning,weekStart:week.week_start,weekEnd:week.week_end,url:i.source_url||week.source_url,context:i.context||'',diagnostics,provenance:{start:precision==='week'?'Weekly Planner.week_start':precision==='day'?'item.occurred_on':precision==='actual_span'?'item.actual_start':'item.planned_start',end:precision==='week'?'Weekly Planner.week_end':precision==='day'?'item.occurred_on':precision==='actual_span'?'item.actual_end':'item.planned_end',status:'item.status',axis:i.pillar,coverage:week.coverage}};
+}
+export function buildGanttModel({year=2026,quarter=0,weeks=[],axes=[],yearPlan=null,blueprint=[],metrics=[],today}){
+ const range=quarterRange(year,quarter),canonical=canonicalWeeks(weeks),sourceWeeks=quarterSources(weeks,range);
+ // An explicitly dated item belongs to its date, including a week crossing a quarter boundary.
+ const tasks=uniqueItems(weeks).map(i=>normalizeGanttTask(i,canonical.find(w=>w.page_id===i.page_id),year)).filter(t=>t.start<=range.end&&t.end>=range.start);
+ const known=new Set(axes.map(a=>a[0]||a.id));
+ tasks.forEach(t=>{if(!known.has(t.axis))t.axis='unassigned';});
+ const refs=year===2026?(yearPlan?.plan?.axes||[]):blueprint;
+ const groups=axes.map(a=>({id:a[0]||a.id,name:a[1]||a.name}));if(tasks.some(t=>t.axis==='unassigned'))groups.push({id:'unassigned',name:'Chưa phân trục'});
+ const execution=tasks.filter(t=>!['must_win','risk','stop','reflection'].includes(t.kind)&&t.source.scope!=='summary');
+ const quarterMetrics=metrics.filter(m=>validDate(m.month_start)&&m.month_start>=range.start&&m.month_start<=range.end);
+ const activeSource=canonical.filter(w=>w.week_start<=today&&w.week_end>=range.start&&w.week_start<=range.end).sort((a,b)=>b.week_start.localeCompare(a.week_start))[0];
+ const activeStart=activeSource?.week_start;
+ const rows=groups.map(a=>{const ref=refs.find(r=>r.id===a.id),items=tasks.filter(t=>t.axis===a.id),observations=execution.filter(t=>t.axis===a.id),measurements=quarterMetrics.filter(m=>normalizeAxis(m.pillar,year)===a.id);const planText=(year===2026?ref?.quarters?.[quarter]:ref?.q?.[quarter])||'';const latest=items.filter(t=>t.weekStart===activeStart);return {...a,color:GANTT_COLORS[a.id]||GANTT_COLORS.unassigned,planText,objective:ref?.objective||'',krs:ref?.krs||[],assessment:ref?.assessment||'',tasks:items,observations,counts:countsByStatus(observations),metrics:measurements,latest,stops:latest.filter(t=>t.kind==='stop'),risks:latest.filter(t=>t.kind==='risk'),undated:observations.filter(t=>t.precision==='week').length,review:yearPlan?.plan?.quarter_reviews?.[String(quarter+1)]?.axes?.find(x=>x.id===a.id)||null};});
+ const first=weekRange(range.start).start;const slots=[];for(let start=first;start<=range.end;start=shiftDate(start,7)){const raw=sourceWeeks.filter(w=>w.week_start===start),selected=canonicalWeeks(raw),state=!raw.length?'missing':!selected.length?'conflict':selected[0].coverage==='complete'?'complete':'partial';slots.push({start,end:shiftDate(start,6),state,pages:raw.length,future:start>today});}
+ const elapsed=validDate(today)?Math.max(0,Math.min(range.days,daysBetween(range.start,today)+1)):0;
+ const counts=countsByStatus(execution),review=yearPlan?.plan?.quarter_reviews?.[String(quarter+1)]||null;const reviewFresh=!!review&&review.source_signature===sourceSignature(weeks,range)&&review.baseline_signature===planSignature(refs,quarter,year);
+ return {range,today,tasks,execution,groups:rows,counts,slots,elapsed,remaining:range.days-elapsed,elapsedPercent:100*elapsed/range.days,sourceCount:slots.filter(s=>['complete','partial'].includes(s.state)).length,conflictCount:slots.filter(s=>s.state==='conflict').length,quarterMetrics,undated:execution.filter(t=>t.precision==='week').length,exact:execution.filter(t=>t.precision==='day').length,activeStart,review,reviewFresh,milestones:reviewFresh?(review.milestones||[]).filter(v=>validDate(v.date)&&v.date>=range.start&&v.date<=range.end):[],planSource:year===2026?{url:yearPlan?.source_url||'',title:yearPlan?.source_title||'Objectives '+year,checkedAt:yearPlan?.checked_at||''}:{url:'',title:'2027 Objectives · bản tham chiếu 18/10/2026',checkedAt:'2026-10-18'},warnings:year===2026?yearPlan?.plan?.warnings||[]:[],signature:sourceSignature(weeks,range)};
+}
+export function filterGanttTasks(model,{axis='all',status='all',kind='execution',query=''}={}){const needle=query.trim().normalize('NFC').toLocaleLowerCase('vi');return model.tasks.filter(t=>(axis==='all'||t.axis===axis)&&(status==='all'||(status==='open'?['plan','doing','blocked','unknown'].includes(t.status):status==='done'?['reported_done','verified_done'].includes(t.status):status===t.status))&&(kind==='all'||(kind==='execution'?!['must_win','risk','stop','reflection'].includes(t.kind)&&t.source.scope!=='summary':['must_win','risk','stop'].includes(t.kind)))&&(!needle||[t.name,t.context,t.axis,t.sourceId].join(' ').normalize('NFC').toLocaleLowerCase('vi').includes(needle))).sort((a,b)=>b.start.localeCompare(a.start)||a.name.localeCompare(b.name,'vi'));}
+export function taskPosition(task,range){const start=task.start<range.start?range.start:task.start,end=task.end>range.end?range.end:task.end;return {left:100*daysBetween(range.start,start)/range.days,width:100*(daysBetween(start,end)+1)/range.days,clipped:start!==task.start||end!==task.end};}
+export function calendarMonths(range){return Array.from({length:3},(_,n)=>{const start=range.year+'-'+String(range.q*3+n+1).padStart(2,'0')+'-01',end=new Date(Date.UTC(range.year,range.q*3+n+1,0,12)).toISOString().slice(0,10);return {start,end,label:'Tháng '+Number(start.slice(5,7)),...taskPosition({start,end},range)};});}
+export function ganttCsv(model,tasks){const rows=[['Quarter','Axis','Task','Status','Kind','Start','End','Date precision','Date meaning','Source ID','Source URL','Diagnostics'],...tasks.map(t=>['Q'+(model.range.q+1)+' '+model.range.year,t.axis,t.name,t.status,t.kind,t.start,t.end,t.precision,t.dateMeaning,t.sourceId,t.url,t.diagnostics.join(' | ')])];return '\ufeff'+rows.map(row=>row.map(x=>{let v=String(x??'');if(/^[=+@\-\t\r]/.test(v))v="'"+v;return '"'+v.replaceAll('"','""')+'"';}).join(',')).join('\r\n');}

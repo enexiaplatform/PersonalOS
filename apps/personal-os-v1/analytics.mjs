@@ -4,7 +4,7 @@ export const STATUS_META={reported_done:{label:'Tự báo đã làm',short:'Tự
 const CONTEXT=new Set(['must_win','risk','stop','summary','reflection']);
 export function executionRecords(weeks){return uniqueItems(weeks).filter(i=>!CONTEXT.has(i.kind)&&i.scope!=='summary'&&!i.is_summary);}
 export function countsByStatus(records){const counts=Object.fromEntries(STATUS_ORDER.map(k=>[k,0]));for(const i of records)counts[Object.hasOwn(counts,i.status)?i.status:'unknown']++;return counts;}
-export function normalizeAxis(id,year){return year===2026&&id==='entrepreneurship'?'business':year===2027&&id==='business'?'entrepreneurship':id;}
+export function normalizeAxis(id,year){id=({learning:'education',personal:'growth'})[id]||id;return year===2026&&id==='entrepreneurship'?'business':year===2027&&id==='business'?'entrepreneurship':id;}
 export function shiftDate(date,days){const d=new Date(date+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+days);return d.toISOString().slice(0,10);}
 export function monthMetricRecords(metrics,month){return metrics.filter(m=>String(m.month_start||'').slice(0,7)===month);}
 export function buildWeekAnalytics({week,weeks=[],axes=[],metrics=[],year=2026}){
