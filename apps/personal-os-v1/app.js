@@ -1,4 +1,4 @@
-import {createCalendar} from './calendar.mjs';
+import {createCalendar,fallbackTasks} from './calendar.mjs';
 import {MODULES,parseWorkspaceHash,renderWorkspaceHome,createWorkspaceGateway} from './workspaces.mjs';
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.58.0";
 import { STATUSES, todayVN, weekRange, canonicalWeeks, uniqueItems, currentSnapshot, periodItems, explicitDate, dailyEvidence } from "./model.mjs";
@@ -33,7 +33,7 @@ let workspace=parseWorkspaceHash(location.hash).module,moduleMetadata={};
 let lastWorkspace=localStorage.getItem('henry-last-workspace')||'personal';
 const gateway=createWorkspaceGateway({db,getUser:()=>user,container:document.querySelector('#module-deck'),onMetadata:data=>{moduleMetadata=data;if(workspace==='home')render();}});
 function navigateWorkspace(module,view){for(const id of ['detail-dialog','command-dialog']){const dialog=document.getElementById(id);if(dialog?.open)dialog.close();}workspace=module;document.body.dataset.workspace=module;if(module==='personal'){currentView=view||currentView||'overview';}if(Object.hasOwn(MODULES,module)){lastWorkspace=module;localStorage.setItem('henry-last-workspace',module);}const hash=module==='personal'?'personal/'+currentView:module;history.replaceState(null,'','#'+hash);render();if(module==='home')void gateway.refreshMetadata();window.scrollTo(0,0);}
-document.addEventListener('click',e=>{const target=e.target.closest('[data-workspace]');if(target?.tagName==='BUTTON')navigateWorkspace(target.dataset.workspace);});
+document.addEventListener('click',e=>{const target=e.target.closest('[data-workspace]');if(target?.tagName==='BUTTON')navigateWorkspace(target.dataset.workspace,target.dataset.workspaceView);});
 window.addEventListener('hashchange',()=>{const route=parseWorkspaceHash(location.hash);navigateWorkspace(route.module,route.view);});
 
 let chartRevision="";
@@ -322,9 +322,10 @@ document.addEventListener('keydown',e=>{if(!['Enter',' '].includes(e.key)||e.tar
 function render(){
  if(!user)return;
  document.body.dataset.workspace=workspace;
+ const focusButton=document.querySelector("#toggle-focus");if(focusButton){focusButton.onclick=()=>{const on=document.body.classList.toggle("focus-mode");focusButton.setAttribute("aria-pressed",String(on));focusButton.textContent=on?"↙ Thu gọn":"⤢ Mở rộng";};}
  document.querySelectorAll('.workspace-bar [data-workspace]').forEach(b=>{const active=b.dataset.workspace===workspace;b.classList.toggle('selected',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
  void gateway.open(workspace);
- if(workspace!=='personal'){$('#view-content').innerHTML=workspace==='home'?renderWorkspaceHome({escape:safe,metadata:moduleMetadata,weekCount:loadingData?null:notionWeeks.length,last:lastWorkspace}):'';$('#page-title').textContent=MODULES[workspace]?.name||'Không gian';return;}
+ if(workspace!=='personal'){$('#view-content').innerHTML=workspace==='home'?renderWorkspaceHome({escape:safe,metadata:moduleMetadata,weekCount:loadingData?null:notionWeeks.length,last:lastWorkspace,week:selectedWeek(),tasks:fallbackTasks(selectedWeek())}):'';$('#page-title').textContent=MODULES[workspace]?.name||'Không gian';return;}
  history.replaceState(null,'','#personal/'+currentView);
 
  const previousGanttKey=$('.gantt-pro')?.dataset?.ganttKey,previousGanttScroll=$('#gantt-scroll'),ganttScrollState=previousGanttScroll?{x:previousGanttScroll.scrollLeft,y:previousGanttScroll.scrollTop}:null;
@@ -492,3 +493,5 @@ document.addEventListener('visibilitychange',()=>{if(user&&!document.hidden&&!lo
 document.querySelectorAll('[data-icon]').forEach(el=>{el.innerHTML=icon(el.dataset.icon);});
 
 setInterval(()=>{if(user&&!document.hidden)void gateway.refreshMetadata();},60000);
+
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!document.querySelector("dialog[open]")){document.body.classList.remove("focus-mode");const b=document.getElementById("toggle-focus");if(b){b.setAttribute("aria-pressed","false");b.textContent="⤢ Mở rộng";}}});
