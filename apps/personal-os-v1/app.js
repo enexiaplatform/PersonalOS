@@ -30,7 +30,7 @@ const detailRegistry=new Map();
 let workspace=parseWorkspaceHash(location.hash).module,moduleMetadata={};
 let lastWorkspace=localStorage.getItem('henry-last-workspace')||'personal';
 const gateway=createWorkspaceGateway({db,getUser:()=>user,container:document.querySelector('#module-deck'),onMetadata:data=>{moduleMetadata=data;if(workspace==='home')render();}});
-function navigateWorkspace(module,view){if(module==='enexia'){window.location.assign('https://henry-enexia.henrytran0911.chatgpt.site');return;}for(const id of ['detail-dialog','command-dialog']){const dialog=document.getElementById(id);if(dialog?.open)dialog.close();}workspace=module;document.body.dataset.workspace=module;if(module==='personal'){currentView=view||currentView||'overview';}if(Object.hasOwn(MODULES,module)){lastWorkspace=module;localStorage.setItem('henry-last-workspace',module);}const hash=module==='personal'?'personal/'+currentView:module;history.replaceState(null,'','#'+hash);render();if(module==='home')void gateway.refreshMetadata();window.scrollTo(0,0);}
+function navigateWorkspace(module,view){for(const id of ['detail-dialog','command-dialog']){const dialog=document.getElementById(id);if(dialog?.open)dialog.close();}workspace=module;document.body.dataset.workspace=module;if(module==='personal'){currentView=view||currentView||'overview';}if(Object.hasOwn(MODULES,module)){lastWorkspace=module;localStorage.setItem('henry-last-workspace',module);}const hash=module==='personal'?'personal/'+currentView:module;history.replaceState(null,'','#'+hash);render();if(module==='home')void gateway.refreshMetadata();window.scrollTo(0,0);}
 document.addEventListener('click',e=>{const target=e.target.closest('[data-workspace]');if(target?.tagName==='BUTTON')navigateWorkspace(target.dataset.workspace);});
 window.addEventListener('hashchange',()=>{const route=parseWorkspaceHash(location.hash);navigateWorkspace(route.module,route.view);});
 
@@ -322,7 +322,7 @@ function render(){
  document.body.dataset.workspace=workspace;
  document.querySelectorAll('.workspace-bar [data-workspace]').forEach(b=>{const active=b.dataset.workspace===workspace;b.classList.toggle('selected',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
  void gateway.open(workspace);
- if(workspace!=='personal'){$('#view-content').innerHTML=workspace==='home'?renderWorkspaceHome({escape:safe,metadata:moduleMetadata,weekCount:loadingData?null:notionWeeks.length,last:lastWorkspace}):workspace==='enexia'?'<section class="space-intro"><div><p class="space-kicker">04 / PRODUCT & PLATFORM</p><h1>Enexia</h1><p>Memoire · Helm · Sentinel · Forge · Flow</p><a class="btn primary" href="https://henry-enexia.henrytran0911.chatgpt.site">Mở Domain Enexia ↗</a></div></section>':'';$('#page-title').textContent=MODULES[workspace]?.name||'Không gian';return;}
+ if(workspace!=='personal'){$('#view-content').innerHTML=workspace==='home'?renderWorkspaceHome({escape:safe,metadata:moduleMetadata,weekCount:loadingData?null:notionWeeks.length,last:lastWorkspace}):'';$('#page-title').textContent=MODULES[workspace]?.name||'Không gian';return;}
  history.replaceState(null,'','#personal/'+currentView);
 
  const previousGanttKey=$('.gantt-pro')?.dataset?.ganttKey,previousGanttScroll=$('#gantt-scroll'),ganttScrollState=previousGanttScroll?{x:previousGanttScroll.scrollLeft,y:previousGanttScroll.scrollTop}:null;
