@@ -58,3 +58,14 @@ Read-only quarterly timeline and gap review. `gantt.mjs` adapts the same canonic
 - Portrait mobile defaults to an agenda with the same data; timeline mode remains available. Native buttons support Tab/Enter/Space; the focused timeline scrolls with the keyboard. Reduced motion is respected.
 
 Run `node --experimental-vm-modules --test tests/*.test.mjs` to verify date boundaries, quarter filters, ambiguity, snapshot deduplication, review invalidation, CSV safety and app-level drawer/navigation behavior.
+
+
+### Bản đồ tiến bộ
+
+Dedicated evidence-based radar workspace with annual, per-axis and 2031 competency views. `progress-rubric.mjs` defines versioned ordinal anchors and facet targets; `progress.mjs` owns validation, checkpoint selection, conservative aggregation and radar geometry; `progress-view.mjs` renders accessible SVG / compact mobile variants.
+
+`personal_os_progress_snapshots` is an owner-protected, browser-read-only checkpoint history. Personal assessments and source excerpts are stored only in the private table. Checkpoints append; corrections supersede an earlier row without deleting it. Store the goal context in every checkpoint to preserve interpretation after goal edits.
+
+Ratings require integer levels 0–4, explicit confidence, source references and rationale. Missing evidence stays null. Annual summaries require 60% coverage and use a lower median; do not represent attainment percent or a peer percentile. Partial radars remain open; comparisons require the same rubric and annual goal signature. 2027 annual progress is not copied from 2026.
+
+See [progress-checkpoints.md](progress-checkpoints.md) for the review / append contract used by Weekly Executive Review. Automated source refresh does not automatically increase ratings.
