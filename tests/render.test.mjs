@@ -6,9 +6,9 @@ import path from 'node:path';
 const root=path.resolve('apps/personal-os-v1');
 async function app(){
  const nodes=new Map();const events={};
- const document={hidden:false,activeElement:null,querySelector(selector){if(!nodes.has(selector))nodes.set(selector,{textContent:'',innerHTML:'',value:'',classList:{toggle(){},add(){},remove(){}},addEventListener(){},showModal(){this.open=true},close(){this.open=false}});return nodes.get(selector);},querySelectorAll(){return []},addEventListener(name,fn){events[name]=fn;}};
+ const document={body:{dataset:{}},hidden:false,activeElement:null,querySelector(selector){if(!nodes.has(selector))nodes.set(selector,{textContent:'',innerHTML:'',value:'',classList:{toggle(){},add(){},remove(){}},addEventListener(){},showModal(){this.open=true},close(){this.open=false}});return nodes.get(selector);},querySelectorAll(){return []},addEventListener(name,fn){events[name]=fn;}};
  class FixedDate extends Date{constructor(...a){super(...(a.length?a:['2026-10-27T06:00:00Z']));}}
- const ctx=vm.createContext({document,window:{scrollTo(){},setTimeout(){return 0}},localStorage:{getItem(){return null},setItem(){}},console,Date:FixedDate,Intl,URL,Blob,setTimeout(){return 0},setInterval(){return 0},clearTimeout(){},navigator:{clipboard:{async writeText(){}}}});
+ const ctx=vm.createContext({document,location:{hash:"#personal/overview"},history:{replaceState(){}},window:{addEventListener(){},scrollTo(){},setTimeout(){return 0}},localStorage:{getItem(){return null},setItem(){}},console,Date:FixedDate,Intl,URL,Blob,setTimeout(){return 0},setInterval(){return 0},clearTimeout(){},navigator:{clipboard:{async writeText(){}}}});
  const modules=new Map();
  const sdk=new vm.SourceTextModule(`export function createClient(){return {auth:{onAuthStateChange(){},async getSession(){return {data:{session:null}}}},from(){throw new Error('Unexpected database access in renderer')}}}`,{context:ctx});
  const source=await fs.readFile(path.join(root,'app.js'),'utf8');

@@ -1,3 +1,4 @@
+import {MODULES,parseWorkspaceHash,renderWorkspaceHome,createWorkspaceGateway} from './workspaces.mjs';
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.58.0";
 import { STATUSES, todayVN, weekRange, canonicalWeeks, uniqueItems, currentSnapshot, periodItems, explicitDate, dailyEvidence } from "./model.mjs";
 import { buildWeekAnalytics, filterAnalysisRecords, STATUS_META } from "./analytics.mjs";
@@ -26,6 +27,13 @@ let notionWeeks=[];
 let user=null,entries=[],metrics=[],settings=null,currentView="overview",busy=false;
 const $=s=>document.querySelector(s);
 const detailRegistry=new Map();
+let workspace=parseWorkspaceHash(location.hash).module,moduleMetadata={};
+let lastWorkspace=localStorage.getItem('henry-last-workspace')||'personal';
+const gateway=createWorkspaceGateway({db,getUser:()=>user,container:document.querySelector('#module-deck'),onMetadata:data=>{moduleMetadata=data;if(workspace==='home')render();}});
+function navigateWorkspace(module,view){for(const id of ['detail-dialog','command-dialog']){const dialog=document.getElementById(id);if(dialog?.open)dialog.close();}workspace=module;document.body.dataset.workspace=module;if(module==='personal'){currentView=view||currentView||'overview';}if(Object.hasOwn(MODULES,module)){lastWorkspace=module;localStorage.setItem('henry-last-workspace',module);}const hash=module==='personal'?'personal/'+currentView:module;history.replaceState(null,'','#'+hash);render();if(module==='home')void gateway.refreshMetadata();window.scrollTo(0,0);}
+document.addEventListener('click',e=>{const target=e.target.closest('[data-workspace]');if(target?.tagName==='BUTTON')navigateWorkspace(target.dataset.workspace);});
+window.addEventListener('hashchange',()=>{const route=parseWorkspaceHash(location.hash);navigateWorkspace(route.module,route.view);});
+
 let chartRevision="";
 const safe=s=>String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
 const dateNow=()=>todayVN();
@@ -311,6 +319,12 @@ document.addEventListener('keydown',e=>{if(!['Enter',' '].includes(e.key)||e.tar
 
 function render(){
  if(!user)return;
+ document.body.dataset.workspace=workspace;
+ document.querySelectorAll('.workspace-bar [data-workspace]').forEach(b=>{const active=b.dataset.workspace===workspace;b.classList.toggle('selected',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+ void gateway.open(workspace);
+ if(workspace!=='personal'){$('#view-content').innerHTML=workspace==='home'?renderWorkspaceHome({escape:safe,metadata:moduleMetadata,weekCount:loadingData?null:notionWeeks.length,last:lastWorkspace}):'';$('#page-title').textContent=MODULES[workspace]?.name||'Không gian';return;}
+ history.replaceState(null,'','#personal/'+currentView);
+
  const previousGanttKey=$('.gantt-pro')?.dataset?.ganttKey,previousGanttScroll=$('#gantt-scroll'),ganttScrollState=previousGanttScroll?{x:previousGanttScroll.scrollLeft,y:previousGanttScroll.scrollTop}:null;
  $("#page-title").textContent=currentView==='overview'?"Tổng quan":currentView==='blueprint'?"Mục tiêu "+selectedYear:viewNames[currentView]||"Personal OS";
  $('#os-year').value=String(selectedYear);
@@ -455,19 +469,22 @@ document.addEventListener("submit",async e=>{
 });
 $("#signup-button").addEventListener("click",()=>signIn("signup"));
 $("#reset-button").addEventListener("click",()=>signIn("reset"));
-async function logout(){await db.auth.signOut();user=null;entries=[];metrics=[];notionWeeks=[];yearPlan=null;progressSnapshots=[];progressError='';detailRegistry.clear();stateLogin(false);}
+async function logout(){gateway.clear();await db.auth.signOut();user=null;entries=[];metrics=[];notionWeeks=[];yearPlan=null;progressSnapshots=[];progressError='';detailRegistry.clear();stateLogin(false);}
 $("#logout-button").addEventListener("click",logout);
+$("#workspace-logout").addEventListener("click",logout);
 $("#mobile-logout").addEventListener("click",logout);
 // Keep the auth callback synchronous: authenticated queries must run after
 // Supabase releases its auth lock, otherwise getSession and data loads can deadlock.
 db.auth.onAuthStateChange((event,session)=>{
- const was=user?.id;user=session?.user||null;stateLogin(Boolean(user));
- if(user&&was!==user.id){currentView="overview";setTimeout(()=>{void refresh();},0);}
+ const was=user?.id;user=session?.user||null;if(!user||was&&was!==user.id)gateway.clear();stateLogin(Boolean(user));
+ if(user&&was!==user.id){currentView=parseWorkspaceHash(location.hash).view||"overview";setTimeout(()=>{void refresh();void gateway.refreshMetadata();},0);}
 });
-(async()=>{const {data,error}=await db.auth.getSession();if(error)notifyError(error);user=data?.session?.user||null;stateLogin(Boolean(user));if(user)void refresh()})();
+(async()=>{const {data,error}=await db.auth.getSession();if(error)notifyError(error);user=data?.session?.user||null;stateLogin(Boolean(user));if(user){currentView=parseWorkspaceHash(location.hash).view||"overview";void refresh();void gateway.refreshMetadata();}})();
 
 document.addEventListener("change",e=>{if(e.target.id==='progress-checkpoint'||e.target.id==='progress-compare'){const id=e.target.id;if(id==='progress-checkpoint'){progressState.checkpointId=e.target.value;progressState.compareId=null;}else progressState.compareId=e.target.value;render();$('#'+id)?.focus();return;}if(['gantt-axis','gantt-status','gantt-kind'].includes(e.target.id)){const controlId=e.target.id;ganttState[controlId.replace('gantt-','')]=e.target.value;render();$('#'+controlId)?.focus();return;}if(e.target.id==="mobile-view"){currentView=e.target.value;render();window.scrollTo(0,0);return;}if(e.target.id==="week-select"){window._weekStart=e.target.value;window._selectedDay=null;render();return;}if(e.target.id==="life-date"){if(!e.target.value.startsWith(String(selectedYear))){toast('Chọn năm ở thanh trên để xem dữ liệu năm khác.');render();return;}window._lifeDay=e.target.value;render();return;}if(e.target.id==="os-year"){selectedYear=Number(e.target.value)===2027?2027:2026;localStorage.setItem("henry-os-year",selectedYear);window._notionPeriod=monthNow();window._annualQuarter=undefined;ganttState.quarter=null;ganttState.axis='all';progressState.checkpointId=null;progressState.compareId=null;ganttState.collapsed=[];ganttState.expanded=[];window._weekStart=null;window._lifeDay=null;yearPlan=null;settings=null;refresh();return;}if(e.target.id==="notion-mode"){window._notionMode=e.target.value;render();}if(e.target.id==="notion-period"&&/^\d{4}-\d{2}$/.test(e.target.value)){if(!e.target.value.startsWith(String(selectedYear))){toast("Chọn năm ở thanh trên để chuyển toàn bộ workspace.");e.target.value=window._notionPeriod||monthNow();return;}window._notionPeriod=e.target.value;render();}});
 
 setInterval(()=>{if(user&&!document.hidden&&!loadingData&&['overview','life','business','notion','gantt','progress'].includes(currentView)&&!document.activeElement?.matches('input,textarea,select'))void refresh(true);},60000);
 document.addEventListener('visibilitychange',()=>{if(user&&!document.hidden&&!loadingData&&!document.activeElement?.matches('input,textarea,select'))void refresh();});
 document.querySelectorAll('[data-icon]').forEach(el=>{el.innerHTML=icon(el.dataset.icon);});
+
+setInterval(()=>{if(user&&!document.hidden)void gateway.refreshMetadata();},60000);
