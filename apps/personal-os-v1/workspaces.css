@@ -20,3 +20,6 @@ body[data-workspace=personal] .shell>.sidebar{background:linear-gradient(170deg,
 .portal-enexia{--portal-accent:#9d81c4;--portal-light:#eee7f8;--portal-deep:#59446f;--portal-bg:#f1ebf7;background:linear-gradient(155deg,#faf8fd,#eee7f6);color:#645077}.portal-enexia .portal-art{color:#a48bbf}.portal-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.portal-enexia .portal-mark{background:#e9def5;color:#8e6db3}.portal-enexia .live-dot{background:#ad8dcb}body[data-workspace=enexia] .shell>.sidebar{display:none}body[data-workspace=enexia] .shell>.main{margin-left:0;width:100%;max-width:none}@media(max-width:1200px){.portal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:650px){.portal-grid{grid-template-columns:1fr}.workspace-bar nav button{padding:10px 9px;font-size:11px}}
 
 body[data-workspace=enexia] .main>.topbar,body[data-workspace=enexia] .main>.footer{display:none}body[data-workspace=enexia] .shell>.main{padding:0}
+body[data-workspace=enexia] .shell{grid-template-columns:minmax(0,1fr)}
+body[data-workspace=enexia] #view-content{display:none}
+body[data-workspace=enexia] .shell>.main{margin:0;align-self:start}
