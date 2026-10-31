@@ -1,3 +1,4 @@
+import {createCalendar} from './calendar.mjs';
 import {MODULES,parseWorkspaceHash,renderWorkspaceHome,createWorkspaceGateway} from './workspaces.mjs';
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.58.0";
 import { STATUSES, todayVN, weekRange, canonicalWeeks, uniqueItems, currentSnapshot, periodItems, explicitDate, dailyEvidence } from "./model.mjs";
@@ -19,13 +20,14 @@ const PILLARS=[
 ["health","Sức khỏe & năng lượng","♥","#ffe9e6"],
 ["relationships","Quan hệ & gia đình","♧","#f5e5f1"],
 ["growth","Phát triển & sáng tạo","✳","#fff2d7"]];
-const viewNames={progress:"Bản đồ tiến bộ",gantt:"Gantt Pro",life:"Nhịp sống",business:"Business cá nhân",review:"Review & bằng chứng",notion:"Dữ liệu từ Notion",blueprint:"Mục tiêu năm",overview:"Tuần của tôi",weekly:"Review tuần",monthly:"Review tháng",evidence:"Bằng chứng",decision:"Nhật ký quyết định",settings:"Nguồn & cài đặt"};
+const viewNames={calendar:"Lịch công việc",progress:"Bản đồ tiến bộ",gantt:"Gantt Pro",life:"Nhịp sống",business:"Business cá nhân",review:"Review & bằng chứng",notion:"Dữ liệu từ Notion",blueprint:"Mục tiêu năm",overview:"Tuần của tôi",weekly:"Review tuần",monthly:"Review tháng",evidence:"Bằng chứng",decision:"Nhật ký quyết định",settings:"Nguồn & cài đặt"};
 let selectedYear=Number(localStorage.getItem("henry-os-year"))===2027?2027:2026;
 let progressSnapshots=[],progressError='';
 let yearPlan=null,loadingData=false,loadError="",refreshSequence=0;
 let notionWeeks=[];
 let user=null,entries=[],metrics=[],settings=null,currentView="overview",busy=false;
 const $=s=>document.querySelector(s);
+const calendarController=createCalendar({db,getUser:()=>user,getWeeks:()=>canonicalWeeks(notionWeeks),container:document.querySelector('#view-content')});
 const detailRegistry=new Map();
 let workspace=parseWorkspaceHash(location.hash).module,moduleMetadata={};
 let lastWorkspace=localStorage.getItem('henry-last-workspace')||'personal';
@@ -331,9 +333,10 @@ function render(){
  if($('#mobile-view'))$('#mobile-view').value=['notion','weekly','monthly','evidence','decision'].includes(currentView)?'review':currentView;
  $('#blueprint-label').textContent='Mục tiêu '+selectedYear;
  document.querySelectorAll("#nav [data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===currentView||b.dataset.view==='review'&&['notion','weekly','monthly','evidence','decision'].includes(currentView)));
- const fn={progress:renderProgressTab,gantt:renderGantt,life:renderLife,business:renderBusiness,review:renderReviewHub,notion:renderNotion,blueprint:renderBlueprint,overview:renderOverview,weekly:renderWeekly,monthly:renderMonthly,evidence:renderEvidence,decision:renderDecision,settings:renderSettings}[currentView]||renderOverview;
+ const fn={calendar:()=>'',progress:renderProgressTab,gantt:renderGantt,life:renderLife,business:renderBusiness,review:renderReviewHub,notion:renderNotion,blueprint:renderBlueprint,overview:()=>'<div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button class="btn" data-view="calendar">▦ Mở lịch công việc tuần →</button></div>'+renderOverview(),weekly:renderWeekly,monthly:renderMonthly,evidence:renderEvidence,decision:renderDecision,settings:renderSettings}[currentView]||renderOverview;
  detailRegistry.clear();
  $("#view-content").innerHTML=fn();
+ if(currentView==='calendar')void calendarController.mount();
  if(currentView==='gantt'&&ganttScrollState&&previousGanttKey===$('.gantt-pro')?.dataset?.ganttKey&&$('#gantt-scroll')){$('#gantt-scroll').scrollLeft=ganttScrollState.x;$('#gantt-scroll').scrollTop=ganttScrollState.y;}
 
 }
@@ -469,7 +472,7 @@ document.addEventListener("submit",async e=>{
 });
 $("#signup-button").addEventListener("click",()=>signIn("signup"));
 $("#reset-button").addEventListener("click",()=>signIn("reset"));
-async function logout(){gateway.clear();await db.auth.signOut();user=null;entries=[];metrics=[];notionWeeks=[];yearPlan=null;progressSnapshots=[];progressError='';detailRegistry.clear();stateLogin(false);}
+async function logout(){calendarController.clear();gateway.clear();await db.auth.signOut();user=null;entries=[];metrics=[];notionWeeks=[];yearPlan=null;progressSnapshots=[];progressError='';detailRegistry.clear();stateLogin(false);}
 $("#logout-button").addEventListener("click",logout);
 $("#workspace-logout").addEventListener("click",logout);
 $("#mobile-logout").addEventListener("click",logout);
