@@ -91,7 +91,7 @@ const schema={type:'object',additionalProperties:false,properties:{
  situation:{type:'string',description:'What is actually known from source, with uncertainty'},
  priorities:{type:'array',items:{type:'string'}},risks:{type:'array',items:{type:'string'}},
  recommendations:{type:'array',items:actionSchema},unknowns:{type:'string'},
- memory_candidates:{type:'array',maxItems:3,items:{type:'object',additionalProperties:false,properties:{key:{type:'string'},value:{type:'string'}},required:['key','value']}}
+ memory_candidates:{type:'array',items:{type:'object',additionalProperties:false,properties:{key:{type:'string'},value:{type:'string'}},required:['key','value']}}
 },required:['situation','priorities','risks','recommendations','unknowns','memory_candidates']};
 const system=[
 'Vai trò: Personal OS Chief of Staff. Trả lời tiếng Việt, chính xác, dễ đọc, ngắn gọn.',

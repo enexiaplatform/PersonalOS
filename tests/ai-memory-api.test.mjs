@@ -19,7 +19,9 @@ test('API create → structured completion → pending memory → subsequent con
  t.mock.method(globalThis,'fetch',async(url,init={})=>{
   const u=new URL(url);if(u.pathname==='/auth/v1/user')return Response.json({id:owner});
   if(u.hostname==='api.manus.ai'){
-   providerCalls++;if(u.pathname.endsWith('task.create')){const b=JSON.parse(init.body);messages.push(b);return Response.json({task_id:randomUUID()});}
+   providerCalls++;if(u.pathname.endsWith('task.create')){const b=JSON.parse(init.body);
+    const checkSchema=s=>{for(const key of ['maxItems','minItems','maxLength','minLength','pattern','format'])assert.equal(s[key],undefined,'Unsupported provider schema keyword '+key);if(s.type==='object'){assert.equal(s.additionalProperties,false);assert.deepEqual([...s.required].sort(),Object.keys(s.properties).sort());Object.values(s.properties).forEach(checkSchema);}if(s.items)checkSchema(s.items);};checkSchema(b.structured_output_schema);
+    messages.push(b);return Response.json({task_id:randomUUID()});}
    if(u.pathname.endsWith('task.detail'))return Response.json({task:{status:'stopped'}});
    return Response.json({messages:[{structured_output_result:{success:true,value:{situation:'User seeks GM 2031',priorities:[],risks:[],recommendations:[],unknowns:'No weekly source',memory_candidates:[{key:'learning.practice',value:'Practice Chinese daily'},{key:'INVALID KEY',value:'discard'}]}}}]});
   }
