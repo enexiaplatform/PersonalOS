@@ -31,3 +31,6 @@ The API key must remain a server-only encrypted Vercel environment variable name
 - Run `node --experimental-vm-modules --test tests/*.test.mjs` from the repository root.
 - Test after logging into the actual web UI: auto source scan; Manus structured task; queue population; one explicitly approved journal write; readback in private journal; dismissal and activity history; mobile resizing; unauthorized API request denied; sensitive data opt-in remains off.
 - If a Vercel runtime call fails, examine deployment function logs. Do not assume success because the frontend rendered.
+
+## Persistent memory
+Memory Engine v1 now adds Core, Working and Decision retrieval to Manus task creation, plus a private Bộ nhớ tab. See [ai-memory-engine.md](ai-memory-engine.md) for boundaries, schema, incremental refresh and validation. User profile values are stored only in private database rows.

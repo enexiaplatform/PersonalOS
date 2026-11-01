@@ -6,14 +6,14 @@ const put=(parent,tag,cls,text)=>{const x=make(tag,cls,text);parent.append(x);re
 const time=x=>{if(!x)return 'Chưa rõ';const d=new Date(x);return Number.isNaN(d.getTime())?'Chưa rõ':d.toLocaleString('vi-VN',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Ho_Chi_Minh'});};
 const scopeTitles={personal:'Personal OS',servicebio:'Servicebio',ventures:'Ventures',enexia:'Enexia'};
 const scope=()=>{const v=location.hash.replace(/^#/,'').split('/')[0];return scopeTitles[v]?v:'personal';};
-const state={tab:'overview',open:false,busy:false,source:null,actions:[],runs:[],output:null,message:'',lastLoad:0,includeDetails:false,activeRun:null};
+const state={tab:'overview',open:false,busy:false,source:null,actions:[],runs:[],output:null,message:'',lastLoad:0,includeDetails:false,activeRun:null,memory:null,memoryLoading:false,memoryFilter:'all',memoryEditor:null};
 const overlay=make('div','aom-overlay');
 overlay.innerHTML=[
 '<div class="aom-backdrop" data-close></div>',
 '<section class="aom-shell" role="dialog" aria-modal="true" aria-labelledby="aom-title">',
 '<header class="aom-header"><div class="aom-brand"><span class="aom-logo">✦</span><div><h2 id="aom-title">AI Manager</h2><p>Personal OS · Powered by Manus</p></div></div>',
 '<div class="aom-header-actions"><span class="aom-level">● Autonomous · Level B</span><button class="aom-icon" data-refresh title="Kiểm tra nguồn" aria-label="Kiểm tra nguồn">⟳</button><button class="aom-icon" data-close title="Đóng" aria-label="Đóng">×</button></div></header>',
-'<nav class="aom-tabs" role="tablist" aria-label="AI Manager"><button data-tab="overview" role="tab">Tổng quan</button><button data-tab="actions" role="tab">Hành động <span id="aom-count"></span></button><button data-tab="history" role="tab">Lịch sử</button><button data-tab="settings" role="tab">Quyền & dữ liệu</button></nav>',
+'<nav class="aom-tabs" role="tablist" aria-label="AI Manager"><button data-tab="overview" role="tab">Tổng quan</button><button data-tab="actions" role="tab">Hành động <span id="aom-count"></span></button><button data-tab="history" role="tab">Lịch sử</button><button data-tab="memory" role="tab">Bộ nhớ</button><button data-tab="settings" role="tab">Quyền & dữ liệu</button></nav>',
 '<div class="aom-content"><main class="aom-main"><div class="aom-source" id="aom-source"></div><div class="aom-body" id="aom-body" aria-live="polite"></div></main>',
 '<aside class="aom-rail"><div class="aom-rail-title"><div><h3>Action Queue</h3><p>Những đề xuất cần xem xét</p></div><span id="aom-rail-count">0</span></div><div class="aom-rail-list" id="aom-rail-list"></div><div class="aom-rail-footer">Tự phát hiện rủi ro · Không tự thay đổi Notion.</div></aside></div>',
 '<div id="aom-message" class="aom-message" role="status" hidden></div>',
@@ -29,16 +29,24 @@ function open(){state.open=true;overlay.classList.add('open');document.body.clas
 function close(){state.open=false;overlay.classList.remove('open');document.body.classList.remove('aom-active');launch.focus();}
 launch.addEventListener('click',open);
 overlay.querySelectorAll('[data-close]').forEach(x=>x.addEventListener('click',close));
-overlay.querySelectorAll('[data-tab]').forEach(x=>x.addEventListener('click',()=>{state.tab=x.dataset.tab;draw();}));
+overlay.querySelectorAll('[data-tab]').forEach(x=>x.addEventListener('click',()=>{state.tab=x.dataset.tab;draw();if(state.tab==='memory')void loadMemory();}));
 $('[data-refresh]').addEventListener('click',()=>void load(true));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.open)close();});
-window.addEventListener('hashchange',()=>{if(state.open)draw();});
+window.addEventListener('hashchange',()=>{if(state.open){draw();if(state.tab==='memory')void loadMemory();}});
 async function api(method,op,fields={}){
  const {data:{session}}=await sb.auth.getSession();
  if(!session?.access_token)throw Error('Bạn cần đăng nhập Personal OS để sử dụng AI Manager.');
  const q=new URLSearchParams({op});if(fields.runId&&method==='GET')q.set('run_id',fields.runId);
  const response=await fetch('/api/ai-manager?'+q,{method,headers:{Authorization:'Bearer '+session.access_token,...(method==='POST'?{'Content-Type':'application/json'}:{})},...(method==='POST'?{body:JSON.stringify({op,...fields})}:{})});
  const data=await response.json().catch(()=>({}));if(!response.ok||!data.ok)throw Error(data.error||'Không thể kết nối AI Manager');return data;
+}
+async function loadMemory(refresh=false){
+ if(state.memoryLoading)return;state.memoryLoading=true;draw();
+ try{const d=await api(refresh?'POST':'GET',refresh?'memory_refresh':'memory');state.memory=d.memory;state.message=refresh?'Đã đối chiếu nguồn. '+d.updated+' bản tóm tắt thay đổi.':'';}catch(e){state.message=e.message;}finally{state.memoryLoading=false;draw();}
+}
+async function changeMemory(row,choice,fields={}){
+ if(state.busy)return;state.busy=true;draw();
+ try{const d=await api('POST','memory_edit',{id:row.id,version:row.version,choice,...fields});if(!d.record)throw Error('Chưa xác minh bộ nhớ');state.memoryEditor=null;await loadMemory();state.message='Đã lưu bộ nhớ và đọc lại xác minh. Lịch sử phiên bản được giữ lại.';}catch(e){state.message=e.message;}finally{state.busy=false;draw();}
 }
 async function load(scan=false){
  if(!scan&&Date.now()-state.lastLoad<12000)return;
@@ -131,9 +139,73 @@ function historyView(){
  const root=make('section','aom-page');put(root,'span','aom-eyebrow','AUDIT HISTORY');put(root,'h2','','Lịch sử AI runs');
  para(root,'Lưu lại những lần phân tích. Một AI run không đồng nghĩa với một hành động đã thực hiện.');
  if(!state.runs.length)para(root,'Chưa có run nào được lưu.');
- state.runs.forEach(r=>{const b=make('button','aom-history');b.type='button';const top=make('div','aom-history-meta');put(top,'span','',scopeTitles[r.scope]||'Personal OS');put(top,'span','',time(r.created_at));b.append(top);put(b,'strong','',r.question);put(b,'span','aom-history-status',r.status==='stopped'?'Đã hoàn tất':r.status==='running'?'Đang xử lý':r.status==='waiting'?'Cần thao tác':'Lỗi');b.addEventListener('click',()=>{state.output=r;state.tab='overview';draw();if(r.status==='running')void watch(r.id);});root.append(b);});
+ state.runs.forEach(r=>{const b=make('button','aom-history');b.type='button';const top=make('div','aom-history-meta');put(top,'span','',scopeTitles[r.scope]||'Personal OS');put(top,'span','',time(r.created_at));b.append(top);put(b,'strong','',r.question);if(r.context_manifest?.version)para(b,'Bộ nhớ: '+(r.context_manifest.core_ids?.length||0)+' dài hạn · '+(r.context_manifest.working_ids?.length||0)+' snapshot · '+(r.context_manifest.history_ids?.length||0)+' phân tích trước','aom-evidence');put(b,'span','aom-history-status',r.status==='stopped'?'Đã hoàn tất':r.status==='running'?'Đang xử lý':r.status==='waiting'?'Cần thao tác':'Lỗi');b.addEventListener('click',()=>{state.output=r;state.tab='overview';draw();if(r.status==='running')void watch(r.id);});root.append(b);});
  return root;
 }
+const memoryStatus={active:'Đã xác nhận',pending:'Chờ duyệt',conflict:'Có mâu thuẫn',archived:'Đã lưu trữ'};
+function memoryView(){
+ const root=make('section','aom-page aom-memory');put(root,'span','aom-eyebrow','PERSONAL OS MEMORY');put(root,'h2','','AI đang nhớ gì?');
+ para(root,'Thông tin đã xác nhận, snapshot công việc và lịch sử quyết định. Chỉ những mục được phép mới được gửi sang Manus.');
+ const tools=make('div','aom-memory-tools'),filter=make('select');filter.setAttribute('aria-label','Lọc bộ nhớ theo domain');
+ for(const [id,name] of [['all','Tất cả domain'],['global','Dùng chung'],...Object.entries(scopeTitles)]){const o=put(filter,'option','',name);o.value=id;}filter.value=state.memoryFilter;filter.addEventListener('change',()=>{state.memoryFilter=filter.value;draw();});tools.append(filter);
+ const refresh=put(tools,'button','aom-save',state.memoryLoading?'Đang đối chiếu…':'Đối chiếu nguồn');refresh.disabled=state.memoryLoading||state.busy;refresh.addEventListener('click',()=>void loadMemory(true));
+ const add=put(tools,'button','aom-save','+ Ghi nhớ mới');add.disabled=state.busy;add.addEventListener('click',()=>{state.memoryEditor={new:true};draw();});root.append(tools);
+ if(state.memoryLoading&&!state.memory){para(root,'Đang đọc bộ nhớ…');return root;}
+ const m=state.memory;if(!m){para(root,'Chưa đọc được bộ nhớ. Chọn đối chiếu nguồn để thử lại.');return root;}
+ const allowed=x=>state.memoryFilter==='all'||x.scope===state.memoryFilter;
+ const core=m.core.filter(allowed),working=m.working.filter(allowed);
+ const cards=make('div','aom-kpis');for(const [n,t] of [[core.filter(r=>r.status==='active').length,'Đã xác nhận'],[core.filter(r=>['pending','conflict'].includes(r.status)).length,'Cần bạn duyệt'],[working.length,'Snapshot công việc']]){const c=make('div','aom-kpi');put(c,'b','',n);put(c,'span','',t);cards.append(c);}root.append(cards);
+ if(state.memoryEditor)root.append(memoryEditor());
+ put(root,'h3','','Thông tin dài hạn');
+ for(const row of core){
+  const card=make('article','aom-memory-card'+(row.status==='conflict'?' conflict':'')),top=make('div','aom-action-top');put(top,'strong','',row.memory_key);put(top,'span','',memoryStatus[row.status]);card.append(top);
+  if(row.value)para(card,row.value,'aom-memory-value');if(row.proposed_value){const p=make('div','aom-unknown');put(p,'strong','','Đề xuất mới · chưa dùng làm sự thật');para(p,row.proposed_value);card.append(p);}
+  const source=m.sources.find(s=>s.id===row.source_id),pendingSource=m.sources.find(s=>s.id===row.proposed_source_id);
+  para(card,(row.scope==='global'?'Dùng chung':scopeTitles[row.scope])+' · Nguồn: '+(source?.title||'Chưa rõ')+' · v'+row.version+' · '+time(row.updated_at),'aom-evidence');
+  if(pendingSource)para(card,'Nguồn đề xuất: '+pendingSource.title,'aom-evidence');
+  if(row.sensitivity==='internal')para(card,'Chưa cho phép gửi sang Manus. Chỉ bật chia sẻ nếu nội dung không nhạy cảm.','aom-evidence');
+  if(row.valid_until)para(card,'Hiệu lực đến '+time(row.valid_until)+(Date.parse(row.valid_until)<Date.now()?' · Đã hết hạn':''),'aom-evidence');
+  const controls=make('div','aom-action-buttons');
+  if(row.proposed_value)for(const [choice,label] of [['accept','Duyệt thông tin'],['reject','Từ chối']]){const b=put(controls,'button','aom-save',label);b.disabled=state.busy;b.addEventListener('click',()=>void changeMemory(row,choice));}
+  if(row.status!=='archived'){
+   const edit=put(controls,'button','aom-dismiss','Sửa');edit.disabled=state.busy;edit.addEventListener('click',()=>{state.memoryEditor={row};draw();});
+   const archive=put(controls,'button','aom-dismiss','Ngừng sử dụng');archive.disabled=state.busy;archive.addEventListener('click',()=>void changeMemory(row,'archive'));
+  }
+  if(row.status==='archived'){const restore=put(controls,'button','aom-save','Khôi phục');restore.disabled=state.busy||!row.value;restore.addEventListener('click',()=>void changeMemory(row,'edit',{value:row.value}));}
+  card.append(controls);
+  if(row.status!=='archived'){
+   const label=make('label','aom-memory-share'),check=make('input');check.type='checkbox';check.checked=row.external_allowed;check.disabled=state.busy||row.sensitivity==='restricted'||row.scope==='servicebio';check.addEventListener('change',()=>void changeMemory(row,'sharing',{external_allowed:check.checked}));label.append(check,make('span','',row.sensitivity==='restricted'||row.scope==='servicebio'?'Chỉ dùng nội bộ · không gửi sang Manus':'Cho Manus dùng thông tin này'));card.append(label);
+  }
+  root.append(card);
+ }
+ if(!core.length)para(root,'Chưa có thông tin dài hạn trong domain này.');
+ put(root,'h3','','Bộ nhớ công việc');
+ for(const row of working){const card=make('article','aom-memory-card'),s=row.summary||{},expired=Date.parse(row.expires_at)<Date.now();
+  put(card,'strong','',(scopeTitles[row.scope]||row.scope)+' · '+(s.title||s.year||row.memory_key));
+  para(card,expired?'Dữ liệu đã cũ · cần xác minh nguồn':'Snapshot còn trong thời hạn · không phải đọc trực tiếp nguồn',expired?'aom-memory-stale':'aom-verified');
+  para(card,'Cập nhật '+time(row.updated_at)+' · Hết hạn '+time(row.expires_at),'aom-evidence');
+  if(s.week_start)para(card,s.week_start+' → '+s.week_end+' · '+s.coverage+' · '+s.task_count+' ghi nhận','aom-evidence');
+  for(const [key,label] of [['must_win','Must-Win'],['risks','Rủi ro'],['stop','Stop / defer']])if(s[key]?.length){put(card,'h4','',label);for(const i of s[key])para(card,i.text+' · '+i.status);}
+  if(s.axes)for(const a of s.axes)para(card,a.name+': '+a.objective);
+  if(s.projects)for(const p of s.projects)para(card,p.name+' · '+p.stage+(p.decision?' · '+p.decision:'')+(p.next?' · '+p.next:''));
+  if(s.warning)para(card,s.warning,'aom-evidence');root.append(card);
+ }
+ put(root,'h3','','Quyết định đã ghi nhận');
+ for(const d of (m.decisions||[]).filter(d=>allowed(d.personal_os_ai_actions||{scope:'unknown'})).slice(0,12)){const line=make('div','aom-memory-event');put(line,'strong','',d.personal_os_ai_actions?.title||'Đề xuất AI');para(line,(d.event_type==='dismissed'?'Bạn đã bỏ qua đề xuất':'Bạn đã lưu review, chưa đồng nghĩa duyệt thay đổi kế hoạch')+' · '+time(d.occurred_at),'aom-evidence');root.append(line);}
+ if(!m.decisions?.length)para(root,'Chưa có quyết định được ghi nhận. Không tự suy ra quyết định từ câu trả lời AI.');
+ put(root,'h3','','Lịch sử thay đổi');
+ for(const e of m.events.filter(allowed).slice(0,15)){const line=make('div','aom-memory-event');put(line,'strong','',e.after_value?.memory_key||e.entity_table);para(line,(e.event_type==='created'?'Tạo mới':'Cập nhật')+' · '+time(e.occurred_at),'aom-evidence');if(e.before_value?.value!==undefined&&e.before_value?.value!==e.after_value?.value){para(line,'Trước: '+(e.before_value.value||'(trống)'));para(line,'Sau: '+(e.after_value?.value||'(trống)'));}root.append(line);}
+ return root;
+}
+function memoryEditor(){
+ const editor=state.memoryEditor,form=make('form','aom-memory-editor');put(form,'h3','',editor.new?'Ghi nhớ mới':'Sửa thông tin đã xác nhận');
+ const value=make('textarea');value.maxLength=2000;value.required=true;value.rows=3;value.value=editor.row?.value||editor.row?.proposed_value||'';value.setAttribute('aria-label','Nội dung ghi nhớ');form.append(value);
+ let key,domain;
+ if(editor.new){key=make('input');key.required=true;key.placeholder='Mã dễ nhớ, ví dụ career.goal';key.pattern='[a-z0-9][a-z0-9_.:-]{2,99}';key.setAttribute('aria-label','Mã ghi nhớ');form.append(key);domain=make('select');domain.setAttribute('aria-label','Domain ghi nhớ');for(const [id,title]of [['global','Dùng chung'],...Object.entries(scopeTitles).filter(([s])=>s!=='servicebio')]){const o=put(domain,'option','',title);o.value=id;}form.append(domain);para(form,'Thông tin mới được lưu nội bộ và chờ bạn duyệt. Không nhập API key hay dữ liệu khách hàng.','aom-evidence');}
+ const controls=make('div','aom-action-buttons'),save=put(controls,'button','aom-save',editor.new?'Tạo đề xuất':'Lưu thay đổi'),cancel=put(controls,'button','aom-dismiss','Hủy');save.type='submit';save.disabled=state.busy;cancel.type='button';cancel.addEventListener('click',()=>{state.memoryEditor=null;draw();});form.append(controls);
+ form.addEventListener('submit',async e=>{e.preventDefault();if(!editor.new)return void changeMemory(editor.row,'edit',{value:value.value});if(state.busy)return;state.busy=true;try{await api('POST','memory_propose',{scope:domain.value,memory_key:key.value,value:value.value});state.memoryEditor=null;await loadMemory();state.message='Đã tạo đề xuất ghi nhớ. Duyệt để sử dụng.';}catch(e){state.message=e.message;}finally{state.busy=false;draw();}});return form;
+}
+
 function settingsView(){
  const root=make('section','aom-page');put(root,'span','aom-eyebrow','PERMISSIONS');put(root,'h2','','Quyền vận hành · Level B');
  para(root,'Autonomy không có nghĩa là giao toàn bộ dữ liệu hoặc quyền ghi cho Manus. Mọi thao tác đều được kiểm soát từ Personal OS.');
@@ -144,7 +216,7 @@ function settingsView(){
  ['Chỉnh sửa Notion, KPI và lịch đã cam kết','Chưa có connector ghi nguồn và rollback được xác minh.','Chưa cấp quyền']
  ];
  for(const [title,desc,label] of opts){const row=make('div','aom-setting');const copy=make('div');put(copy,'strong','',title);para(copy,desc);row.append(copy);put(row,'span','',label);root.append(row);}
- const label=make('label','aom-consent'),check=make('input');check.type='checkbox';check.checked=state.includeDetails;check.addEventListener('change',()=>{state.includeDetails=check.checked;});label.append(check);const text=make('div');put(text,'strong','','Cho Manus đọc nội dung task cá nhân');para(text,'Mặc định tắt. Khi bật, tối đa 25 task cá nhân của snapshot hiện hành được gửi trong một lần phân tích. Không gửi dữ liệu chi tiết Servicebio.');label.append(text);root.append(label);
+ const label=make('label','aom-consent'),check=make('input');check.type='checkbox';check.checked=state.includeDetails;check.addEventListener('change',()=>{state.includeDetails=check.checked;});label.append(check);const text=make('div');put(text,'strong','','Cho Manus đọc nội dung task cá nhân');para(text,'Mặc định tắt. Khi bật, AI đọc tối đa 25 mục học tập, sức khỏe, sáng tạo và quan hệ từ snapshot. Task thương mại và tài chính được loại khỏi phần này.');label.append(text);root.append(label);
  const note=make('div','aom-unknown');para(note,'Notion Weekly Planner là nguồn kế hoạch tuần. Dashboard chỉ có snapshot. Manus không được cấp connector để sửa Notion.');root.append(note);return root;
 }
 function draw(){
@@ -160,6 +232,7 @@ function draw(){
  if(pending.length>5){const b=put(list,'button','aom-more','Xem tất cả ↗');b.addEventListener('click',()=>{state.tab='actions';draw();});}
  if(state.tab==='actions')body.append(actionsView());
  else if(state.tab==='history')body.append(historyView());
+ else if(state.tab==='memory')body.append(memoryView());
  else if(state.tab==='settings')body.append(settingsView());
  else{body.append(intro());if(state.busy){const progress=make('div','aom-progress');put(progress,'span','aom-loader','');const copy=make('div');put(copy,'strong','','Manus đang phân tích…');para(copy,'Kết quả sẽ hiển thị thành Executive Brief và danh sách đề xuất.');progress.append(copy);body.append(progress);}if(state.output)body.append(brief(state.output));else body.append(quickPrompts());}
  const msg=$('#aom-message');msg.hidden=!state.message;msg.textContent=state.message;
@@ -193,9 +266,11 @@ async function analyze(){
  try{const result=await api('POST','create',{question:text,scope:scope(),includeDetails:state.includeDetails});
   if(!result.run?.id)throw Error('Không nhận được Manus run ID');
   box.value='';state.activeRun=result.run.id;
-  state.message='Manus đang phân tích dữ liệu snapshot.';void watch(state.activeRun);draw();
+  state.message='Manus đang phân tích với bộ nhớ: '+(result.memory_used?.core_ids?.length||0)+' thông tin dài hạn, '+(result.memory_used?.working_ids?.length||0)+' snapshot, '+(result.memory_used?.history_ids?.length||0)+' phân tích trước.';void watch(state.activeRun);draw();
  }catch(e){state.message=e.message;state.busy=false;draw();}
 }
 $('#aom-form').addEventListener('submit',e=>{e.preventDefault();void analyze();});
 box.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();void analyze();}});
 setInterval(()=>{if(state.open&&!state.busy&&Date.now()-state.lastLoad>120000)void load(false);},60000);
+
+sb.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT'||(session?.user?.id&&session.user.id!=='5b87bd58-aa3e-4167-bf62-82531597bf8a')){state.memory=null;state.memoryEditor=null;state.actions=[];state.runs=[];state.output=null;state.source=null;if(state.open)close();}});
