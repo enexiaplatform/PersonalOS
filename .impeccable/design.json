@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-01T04:02:53.107488+00:00",
+  "title": "Design System: Henry OS",
+  "extensions": {
+    "shadows": [
+      {
+        "name": "panel",
+        "value": "0 3px 12px #1b344008",
+        "purpose": "Low emphasis working panels."
+      },
+      {
+        "name": "inspector",
+        "value": "-8px 0 30px #19333f18",
+        "purpose": "Right edge detail and edit inspectors."
+      },
+      {
+        "name": "overflow",
+        "value": "0 18px 50px #192a3222",
+        "purpose": "Calendar overflow dialog."
+      }
+    ],
+    "motion": [
+      {
+        "name": "button-colors",
+        "value": "background-color .12s,border-color .12s,color .12s",
+        "purpose": "Button state changes; disabled under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact-desktop",
+        "value": "1200px"
+      },
+      {
+        "name": "mobile",
+        "value": "760px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Shared domain action; accent resolves from workspace.",
+      "html": "<button class=\"ds-primary\">Lưu</button>",
+      "css": ".ds-primary{font:400 12px/1.5 var(--os-font,sans-serif);border-radius:6px;min-height:36px;padding:8px 13px;background:var(--accent,#7753a7);color:#fff;border:1px solid var(--accent,#7753a7);transition:background-color .12s,border-color .12s,color .12s}.ds-primary:hover{background:var(--accent-hover,#65448f);border-color:var(--accent-hover,#65448f)}.ds-primary:focus-visible{outline:2px solid var(--accent,#7753a7);outline-offset:3px}.ds-primary:disabled{opacity:.52;cursor:not-allowed}"
+    },
+    {
+      "name": "Secondary button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Quiet supporting action.",
+      "html": "<button class=\"ds-secondary\">Hủy</button>",
+      "css": ".ds-secondary{font:400 12px/1.5 var(--os-font,sans-serif);border-radius:6px;min-height:36px;padding:8px 13px;background:#fff;color:var(--os-ink,#22333e);border:1px solid var(--os-line-strong,#c2cfd8)}.ds-secondary:hover{background:var(--os-inset,#f7f8fa);border-color:#a9bac6}.ds-secondary:focus-visible{outline:2px solid var(--accent,#7753a7);outline-offset:3px}"
+    },
+    {
+      "name": "Field",
+      "kind": "input",
+      "description": "Calendar dialog field treatment.",
+      "html": "<input class=\"ds-field\" aria-label=\"Tên công việc\" placeholder=\"Tên công việc\">",
+      "css": ".ds-field{font:400 14px var(--os-font,sans-serif);min-height:40px;border:1px solid var(--os-line-strong,#c2cfd8);border-radius:6px;color:var(--os-ink,#22333e);background:#fff}.ds-field:focus-visible{outline:2px solid var(--accent,#7753a7);outline-offset:3px}.ds-field:invalid:not(:placeholder-shown):focus{border-color:var(--os-danger,#b64146)}.ds-field:disabled{opacity:.52;cursor:not-allowed}"
+    },
+    {
+      "name": "Panel",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Shared working container; no interactive state.",
+      "html": "<section class=\"ds-panel\"><h3>Công việc</h3><p>Chi tiết công việc</p></section>",
+      "css": ".ds-panel{background:var(--os-surface,#fff);color:var(--os-ink,#22333e);border:1px solid var(--os-line,#dce3e8);border-radius:8px;padding:18px;box-shadow:var(--os-shadow,0 3px 12px #1b344008);font:14px/1.55 var(--os-font,sans-serif)}.ds-panel h3{font:700 15px/1.45 var(--os-font,sans-serif)}.ds-panel p{font-size:12px;color:var(--os-muted,#596b78)}"
+    },
+    {
+      "name": "Domain navigation",
+      "kind": "nav",
+      "description": "Compact dark navigation with visible selection.",
+      "html": "<nav class=\"ds-nav\"><button class=\"ds-selected\">Cá nhân</button><button>Servicebio</button></nav>",
+      "css": ".ds-nav{background:var(--os-nav,#192a32);padding:8px;display:flex;gap:3px}.ds-nav button{font:400 12px var(--os-font,sans-serif);padding:9px 14px;color:#c4d0d7;border:1px solid transparent;background:none;border-radius:5px}.ds-nav button:hover{background:#ffffff0c;color:#fff}.ds-nav .ds-selected{background:#ffffff13;border-color:#ffffff1c;box-shadow:inset 0 -2px var(--os-purple,#7753a7);color:#fff}.ds-nav button:focus-visible{outline:2px solid var(--accent,#7753a7);outline-offset:3px}"
+    },
+    {
+      "name": "Weekly day count",
+      "kind": "chip",
+      "description": "Interactive weekly matrix cell with tasks.",
+      "html": "<button class=\"ds-count\"><b>2</b><span>công việc</span></button>",
+      "css": ".ds-count{display:grid;place-content:center;gap:1px;min-height:40px;margin:6px 3px;padding:0 8px;border:1px solid color-mix(in srgb,var(--os-purple,#7753a7) 14%,white);border-radius:4px;background:color-mix(in srgb,var(--os-purple,#7753a7) 9%,white);color:var(--os-purple,#7753a7);font-family:var(--os-font,sans-serif);font-variant-numeric:tabular-nums}.ds-count b{font-size:16px;line-height:1.2}.ds-count span{font-size:10px}.ds-count:hover{border-color:var(--os-purple,#7753a7)}.ds-count:focus-visible{outline:2px solid var(--accent,#7753a7);outline-offset:3px}"
+    }
+  ],
+  "narrative": {
+    "overview": "High density productivity UI with compact titles, quiet working surfaces and source evidence. This describes the shared CSS layer, including inherited legacy limits.",
+    "keyCharacteristics": [
+      "Self hosted Vietnamese Noto Sans",
+      "Dark persistent domain navigation",
+      "Purple, jade, bronze and indigo accents",
+      "Thin separators and bounded dense-view overflow"
+    ],
+    "rules": [
+      {
+        "name": "Immutable identity and product contracts",
+        "body": "Preserve orbital logo bytes and every domain, menu item, route, permission and source record.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Use the existing domain accent and shared focus treatment.",
+      "Keep evidence, caveats and completion semantics intact.",
+      "Inspect inherited module styles before claiming normalization."
+    ],
+    "donts": [
+      "Do not add slogans, oversized headings or display serif typography.",
+      "Do not invent revenue, completion percentages or evidence.",
+      "Do not replace or redraw the original orbital logo."
+    ]
+  }
+}
