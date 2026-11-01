@@ -146,3 +146,7 @@ The shared layer overlays inherited `styles.css`, `workspaces.css`, `calendar.cs
 - Don't invent revenue, completion percentages, business claims or evidence during visual work.
 - Don't add slogans, oversized headers, display serif typography or decorative text panels.
 - Don't treat inherited chart layouts, mobile target sizes or inline module styling as fully normalized without inspecting their actual rules.
+
+
+## Studio revision
+The application uses a white global workspace switcher and dark local navigation. Raised white cards use 18px radii, dark 25px page headings, 16px section labels and 13px task copy. Home adds four source-backed task statistics; missing week stays a dash. Calendar defaults to a full-title agenda grouped by workstream, with explicit day filtering including undated tasks. An alternative week board retains original lane/calendar semantics and edit dialogs. A bounded scroller prevents task density from consuming the entire page. Private domain cards and tables inherit the shared visual system without modifying their data or navigation. Native plotting geometry remains unchanged.

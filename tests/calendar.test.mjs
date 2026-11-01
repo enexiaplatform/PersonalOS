@@ -2,3 +2,18 @@ import test from 'node:test';import assert from 'node:assert/strict';import {fal
 test('workstreams keep full-time separate and retain every task exactly once',()=>{const tasks=['Medtec / Biomedia','Servicebio','Ventures','Enexia','Language','Personal','Unexpected'].map((group,id)=>({id,group,date:null}));const lanes=calendarLanes(tasks);assert.deepEqual(lanes[0].tasks.map(t=>t.id),[0]);assert.deepEqual(lanes[1].tasks.map(t=>t.id),[1]);assert.deepEqual(lanes[4].tasks.map(t=>t.id),[4,5]);assert.deepEqual(lanes[5].tasks.map(t=>t.id),[6]);assert.deepEqual(lanes.flatMap(l=>l.tasks).map(t=>t.id).sort(),tasks.map(t=>t.id));});
 test('dates are not invented and weekly summaries are not tasks',()=>{const t=fallbackTasks({week_start:'2026-11-02',week_end:'2026-11-08',items:[{key:'a',kind:'activity',text:'Task',pillar:'business',status:'plan'},{key:'s',kind:'summary',text:'summary'},{key:'a',kind:'activity',text:'duplicate'},{key:'b',kind:'activity',text:'Actual',occurred_on:'2026-11-03',status:'reported_done'}]});assert.equal(t.length,2);assert.equal(t[0].date,null);assert.equal(t[1].date,'2026-11-03');assert.equal(t[1].status,'reported_done');});
 test('groups, filtering and week boundaries are stable',()=>{assert.equal(groupOf({text:'Servicebio portfolio'}),'Servicebio');assert.equal(groupOf({text:'HSK4'}),'Language');assert.equal(visibleTasks([{group:'Enexia',title:'Memoire'},{group:'Servicebio',title:'Portfolio'}],'Enexia').length,1);assert.equal(monday(new Date('2026-11-01T12:00:00Z')),'2026-10-26');});
+
+import {createCalendar} from '../apps/personal-os-v1/calendar.mjs';
+test('calendar agenda retains complete task titles, filters explicit days, and switches week mode without writing',async()=>{
+ const start=monday(),title='A complete task title <keep> with enough text to read';
+ const container={isConnected:true,innerHTML:'',replaceChildren(){}};
+ let writes=0;const result={data:[{week_start:start,synced_at:'2026-11-01T00:00:00Z',tasks:[{id:'a',title,group:'Servicebio',date:start,status:'plan'},{id:'b',title:'Undated only',group:'Enexia',date:null,status:'doing'}]}]};
+ const db={from(table){const chain={select(){return this},eq(){return this},order(){return this},limit(){return Promise.resolve(table==='personal_os_calendar_weeks'?result:{data:[]})}};return chain},rpc(){writes++}};
+ const cal=createCalendar({db,getUser:()=>({id:'owner'}),getWeeks:()=>[],container});await cal.mount();
+ assert.match(container.innerHTML,/A complete task title &lt;keep&gt; with enough text to read/);
+ const click=(attribute,value)=>container.onclick({target:{closest:selector=>selector===`[${attribute}]`?{dataset:{[attribute.replace('data-','').replace(/-([a-z])/g,(_,c)=>c.toUpperCase())]:value}}:null}});
+ click('data-cal-focus','undated');let agenda=container.innerHTML.split('class="cal-agenda"')[1].split('class="cal-scroll"')[0];
+ assert.match(agenda,/Undated only/);assert.doesNotMatch(agenda,/A complete task title/);
+ click('data-cal-display','board');assert.match(container.innerHTML,/<div hidden class="cal-agenda"/);assert.match(container.innerHTML,/<div  class="cal-scroll"/);assert.equal(writes,0);
+ cal.clear();
+});
