@@ -77,7 +77,11 @@ async function dashboard(user){
 async function manus(path,options={}){
  const resp=await fetch(MANUS+path,{...options,headers:{'x-manus-api-key':key(),'Content-Type':'application/json',...(options.headers||{})},signal:AbortSignal.timeout(24000)});
  const data=await resp.json().catch(()=>({}));
- if(!resp.ok||data.ok===false)throw Object.assign(new Error('Manus unavailable'),{source:'manus',status:resp.status,code:data.error?.code});
+ if(!resp.ok||data.ok===false){
+  const code=safeText(data.error?.code,80).replace(/[^a-zA-Z0-9_:-]/g,'');
+  console.warn(JSON.stringify({event:'manus_request_failed',status:resp.status,code}));
+  throw Object.assign(new Error('Manus unavailable'),{source:'manus',status:resp.status,code});
+ }
  return data;
 }
 const actionSchema={type:'object',additionalProperties:false,properties:{
@@ -204,7 +208,7 @@ export default async function handler(req,res){
  return error(res,405,'Unsupported operation');
  }catch(e){
   const status=e.status===429?429:e.status===409||e.detail?.includes('40001')?409:e.source==='db'?503:e.status===400?400:502;
-  const message=status===409?'Bộ nhớ vừa thay đổi hoặc có đề xuất đang chờ. Tải lại và xem xét trước khi ghi.':status===429?'Manus đã đạt giới hạn, hãy thử lại sau':e.source==='db'?'Không thể đọc/ghi dữ liệu Personal OS; chưa xác nhận thao tác':e.source==='manus'?'Không thể liên hệ Manus API':safeText(e.message,300)||'Không thể hoàn thành';
+  const message=status===409?'Bộ nhớ vừa thay đổi hoặc có đề xuất đang chờ. Tải lại và xem xét trước khi ghi.':status===429?'Manus đã đạt giới hạn, hãy thử lại sau':e.source==='db'?'Không thể đọc/ghi dữ liệu Personal OS; chưa xác nhận thao tác':e.source==='manus'?'Manus từ chối yêu cầu (HTTP '+e.status+(e.code?', '+e.code:'')+'). Chưa xác nhận tạo task.':safeText(e.message,300)||'Không thể hoàn thành';
   return error(res,status,message);
  }
 }
