@@ -23,7 +23,7 @@ const launch=make('button','aom-launch','✦ AI Manager');launch.type='button';
 launch.setAttribute('aria-label','Mở AI Manager');
 document.body.append(overlay,launch);
 const $=q=>overlay.querySelector(q),body=$('#aom-body'),list=$('#aom-rail-list'),box=$('#aom-question');
-function open(){state.open=true;overlay.classList.add('open');document.body.classList.add('aom-active');state.tab='overview';draw();void load(true);box.focus();}
+function open(){state.open=true;overlay.classList.add('open');document.body.classList.add('aom-active');state.tab='overview';draw();void load(true).then(()=>{const pending=state.runs.find(r=>r.status==='running');if(state.open&&!state.busy&&pending){state.activeRun=pending.id;state.busy=true;void watch(pending.id);draw();}});box.focus();}
 function close(){state.open=false;overlay.classList.remove('open');document.body.classList.remove('aom-active');launch.focus();}
 launch.addEventListener('click',open);
 overlay.querySelectorAll('[data-close]').forEach(x=>x.addEventListener('click',close));

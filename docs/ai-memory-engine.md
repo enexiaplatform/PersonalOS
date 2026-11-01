@@ -41,3 +41,5 @@ No new scheduler, subscription, vector store or privileged source connector is i
 Run `node --experimental-vm-modules --test tests/*.test.mjs`. New behavior tests cover private/expired/conflicting memory exclusion, source status fidelity, commercial filtering, character budgets, safe-history semantics, incremental refresh, pending/conflict preservation and API create → poll → next-run retrieval with a mocked Manus provider. Live SQL rollback tests exercise real owner isolation, approval/sharing, audit retention and stale-write rejection without leaving fixtures behind.
 
 A READY deployment verifies distribution only. Verify the authenticated Memory tab and source refresh on production; explicitly distinguish any live Manus run from the mocked provider tests.
+
+Reopening AI Manager resumes polling the most recent unfinished run through the authenticated server route; it never creates a replacement task. A stopped Manus agent remains pending until its structured-output event arrives (bounded to ten minutes), avoiding premature completion before extraction.

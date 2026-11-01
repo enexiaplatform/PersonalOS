@@ -112,11 +112,14 @@ async function poll(user,run){
  if(run.status==='stopped'||run.status==='error')return {run,done:true};
  const [detail,events]=await Promise.all([manus('/task.detail?task_id='+encodeURIComponent(run.task_id)),manus('/task.listMessages?task_id='+encodeURIComponent(run.task_id)+'&order=desc&limit=60')]);
  const messages=events.messages||[];
- const structured=messages.find(m=>m.structured_output_result?.success&&m.structured_output_result.value)?.structured_output_result.value||null;
+ const extraction=messages.find(m=>m.structured_output_result)?.structured_output_result;
+ const structured=extraction?.success&&extraction.value?extraction.value:null;
  const text=messages.find(m=>m.assistant_message?.content)?.assistant_message?.content||'';
  const statusUpdate=messages.find(m=>m.status_update?.agent_status)?.status_update;
  const status=statusUpdate?.agent_status||detail.task?.status||'running';
- const normalized=['stopped','waiting','error'].includes(status)?status:'running';
+ let normalized=['stopped','waiting','error'].includes(status)?status:'running';
+ // Extraction is asynchronous; a stopped agent is not yet a completed structured result.
+ if(normalized==='stopped'&&(!extraction||detail.task?.has_running_background_jobs===true))normalized=Date.now()-Date.parse(run.created_at)<600000?'running':'error';
  const summary=structured&&typeof structured==='object'?{situation:safeText(structured.situation,3500),priorities:(Array.isArray(structured.priorities)?structured.priorities:[]).slice(0,3).map(x=>safeText(x,400)),risks:(Array.isArray(structured.risks)?structured.risks:[]).slice(0,3).map(x=>safeText(x,400)),recommendations:(Array.isArray(structured.recommendations)?structured.recommendations:[]).slice(0,3).map(x=>({title:safeText(x.title,180),why:safeText(x.why,1100),evidence:safeText(x.evidence,700),priority:['high','low'].includes(x.priority)?x.priority:'medium'})),unknowns:safeText(structured.unknowns,2000)}:{raw:safeText(typeof text==='string'?text:JSON.stringify(text),12000)};
  const changed={status:normalized,summary,last_error:safeText(messages.find(m=>m.error_message)?.error_message?.content,400)||null,updated_at:new Date().toISOString()};
  if(normalized==='stopped'&&structured){await memoryEngine(db,user).extract(run,structured.memory_candidates);}
