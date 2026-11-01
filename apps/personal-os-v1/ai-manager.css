@@ -1,6 +1,6 @@
 /* Personal OS / Autonomous Manager. Contained styles; existing domains remain untouched. */
 .aom-overlay,.aom-overlay *{box-sizing:border-box}
-.aom-launch{position:fixed;z-index:1200;right:22px;bottom:20px;padding:12px 18px;border:1px solid rgba(155,147,198,.6);border-radius:999px;background:#37304f;color:#fff;font:600 13px/1.2 inherit;letter-spacing:.01em;box-shadow:0 8px 26px rgba(26,20,47,.25);cursor:pointer;transition:transform .15s,box-shadow .15s}
+.aom-launch{position:fixed;z-index:1200;right:22px;bottom:20px;padding:12px 18px;border:1px solid rgba(155,147,198,.6);border-radius:999px;background:#37304f;color:#fff;font-family:inherit;font-size:13px;font-weight:600;line-height:1.2;letter-spacing:.01em;box-shadow:0 8px 26px rgba(26,20,47,.25);cursor:pointer;transition:transform .15s,box-shadow .15s}
 .aom-launch:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(26,20,47,.3)}
 body:has(#shell.hidden) .aom-launch{display:none}
 .aom-overlay{display:none;position:fixed;inset:0;z-index:4500;align-items:center;justify-content:center;padding:26px;font-family:inherit}
