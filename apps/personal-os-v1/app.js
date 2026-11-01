@@ -322,6 +322,7 @@ document.addEventListener('keydown',e=>{if(!['Enter',' '].includes(e.key)||e.tar
 function render(){
  if(!user)return;
  document.body.dataset.workspace=workspace;
+ const crumb=document.querySelector('.breadcrumb>span:first-child');if(crumb)crumb.textContent=workspace==='home'?'Henry / OS':'Personal OS';
  const focusButton=document.querySelector("#toggle-focus");if(focusButton){focusButton.onclick=()=>{const on=document.body.classList.toggle("focus-mode");focusButton.setAttribute("aria-pressed",String(on));focusButton.textContent=on?"↙ Thu gọn":"⤢ Mở rộng";};}
  document.querySelectorAll('.workspace-bar [data-workspace]').forEach(b=>{const active=b.dataset.workspace===workspace;b.classList.toggle('selected',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
  void gateway.open(workspace);
