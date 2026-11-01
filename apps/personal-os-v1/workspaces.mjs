@@ -15,7 +15,7 @@ export function renderWorkspaceHome({escape:s,metadata={},weekCount=0,last='pers
 }
 export function withExecutiveTheme(html,module){
  if(!['servicebio','ventures','enexia'].includes(module))return html;
- const link='<link rel="stylesheet" href="/executive.css?v=studio-2">';
+ const link='<link rel="stylesheet" href="/executive.css?v=studio-3">';
  return html.replace(/<body\b/i,'<body data-executive-module="'+module+'"').replace(/<\/head>/i,link+'</head>');
 }
 export function createWorkspaceGateway({db,getUser,container,onMetadata}){const frames=new Map();let generation=0;let metadata={};
