@@ -1,0 +1,15 @@
+# Verification record — 2026-11-01
+
+This is scoped evidence, not a claim of universal WCAG certification.
+
+- **79 Node tests pass**, including six new foundation tests: token resolution/cycles, semantic contrast pairs, recipe color discipline, missing-vs-zero KPIs, escaped renderer attributes, and all 26 component contracts. Existing model, source isolation, gateway/auth, analytics and progress tests remain in the run.
+- **Chromium interaction suite passes**: normal/compact density, 32/40/44px sizes, busy/disabled activation, checkbox indeterminate/Space, switch Space, searchable combobox filtering and Up/Down/Enter/Escape, roving tabs/Home/End, destructive dialog initial cancel focus and Tab containment/Escape/focus return, left drawer, context-menu arrow navigation/Escape, tooltip focus/Escape, table filter/sort and native form validation. See `tests/browser/design-system.mjs`.
+- **33 Laboratory axe checks**: all 11 sections at **1440, 1280 and 390px**, WCAG 2 A/AA, 2.1 AA and 2.2 AA tags; no violations reported, page errors or page-level horizontal overflow. Screenshots captured with reduced motion and fonts ready.
+- **14 product axe checks**: homepage, weekly overview, Calendar, Gantt, Progress, Settings and Enexia at desktop/mobile. No violations reported after correcting Gantt names/roles/contrast and the interactive radar group/export names.
+- **36 product route/viewport captures**: homepage at 1920/1440/1280/390, Personal route matrix at 1440/390, selected Gantt at 1280/1920, Enexia and AI/auth states. No page-level overflow or browser exceptions in that matrix.
+- **Private native workspaces**: Servicebio and Ventures typechecks and production builds pass. Their standalone packages render from the actual source reader bridge with native views, filters and timelines. Desktop/mobile and accessible native routes were captured locally. Private captures/snapshots are excluded from the public repository.
+- **Contrast**: Node tests calculate luminance from resolved primitive aliases across primary/secondary/tertiary text on canvas/sidebar/surface/raised/hover, primary/destructive default/hover/pressed, all four feedback foreground/background pairs, chart indicators, focus and input boundaries. Text requires 4.5:1; relevant indicators/boundaries require 3:1. Disabled controls are excluded from the contrast requirement. Color Foundations shows representative computed ratios.
+
+Product browser captures use **local, intercepted synthetic fixtures**; no production source records or API behavior were replaced. Laboratory samples are synthetic and never call authenticated APIs. Native private QA uses authorized snapshots only in ignored local work directories. Populated annual/AI decision histories and every possible source content combination are not proven by the empty-source fixtures.
+
+Evidence is local under `.impeccable/review/system-v2/` and `.impeccable/review/nocturne/`; it is intentionally gitignored. No Impeccable detector ran because its launcher was unavailable. Independent visual review and any resulting corrections are recorded separately.

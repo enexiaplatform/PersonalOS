@@ -1,0 +1,9 @@
+/* Tier C — component decisions. No independent palettes. */
+:root {
+ --cmp-button-height-sm:var(--sys-control-height-sm);--cmp-button-height-md:var(--sys-control-height);--cmp-button-height-lg:var(--sys-control-height-lg);
+ --cmp-button-primary-bg-default:var(--sys-action-primary-bg);--cmp-button-primary-bg-hover:var(--sys-action-primary-hover);--cmp-button-primary-bg-pressed:var(--sys-action-primary-pressed);--cmp-button-primary-fg:var(--sys-action-primary-fg);--cmp-button-primary-radius:var(--sys-radius-control);
+ --cmp-card-bg:var(--sys-bg-surface);--cmp-card-border:var(--sys-border-default);--cmp-card-padding:var(--sys-space-panel);--cmp-card-radius:var(--sys-radius-surface);
+ --cmp-input-bg:var(--sys-bg-inset);--cmp-input-border-default:var(--sys-border-interactive);--cmp-input-border-focus:var(--sys-focus-ring);--cmp-input-border-error:var(--sys-feedback-danger);--cmp-input-height:var(--sys-control-height);
+ --cmp-badge-radius:var(--ref-radius-4);--cmp-row-padding:var(--sys-space-row);--cmp-overlay-bg:var(--sys-bg-surface-raised);--cmp-overlay-shadow:var(--sys-elevation-overlay);
+ --cmp-nav-bg-selected:var(--sys-bg-accent);--cmp-nav-fg-selected:var(--sys-fg-accent);--cmp-chart-grid:var(--sys-border-subtle);--cmp-chart-label:var(--sys-fg-tertiary);
+}

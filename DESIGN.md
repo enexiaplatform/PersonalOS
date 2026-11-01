@@ -1,99 +1,146 @@
 ---
 name: Henry OS — Nocturne Command
-description: A midnight command center for source-backed work and personal direction
+description: A three-tier midnight system for truthful work, evidence and decisions
 colors:
-  bg-base: "#070b16"
-  bg-sidebar: "#0b1120"
-  bg-main: "#0a1020"
-  surface-1: "#10192b"
-  surface-2: "#151f34"
-  surface-3: "#1b2840"
-  surface-hover: "#202e48"
-  border-subtle: "#9cafdc1a"
-  border-default: "#9cafdc2b"
-  border-strong: "#9cafdc47"
-  primary: "#9065f8"
-  primary-hover: "#a384ff"
-  primary-muted: "#9065f829"
-  violet: "#b29aff"
-  indigo: "#8796ff"
-  blue: "#65abff"
-  cyan: "#42c9e8"
-  success: "#38d9a9"
-  warning: "#ffb454"
-  danger: "#ff6878"
-  text-primary: "#f1f5ff"
-  text-secondary: "#a7b4d0"
-  text-muted: "#95a4c2"
-  text-disabled: "#7f8dab"
-  jade: "#54d8c0"
-  bronze: "#e5b47d"
+  bg-canvas: "#080d18"
+  bg-sidebar: "#0b1220"
+  bg-surface: "#101827"
+  bg-surface-raised: "#192438"
+  bg-surface-hover: "#223149"
+  bg-surface-pressed: "#34455f"
+  bg-inset: "#0b1220"
+  bg-accent: "#1a1530"
+  fg-primary: "#f0f4ff"
+  fg-secondary: "#bdcce0"
+  fg-tertiary: "#a5b6ce"
+  fg-disabled: "#6e82a0"
+  fg-inverse: "#080d18"
+  fg-accent: "#b59eff"
+  border-subtle: "#223149"
+  border-default: "#34455f"
+  border-interactive: "#6e82a0"
+  border-accent: "#9175f3"
+  action-primary-bg: "#6442ca"
+  action-primary-fg: "#ffffff"
+  action-primary-hover: "#7456e8"
+  action-primary-pressed: "#50359f"
+  action-danger-bg: "#a02c4a"
+  action-danger-fg: "#ffffff"
+  action-danger-hover: "#bf3656"
+  action-danger-pressed: "#7e2440"
+  focus-ring: "#5ad5ea"
+  feedback-success: "#65deb0"
+  feedback-warning: "#ffca6d"
+  feedback-danger: "#ff8fa2"
+  feedback-info: "#7dcbff"
+  feedback-success-bg: "#0c2925"
+  feedback-warning-bg: "#302419"
+  feedback-danger-bg: "#331a28"
+  feedback-info-bg: "#102137"
+  domain-personal: "#b59eff"
+  domain-servicebio: "#63ddc3"
+  domain-ventures: "#efbd82"
+  domain-enexia: "#7dcbff"
+  radar-level-4-bg: "#0c2726"
+  radar-level-3-bg: "#2b211b"
+  radar-level-2-bg: "#302419"
+  radar-level-1-bg: "#331a28"
+  chart-plan: "#a996ff"
+  chart-doing: "#59bdf2"
+  chart-reported: "#42c9e8"
+  chart-verified: "#38d9a9"
+  chart-blocked: "#ff6878"
+  chart-unknown: "#8fa2be"
 typography:
-  display:
-    fontFamily: "'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"
-    fontSize: "30px"
-    fontWeight: 700
-    lineHeight: 1.4
   headline:
-    fontFamily: "'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"
-    fontSize: "26px"
+    fontFamily: "\"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    fontSize: "28px"
     fontWeight: 700
-    lineHeight: 1.4
+    lineHeight: 1.25
+    letterSpacing: "-.02em"
   title:
-    fontFamily: "'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"
+    fontFamily: "\"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
     fontSize: "16px"
     fontWeight: 700
-    lineHeight: 1.5
+    lineHeight: 1.4
   body:
-    fontFamily: "'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"
+    fontFamily: "\"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
     fontSize: "14px"
     fontWeight: 400
     lineHeight: 1.6
-  navigation:
-    fontFamily: "'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"
-    fontSize: "13px"
+  label:
+    fontFamily: "\"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    fontSize: "12px"
     fontWeight: 400
-    lineHeight: 1.5
-  kpi:
-    fontFamily: "'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"
-    fontSize: "30px"
+    lineHeight: 1.4
+  metadata:
+    fontFamily: "\"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    fontSize: "11px"
+    fontWeight: 400
+    lineHeight: 1.4
+  value:
+    fontFamily: "\"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    fontSize: "32px"
     fontWeight: 700
-    lineHeight: 1.2
+    lineHeight: 1.25
+    letterSpacing: "-.02em"
 rounded:
-  sm: "8px"
-  md: "12px"
-  lg: "16px"
-  xl: "20px"
-  control: "9px"
-  kpi: "14px"
+  control: "8px"
+  surface: "12px"
+  overlay: "16px"
+  badge: "4px"
 spacing:
-  "1": "4px"
-  "2": "8px"
-  "3": "12px"
-  "4": "16px"
-  "5": "20px"
-  "6": "24px"
-  "8": "32px"
+  "2": "2px"
+  "4": "4px"
+  "6": "6px"
+  "8": "8px"
+  "12": "12px"
+  "16": "16px"
+  "20": "20px"
+  "24": "24px"
+  "32": "32px"
+  "40": "40px"
+  "48": "48px"
+  "64": "64px"
 components:
+  button-primary:
+    backgroundColor: "{colors.action-primary-bg}"
+    textColor: "{colors.action-primary-fg}"
+    rounded: "{rounded.control}"
+    padding: "0 12px"
+    height: "40px"
+  button-primary-hover:
+    backgroundColor: "{colors.action-primary-hover}"
+  button-primary-pressed:
+    backgroundColor: "{colors.action-primary-pressed}"
   button-secondary:
-    backgroundColor: "{colors.surface-2}"
-    textColor: "{colors.text-primary}"
+    backgroundColor: "{colors.bg-surface-raised}"
+    textColor: "{colors.fg-primary}"
     rounded: "{rounded.control}"
-    padding: "8px 12px"
-  button-soft:
-    backgroundColor: "{colors.primary-muted}"
-    textColor: "{colors.violet}"
+    height: "40px"
+  button-ghost:
+    textColor: "{colors.fg-secondary}"
     rounded: "{rounded.control}"
-    padding: "8px 12px"
-  panel:
-    backgroundColor: "{colors.surface-1}"
-    textColor: "{colors.text-primary}"
-    rounded: "{rounded.lg}"
+    height: "40px"
+  button-destructive:
+    backgroundColor: "{colors.action-danger-bg}"
+    textColor: "{colors.action-danger-fg}"
+    rounded: "{rounded.control}"
+    height: "40px"
+  card:
+    backgroundColor: "{colors.bg-surface}"
+    textColor: "{colors.fg-primary}"
+    rounded: "{rounded.surface}"
     padding: "20px"
-  field:
-    backgroundColor: "{colors.surface-2}"
-    textColor: "{colors.text-primary}"
-    rounded: "{rounded.sm}"
+  input:
+    backgroundColor: "{colors.bg-inset}"
+    textColor: "{colors.fg-primary}"
+    rounded: "{rounded.control}"
+    height: "40px"
+  nav-selected:
+    backgroundColor: "{colors.bg-accent}"
+    textColor: "{colors.fg-accent}"
+    rounded: "{rounded.control}"
 ---
 # Design System: Henry OS — Nocturne Command
 
@@ -101,95 +148,120 @@ components:
 
 **Creative North Star: "Nocturne Command"**
 
-Nocturne Command is a midnight working environment with layered blue surfaces, violet and indigo actions, cyan keyboard focus and restrained atmospheric depth. A compact twilight mountain hero gives home a recognizable identity; real task lists, source facts, charts and utilities remain interactive UI.
+Nocturne Command combines Dark Productivity and Command Center: matte midnight layers, deliberate violet actions, readable data and a restrained atmospheric home identity. Jade, bronze and blue distinguish workspaces; labeled semantic states distinguish evidence and status. Polish comes from coherent anatomy, spacing, native behavior and reliable states rather than decorative glow.
 
-The user’s detailed Nocturne mission supersedes the previous Studio and light-system restrictions, including prohibitions on gradients and atmospheric artwork. No reference image was actually available in this session: the implementation follows the supplied textual mission and must not be described as verified visual fidelity to an unseen image.
+The implemented foundation has three explicit tiers: reference primitives (`--ref-*`), usage semantics (`--sys-*`) and component decisions (`--cmp-*`). The compatibility bridge maps inherited names into that hierarchy. New component work consumes semantic/component roles instead of introducing a parallel palette or adding new legacy aliases.
 
 **Key Characteristics:**
-- Midnight navigation and layered dark working surfaces
-- Self-hosted Noto Sans with Vietnamese coverage
-- Four truthful weekly count cards and visible source caveats
-- Interactive today tasks, status distribution and dated observation timeline
-- Existing AI Manager integration and a real local focus timer
+- Matte midnight surfaces with deliberate violet actions
+- Actual primitive ramps and semantic domain/status roles
+- Self-hosted Vietnamese-compatible Noto Sans
+- Shared normal, compact and touch control contracts
+- Real product components and Laboratory share recipes and renderers
 
-The frontmatter is normative for the extracted primitives. `apps/personal-os-v1/tokens.css` owns portable CSS foundations; `executive.css` owns component recipes. Legacy CSS uses shared aliases rather than a separate light palette. `nocturne-home.mjs` composes home, and `nocturne-ui.mjs` owns local presentation interactions. The existing static ES-module architecture is retained.
+Frontmatter records the resolved default Nocturne values; CSS remains the implementation source. `tokens.css` imports primitives, semantics, component tokens, compatibility, typography and elevation in that order. `executive.css` is a host-pattern import manifest; `design-system/components.css` supplies shared recipes after host/legacy geometry. The production system and `apps/personal-os-v1/design-system.html` Laboratory consume the same foundation. No unavailable reference image is claimed as a fidelity check.
 
 ## Colors
 
 ### Primary
 
-**Primary Violet** and its brighter hover identify primary actions. **Violet**, **Indigo**, **Blue** and **Cyan** provide readable accents on midnight surfaces. Primary gradients belong to actions, selected navigation and restrained highlights; their full recipes live in the sidecar.
+Violet primary actions have distinct default, hover and pressed roles with a white action foreground. Accent foreground and accent background are separate semantic roles; do not substitute a lighter identity violet for the action background. Actions are matte fills, not the earlier gradient recipe.
 
 ### Secondary
 
-**Jade** identifies Servicebio, **Bronze** identifies Ventures and **Indigo** identifies Enexia. Domain identity never substitutes for status semantics.
+Personal uses violet, Servicebio jade, Ventures bronze and Enexia blue. Domain identity supports recognition without implying success or verification. Status-chart roles distinguish plan, doing, reported, verified, blocked and unknown independently of domain color.
 
 ### Tertiary
 
-**Success**, **Warning** and **Danger** communicate actual semantic states with labels. Reported done and verified done retain distinct identities. A green segment is not independent verification of a source record.
+Success, warning, danger and info have explicit foreground/background pairs. Danger action colors are separate from danger feedback colors. Radar level backgrounds represent the native ordinal rubric; they do not establish a quantitative percent-attainment scale.
 
 ### Neutral
 
-**Base**, **Sidebar** and **Main** are the midnight application grounds. **Surface 1–3** and **Surface Hover** create local layers without large light panels. Subtle, default and strong borders use translucent blue-grey. Primary text carries content; secondary and muted text carry context; disabled text is reserved for disabled states. Preserve the actual eight-digit CSS colors in frontmatter rather than silently replacing alpha tokens with opaque approximations.
+Canvas, sidebar, surface, raised surface, hover, pressed and inset are distinct midnight layers. Primary, secondary, tertiary, disabled and inverse text are distinct usage roles. Borders distinguish subtle separators, default boundaries, interactive boundaries and accent states. The cyan focus ring is a separate contrast-bearing role.
 
-**The Selective Light Rule.** Use gradient and bright accent for hierarchy; keep ordinary information panels calm and avoid glowing every boundary.
+**The Role Before Hue Rule.** Choose a semantic usage role before choosing a primitive swatch; component recipes never own an independent palette.
+
+`primitives.css` defines actual neutral, violet, blue, cyan, jade, bronze, success, warning and danger ramps. The sidecar preserves those source ramps and their mappings; it does not synthesize new brand colors. Additional appearances should replace semantic mapping rather than fork component recipes.
 
 ## Typography
 
-Self-hosted Noto Sans is registered as `Henry Noto Sans` in regular and bold WOFF files with `font-display: swap` and platform sans fallbacks. Vietnamese diacritics remain complete. One family spans navigation, working text, charts and dialogs.
+Self-hosted regular and bold Noto Sans is registered as `Henry Noto Sans` with `font-display: swap` and platform sans fallbacks. Vietnamese diacritics must remain complete. Shared headline, title, body, label, metadata and numeric roles are normative in frontmatter. Numeric values use tabular numerals and tight tracking; code samples use the reference monospace stack.
 
-The home greeting and KPI values use their frontmatter roles. Working page headings use the headline role; general section headings use (17px), panel headings (15–16px), body (14px), task copy (12–13px), and metadata (10–12px) according to context. Home KPI metadata is (10px), not a substitute for important record text. Tabular numerals support metrics, tables and timer output. At the mobile breakpoint the greeting becomes (28px), working headings (23px), and KPI values (28px). Full Vietnamese task titles wrap rather than ellipsizing essential meaning.
+The primitive scale spans (11–36px). Shared headline is the semantic default; inherited host page headings remain (26px), with (23px) mobile overrides, and the compact home greeting remains a composition-specific role. These host exceptions do not redefine shared components. Long Vietnamese titles wrap; do not shrink essential data simply to fit more cards. Legacy small metadata declarations were migrated to the shared label role.
 
 ## Layout
 
-Desktop shell: midnight global workspace bar (56px), left navigation (232px), and flexible main content with (24px) horizontal padding and maximum width (1920px). The local utility bar is (64px). Navigation can collapse to (72px) through a real button; native title tooltips preserve labels on collapsed icons. At or below (1100px), the normal rail becomes (208px) and main padding (20px).
+Shared spacing comes from the source reference scale. Normal density uses (40px) controls, (20px) card padding, (16px) gaps and (12px) row spacing. Compact density changes control height to (32px), panel padding to (16px), gap to (12px), row spacing to (8px) and vertical control padding to (6px). Small/medium/large button contracts are (32/40/44px). Coarse pointers or widths at or below (600px) promote normal and small control targets to (44px), including compact density.
 
-Home uses a compact mountain hero (184px), then a working region and utility rail (306px) separated by (20px). Four KPI cards precede source status, today tasks and weekly priorities, group status distribution, goals/source context and timeline observations. Workspace launch links follow the timeline. This three-region composition belongs to home; dense Gantt, calendar and analytical views retain the available working width.
+Semantic container contracts are content (1280px), wide (1600px), dialog (480px) and sidebar (248px). These are shared available sizes, not a claim that every existing host shell uses them: the app shell retains a (232px) rail, collapsible to (72px), a (56px) global bar and a flexible main region with (24px) horizontal padding. The local toolbar is (64px). At (1100px) the normal host rail becomes (208px); at (760px) the global bar wraps to (104px), main padding becomes (16px), and Personal OS uses full-width local navigation selection.
 
-At or below (1380px), home utility panels move below the main workspace rather than compressing charts. Utility content can collapse and reopen. At or below (1100px), KPIs form two columns and the main home grid becomes one column. At or below (760px), the global bar wraps to (104px), the hero becomes (178px), main padding becomes (16px), panels (18px), and home stacks. Personal OS local navigation becomes a full-width select with (44px) minimum height. Utility panels stack and targeted working controls become (44px). The timeline retains an internal horizontal scroller with a (130px) label column and eight (52px) dated/undated columns.
+Home retains a compact decorative mountain hero, four source-backed KPI cards, today tasks and weekly priorities, group status distribution, goal/source context, dated observations and contextual utilities. Shared `kpi` and `taskRow` renderers are used by actual home and Laboratory. The right utility rail moves below working content at narrower desktop widths and can collapse; dense analytical views retain available width. Date matrices/tables scroll within their regions rather than overflowing the document. Home composition does not become a universal three-column page template.
 
-Calendar keeps full-title agenda rows, date, status, filters, alternate week board and task inspectors. Desktop agenda height is bounded at `calc(100dvh - 365px)` with (220px) minimum height; mobile uses (65dvh). Task status moves below text on narrow screens. Native chart scales, geometry, task dates, source calculations and route contracts remain owned by the existing modules.
+The Laboratory has 11 sections: Color foundations, Typography, Spacing, Elevation, Buttons, Form controls, Navigation, Feedback, Data display, Charts and Product patterns. It exposes actual variants, meaningful states, sizes, density, anatomy, token contracts and code, using explicitly synthetic fixtures.
 
 ## Elevation & Depth
 
-Layered surfaces and translucent borders provide the default depth. Cards use the card shadow; dialogs and the authentication card use the floating shadow recorded in the sidecar. Hero and primary-action gradients are allowed by the current user direction. Mountain artwork is a local decorative SVG, never a static screenshot of the interface. Overlay backdrops use a dark translucent ground without unnecessary blur. No new animated visualizations are implied by these tokens.
+Matte surfaces and borders establish default separation. Shared cards are flat at rest. Raised, floating and overlay elevation correspond to the exact source shadows in the sidecar; dialogs use the overlay surface/shadow contract and scrim. Decorative twilight artwork is limited to the home/auth identity context and is not a static image of functional UI. Earlier compatibility names containing “gradient” now resolve to semantic solid values and are not permission to restore gradient controls.
 
-**The Working Depth Rule.** Depth should separate navigation, content and overlays while keeping labels and chart data clear.
+**The Flat Working Surface Rule.** Use tonal layers and boundaries for work; reserve stronger elevation for floating content and overlays.
+
+Motion uses the reference fast/normal/slow durations and standard easing. Reduced-motion preference minimizes transition/animation duration and restores automatic scrolling. Native model geometry remains authoritative for charts and timelines.
 
 ## Shapes
 
-The shared radius scale appears in frontmatter. Working panels generally use the large radius; KPI cards use their contextual radius; shared buttons use the control radius. Inputs use the small radius. Authentication and AI Manager surfaces use the extra-large radius. Side inspectors remain square-edged against the viewport. The original logo remains an undistorted image with unchanged bytes and no recoloring filter.
+Controls, surfaces, overlays and badges use the corresponding frontmatter radii. Reference corner steps remain available for genuine contextual geometry; do not accumulate one-off card silhouettes. Drawers attach to a viewport edge and remain bounded on phones. Preserve the original interwoven logo as an undistorted image without recoloring, filtering or replacement; approved SHA256 is `ce2243b1d8224a28ee0dc02e00b8b5fee9670dd15c942160d85e0e9b2d5ac8c1`.
 
 ## Components
 
-- **Primary actions:** a violet gradient, white text, subtle light border and brightness hover; (38px) desktop minimum height, (9px) radius and (8px 12px) padding. Secondary actions use Surface 2 and a strong boundary. Disabled buttons use opacity (.5).
-- **Fields and focus:** dark Surface 2 inputs with strong boundaries. Every shared keyboard-focus selector uses a (2px) cyan outline offset by (3px). Calendar edit fields use (42px) minimum height; authentication inputs (44px).
-- **Navigation:** midnight ground, outline icons, violet-tinted selected gradient and readable hover. Existing local labels and workspace routes are retained. Sidebar collapse and home utility collapse are local presentation state; mobile local selection retains existing route behavior.
-- **Hero:** current Vietnam-local date and actual selected-week context. Decorative mountain SVG and a restrained overlay support a real greeting and weekly action. No fabricated achievements or notification count.
-- **Four KPI cards:** total tasks, doing, verified done, and attention (blocked or undated, counted once). They show source-derived counts, not attainment. Without a week, values are em dashes. Card actions open the existing calendar; they do not imply a status filter that is not implemented.
-- **Today and priorities:** tasks dated to today in Vietnam time, plus explicit missing-today state and weekly source priorities. Today/upcoming task clicks navigate to calendar and inspect the exact task through its existing controller. Weekly priority rows open the weekly overview.
-- **Group distribution:** separate status segments show observed records by group, scaled against the largest group count. This is a count distribution, not percent goal completion. Actual status labels remain visible in badges and legend.
-- **Goals and timeline:** goals show loaded annual axes or a truthful missing-source message. Timeline cells count exact task-date observations plus undated tasks; they never invent start/end spans or deadlines. Gantt Pro remains a separate real route.
-- **AI utility:** opens actual AI Manager, proposals and memory tabs. Reading the saved briefing calls the existing authenticated dashboard GET, chooses a completed saved analysis for the current scope, and exposes missing/error states. It does not invoke an AI provider. Existing explicit request, memory, approval and execution behavior remains intact.
-- **Focus utility:** real local (25-minute) countdown, start/pause and reset using an absolute end time. It does not persist a session across reload, write achievements or create source activity.
-- **Dialogs and authentication:** dark shared surfaces, accessible text and existing forms. Task inspectors attach to the right at `min(540px,100%)` with full viewport height and (28px) padding, reducing to (22px) on phones. Auth remains the existing account flow.
-- **Isolated modules:** portable tokens and component recipes are injected after native styles. Servicebio/Ventures actual remote packages were unavailable; adapter implementation is not equivalent to full private-screen redesign or rendered verification.
-- **Motion:** button state transitions use (.15s). Reduced-motion preference removes animations/transitions and restores automatic scrolling.
+`design-system/catalog.mjs` owns 26 explicit contracts. `ui.mjs` supplies escaped renderers and progressive enhancement; native application controllers retain source-write ownership. Preview-only `data-state` is a visual inspection API, while production behavior uses native/ARIA states.
 
-**The Source Before Certainty Rule.** Keep dates, missing sources and verification semantics explicit; neither attractive charts nor AI presentation create evidence.
+| Contract | Visual and interaction requirements |
+|---|---|
+| Button | Primary, secondary, tertiary, ghost and destructive; default/hover/pressed/focus/loading/disabled; native Enter/Space and busy duplicate-activation guard. |
+| Icon Button | Accessible name, same target sizes; pressed state for toggles; tooltip supplements the name. |
+| Badge | Neutral/accent/success/warning/danger with explicit text; informational, never a counterfeit button. |
+| Input | Associated label, help/error description, invalid, disabled and copyable read-only state; native validation. |
+| Select | Native single select or real searchable combobox; filter, active descendant, arrows/Enter/Escape/Tab. |
+| Checkbox | Native checked/unchecked/indeterminate property; Space activation and a labeled touch area. |
+| Switch | Native input semantics for reversible local state; no silent external action. |
+| Tabs | Roving focus, arrows/Home/End, linked tabpanels and hidden inactive panels. |
+| Tooltip | Supplemental text on hover/focus; Escape/blur/exit dismissal; no interactive content. |
+| Dialog | Labeled native modal, safe initial focus, browser focus containment, Escape and focus return; destructive defaults to cancel. |
+| Drawer | Modal contract attached left/right, bounded viewport width, no compression of charts. |
+| Popover | Native light dismissal, expanded state; menu arrow/Home/End handling; explicit keyboard trigger for context menus. |
+| Skeleton | Named busy region with decorative shapes; reduced motion; never substitutes for a permanent empty state. |
+| Toast | Status or urgent alert semantics, accessible close, no focus theft; persistent UI for critical decisions. |
+| KPI Card | Informational by default; real action alone creates a button. Missing is an em dash, numeric zero remains zero; source/trend must be supplied. |
+| Insight Card | Priority, explanation, source evidence and valid next action; preserve review ownership. |
+| Task Row | Wrapping title, domain/date and labeled status; details button only when supported; undated and reported/verified remain distinct. |
+| Progress Indicator | Documented denominator; labeled record distribution is not goal attainment; missing denominator stays missing. |
+| Project Card | Identity, real status/context and supported next action; no invented spans or milestones. |
+| Data Table | Caption, keyboard-scrollable region, filters and actual sorting with `aria-sort`; no fake product sorting. |
+| Chart Container | Title/context, plot, legend, filters/source and meaningful accessible label or equivalent; model owns geometry. |
+| Gantt Timeline | Retains native precision, planned/actual/range/zoom/filter/export; lab observations are synthetic. |
+| AI Message | Role, timestamp, content, sources and actions; saved analysis and uncertainty remain explicit. |
+| AI Approval Card | Suggested action, scope/evidence and explicit decision; lab decisions are local; product server authorization remains. |
+| Source Health | Actual freshness/state, explanation and recovery; response success alone does not prove completeness. |
+| Empty State | Explain no data/no results/unavailable source and provide a supported next action; absence is not failure. |
+
+The shared renderer classifies inherited primary, secondary, ghost and input variants so native controls consume the same recipes. Gantt/Progress retain calculations and date geometry while improving names, SVG group semantics, contrast and standalone export token resolution. Source transparency, auth, memory consent and approval semantics are functional invariants, not design tokens.
+
+Isolated Servicebio/Ventures builds consume a generated portable foundation and native runtime provider through their own build workflow. Enexia imports the foundation in its actual source. Parent iframe stylesheet injection is not the integration mechanism. Private source, snapshots and native HTML packages do not belong in public design documentation.
+
+**The Source Before Certainty Rule.** Keep missing sources, exact dates and verification semantics explicit; visual polish does not create evidence or approval.
+
+Scoped verification records 79 Node tests; the shared browser interaction suite; 33 Laboratory axe checks at three widths; 14 selected product axe checks; and 36 product route/viewport captures without document overflow or reported exceptions. Both isolated native workspaces passed typechecks/builds with 29 native captures. This evidence is bounded by the tested fixtures and states, not universal WCAG certification. Independent review reopened all 18 required recaptures and five fix screenshots: findings F1, F2 and F3 are resolved, with disposition “ship” for that fix-list scope. This bounded verdict is not universal full-surface approval. No Impeccable detector result or production publication is claimed here. Current evidence details belong to `design-system/VERIFICATION.md`.
 
 ## Do's and Don'ts
 
-- Do preserve original logo bytes, every existing route, domain, permission and source record.
-- Do keep missing source states, undated work and reported-versus-verified completion explicit.
-- Do use gradients and decorative mountains selectively, keeping operational content legible.
-- Do preserve native chart geometry and full wrapping Vietnamese task titles.
-- Do distinguish local UI actions, saved analysis reads and provider-triggering requests.
+- Do use reference → semantic → component token ownership and keep recipes free of independent color literals.
+- Do preserve the original logo bytes, existing source ownership, authentication and navigation contracts.
+- Do keep exact dates, missing sources, real zero values and reported-versus-verified completion distinct.
+- Do implement native and ARIA behavior as well as visual states; label every icon-only action.
+- Do consume portable shared artifacts through isolated workspaces’ native build workflows.
 
-- Don't claim fidelity to a reference image that was not available.
-- Don't turn task counts or status shares into goal-attainment percentages.
-- Don't invent deadline spans, achievements, goals, notifications or AI advice.
-- Don't replace or recolor the original logo, authentication or owner checks.
-- Don't claim full private Servicebio/Ventures redesign or QA without their actual source packages.
-
-Native Servicebio/Ventures sources and protected package builders were updated in the release continuation. Domain identity remains jade/bronze; shared primary actions use the white-label contrast recipe through hover. See `docs/nocturne-implementation.md` for actual validation and deployment scope.
+- Don't restore the superseded flat Nocturne palette, gradient primary buttons or a second independent component theme.
+- Don't invent attainment percentages, project spans, deadlines, trends, evidence or AI certainty.
+- Don't make informational cards look actionable without a real destination.
+- Don't ship Laboratory fixtures as product records or invoke providers from the Laboratory.
+- Don't infer universal accessibility certification, production publication or private-source disclosure from local verification.

@@ -224,8 +224,8 @@ function settingsView(){
 function draw(){
  if(!state.open)return;
  overlay.dataset.tab=state.tab;
- overlay.querySelectorAll('[data-tab]').forEach(b=>{const active=b.dataset.tab===state.tab;b.classList.toggle('selected',active);b.setAttribute('aria-selected',String(active));});
- sourceLine();body.replaceChildren();
+ overlay.querySelectorAll('[data-tab]').forEach(b=>{const active=b.dataset.tab===state.tab;b.tabIndex=active?0:-1;b.id='aom-tab-'+b.dataset.tab;b.setAttribute('aria-controls','aom-body');b.classList.toggle('selected',active);b.setAttribute('aria-selected',String(active));});
+ body.setAttribute('role','tabpanel');body.setAttribute('aria-labelledby','aom-tab-'+state.tab);sourceLine();body.replaceChildren();
  const pending=state.actions.filter(a=>a.status==='proposed');
  $('#aom-count').textContent=pending.length?'('+pending.length+')':'';
  $('#aom-rail-count').textContent=String(pending.length);list.replaceChildren();
@@ -279,3 +279,6 @@ sb.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT'||(session?.u
 
 let briefGeneration=0;
 document.addEventListener('click',async e=>{const trigger=e.target.closest('[data-ai-brief]');if(!trigger)return;const target=document.getElementById('home-ai-brief');if(!target)return;const generation=++briefGeneration;trigger.disabled=true;target.textContent='Đang đọc phân tích đã lưu…';try{const data=await api('GET','dashboard');if(generation!==briefGeneration||!target.isConnected)return;const run=(data.runs||[]).find(r=>r.scope===scope()&&r.status==='stopped'&&r.summary&&Object.keys(r.summary).length);target.replaceChildren();if(run){put(target,'p','nc-sub','Phân tích đã lưu · '+time(run.created_at));para(target,String(run.summary.situation||'Có phân tích đã lưu. Mở AI Manager để xem đầy đủ.'),'quiet');}else para(target,'Chưa có phân tích đã lưu cho không gian này.','quiet');}catch(error){if(target.isConnected)target.textContent=error.message;}finally{trigger.disabled=false;}});
+
+// Roving keyboard navigation retains the existing authenticated AI controller.
+overlay.querySelector('.aom-tabs').addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;const tabs=[...overlay.querySelectorAll('.aom-tabs [role=tab]')],i=tabs.indexOf(e.target);if(i<0)return;e.preventDefault();const next=e.key==='Home'?0:e.key==='End'?tabs.length-1:(i+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;tabs[next].click();tabs[next].focus();});

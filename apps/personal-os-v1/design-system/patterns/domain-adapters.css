@@ -1,0 +1,9 @@
+
+/* Isolated domains receive a portable recipe without replacing their protected package. */
+body[data-workspace=servicebio] .shell,body[data-workspace=ventures] .shell,body[data-workspace=enexia] .shell{display:block}
+body[data-workspace=servicebio] .shell>.sidebar,body[data-workspace=ventures] .shell>.sidebar,body[data-workspace=enexia] .shell>.sidebar{display:none}
+body[data-workspace=servicebio] .shell>.main,body[data-workspace=ventures] .shell>.main,body[data-workspace=enexia] .shell>.main{padding:0;max-width:none}
+body[data-workspace=servicebio] .main>.topbar,body[data-workspace=ventures] .main>.topbar,body[data-workspace=enexia] .main>.topbar{display:none}
+body[data-workspace=enexia] #view-content,body[data-workspace=enexia] .main>.footer{display:none}
+.workspace-frame{height:calc(100dvh - 56px);background:var(--os-bg-main)}
+body[data-executive-module=enexia] .domain p,body[data-executive-module=enexia] .domain small{color:var(--os-muted)}

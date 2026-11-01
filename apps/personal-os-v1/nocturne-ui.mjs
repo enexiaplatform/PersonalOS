@@ -1,4 +1,9 @@
 /* Local presentation interactions. No provider calls, persistence or source writes. */
+import {mountUI} from './design-system/ui.mjs';
+mountUI();
+const density=document.querySelector('#os-density');
+try{const saved=localStorage.getItem('henry-os-density');if(saved==='compact')document.documentElement.dataset.density=saved;}catch{}
+if(density){density.value=document.documentElement.dataset.density;density.addEventListener('change',()=>{document.documentElement.dataset.density=density.value;window.dispatchEvent(new CustomEvent('henry-density-change',{detail:density.value}));try{localStorage.setItem('henry-os-density',density.value);}catch{}});}
 import {createFocusTimer} from './focus-timer.mjs';
 const focus=createFocusTimer();
 function timer(){const {remaining,running,label}=focus.read();const out=document.querySelector('#focus-countdown');if(out)out.textContent=label;const b=document.querySelector('[data-focus-start]');if(b)b.textContent=running?'Tạm dừng':remaining===0?'Bắt đầu lại':'Bắt đầu';}

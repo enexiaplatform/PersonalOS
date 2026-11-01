@@ -1,20 +1,7 @@
-/* Nocturne Command — portable foundations, including isolated workspace documents. */
-@font-face{font-family:'Henry Noto Sans';src:url('./fonts/NotoSans-Regular.woff') format('woff');font-weight:400;font-display:swap}
-@font-face{font-family:'Henry Noto Sans';src:url('./fonts/NotoSans-Bold.woff') format('woff');font-weight:700;font-display:swap}
-:root{
- --os-font:'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
- --os-bg-base:#070b16;--os-bg-sidebar:#0b1120;--os-bg-main:#0a1020;
- --os-surface-1:#10192b;--os-surface-2:#151f34;--os-surface-3:#1b2840;--os-surface-hover:#202e48;
- --os-border-subtle:#9cafdc1a;--os-border-default:#9cafdc2b;--os-border-strong:#9cafdc47;
- --os-primary:#9065f8;--os-primary-hover:#a384ff;--os-primary-muted:#9065f829;
- --os-violet:#b29aff;--os-indigo:#8796ff;--os-blue:#65abff;--os-cyan:#42c9e8;
- --os-success:#38d9a9;--os-warning:#ffb454;--os-danger:#ff6878;
- --os-text-primary:#f1f5ff;--os-text-secondary:#a7b4d0;--os-text-muted:#95a4c2;--os-text-disabled:#7f8dab;
- --os-radius-sm:8px;--os-radius-md:12px;--os-radius-lg:16px;--os-radius-xl:20px;
- --os-space-1:4px;--os-space-2:8px;--os-space-3:12px;--os-space-4:16px;--os-space-5:20px;--os-space-6:24px;--os-space-8:32px;
- --os-shadow-card:0 8px 28px #00000029;--os-shadow-floating:0 18px 48px #00000059;
- --os-gradient-primary:linear-gradient(135deg,#6840cc,#7953d8);--os-gradient-surface:linear-gradient(145deg,#18243e,#0c1425);
- --os-canvas:var(--os-bg-main);--os-surface:var(--os-surface-1);--os-inset:var(--os-surface-2);--os-ink:var(--os-text-primary);--os-muted:var(--os-text-secondary);--os-line:var(--os-border-default);--os-line-strong:var(--os-border-strong);--os-purple:var(--os-violet);--os-jade:#54d8c0;--os-bronze:#e5b47d;--os-radius:16px;--os-control:38px;--os-shadow:var(--os-shadow-card);--workspace-bar:56px;
- --font:var(--os-font);--bg:var(--os-bg-main);--paper:var(--os-surface-1);--surface:var(--os-surface-1);--ink:var(--os-text-primary);--text:var(--os-text-primary);--muted:var(--os-text-secondary);--line:var(--os-border-default);--border:var(--os-border-default);--accent:var(--os-primary);--accent-hover:var(--os-primary-hover);--sidebar:var(--os-bg-sidebar);--soft:var(--os-primary-muted);--lavender:var(--os-primary-muted);
- color-scheme:dark;
-}
+/* Stable entry point: dependency order is part of the public contract. */
+@import url("./design-system/primitives.css");
+@import url("./design-system/semantic.css");
+@import url("./design-system/components/tokens.css");
+@import url("./design-system/compatibility.css");
+@import url("./design-system/typography.css");
+@import url("./design-system/elevation.css");

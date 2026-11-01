@@ -1,0 +1,14 @@
+@font-face{font-family:'Henry Noto Sans';src:url('../fonts/NotoSans-Regular.woff') format('woff');font-weight:400;font-display:swap}
+@font-face{font-family:'Henry Noto Sans';src:url('../fonts/NotoSans-Bold.woff') format('woff');font-weight:700;font-display:swap}
+:root{font-family:var(--sys-font-family);color-scheme:dark}
+body{font:var(--sys-weight-regular) var(--sys-font-body)/var(--sys-leading-body) var(--sys-font-family);color:var(--sys-fg-primary);background:var(--sys-bg-canvas);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit}button,a,summary{touch-action:manipulation}button{cursor:pointer}h1,h2,h3,h4,p{overflow-wrap:break-word}h1,h2,h3,h4{color:var(--sys-fg-primary)}
+.ui-heading{font-size:var(--sys-font-heading);line-height:var(--sys-leading-tight);letter-spacing:var(--sys-tracking-heading);font-weight:var(--sys-weight-strong);margin:0}.ui-title{font-size:var(--sys-font-title);line-height:var(--sys-leading-label);margin:0}.ui-secondary{color:var(--sys-fg-secondary)}.ui-tertiary{color:var(--sys-fg-tertiary)}.ui-meta{font-size:var(--sys-font-label);color:var(--sys-fg-tertiary)}
+.ui-number{font-variant-numeric:tabular-nums;font-size:var(--sys-font-value);letter-spacing:var(--sys-tracking-heading)}.ui-code{font:var(--ref-font-size-12)/var(--sys-leading-body) var(--sys-font-mono)}
+:where(button,a,input,select,textarea,summary,[tabindex]):focus-visible{outline:var(--sys-focus-width) solid var(--sys-focus-ring);outline-offset:3px}
+::selection{background:var(--sys-action-primary-bg);color:var(--sys-action-primary-fg)}[hidden]{display:none!important}.ui-sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+*{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--sys-border-default) transparent}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important;scroll-behavior:auto!important}}
+.icon{display:block;width:var(--sys-icon-size);height:var(--sys-icon-size);flex:none}
+
+[data-state="focus"]{outline:var(--sys-focus-width) solid var(--sys-focus-ring);outline-offset:3px}

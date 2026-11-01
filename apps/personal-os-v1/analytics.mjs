@@ -1,6 +1,6 @@
 import {canonicalWeeks,uniqueItems,explicitDate} from './model.mjs';
 export const STATUS_ORDER=['reported_done','verified_done','doing','blocked','plan','unknown'];
-export const STATUS_META={reported_done:{label:'Tự báo đã làm',short:'Tự báo',color:'#27b7ad'},verified_done:{label:'Đã xác minh',short:'Xác minh',color:'#176e7a'},doing:{label:'Đang làm',short:'Đang làm',color:'#6399df'},blocked:{label:'Đang vướng',short:'Vướng',color:'#f39851'},plan:{label:'Kế hoạch',short:'Kế hoạch',color:'#a18ae8'},unknown:{label:'Chưa rõ',short:'Chưa rõ',color:'#a6acbb'}};
+export const STATUS_META={reported_done:{label:'Tự báo đã làm',short:'Tự báo',color:'var(--sys-chart-reported)'},verified_done:{label:'Đã xác minh',short:'Xác minh',color:'var(--sys-chart-verified)'},doing:{label:'Đang làm',short:'Đang làm',color:'var(--sys-chart-doing)'},blocked:{label:'Đang vướng',short:'Vướng',color:'var(--sys-chart-blocked)'},plan:{label:'Kế hoạch',short:'Kế hoạch',color:'var(--sys-chart-plan)'},unknown:{label:'Chưa rõ',short:'Chưa rõ',color:'var(--sys-chart-unknown)'}};
 const CONTEXT=new Set(['must_win','risk','stop','summary','reflection']);
 export function executionRecords(weeks){return uniqueItems(weeks).filter(i=>!CONTEXT.has(i.kind)&&i.scope!=='summary'&&!i.is_summary);}
 export function countsByStatus(records){const counts=Object.fromEntries(STATUS_ORDER.map(k=>[k,0]));for(const i of records)counts[Object.hasOwn(counts,i.status)?i.status:'unknown']++;return counts;}

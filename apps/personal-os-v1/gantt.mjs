@@ -1,7 +1,7 @@
 import {canonicalWeeks,uniqueItems,weekRange} from './model.mjs';
 import {normalizeAxis,countsByStatus,shiftDate,STATUS_ORDER} from './analytics.mjs';
 const DAY=86400000;
-export const GANTT_COLORS={career:'#7561bd',business:'#209e92',entrepreneurship:'#209e92',freelance:'#b47b36',education:'#5a8ec7',health:'#cf7c89',finance:'#58937a',growth:'#9a82b0',relationships:'#b18d65',unassigned:'#7d8798'};
+export const GANTT_COLORS={career:'var(--sys-fg-accent)',business:'var(--sys-domain-servicebio)',entrepreneurship:'var(--sys-domain-servicebio)',freelance:'var(--sys-domain-ventures)',education:'var(--sys-domain-enexia)',health:'var(--sys-feedback-danger)',finance:'var(--sys-feedback-success)',growth:'var(--sys-chart-plan)',relationships:'var(--sys-feedback-warning)',unassigned:'var(--sys-fg-tertiary)'};
 export const validDate=x=>typeof x==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x)&&Number.isFinite(Date.parse(x+'T12:00:00Z'))&&new Date(x+'T12:00:00Z').toISOString().slice(0,10)===x;
 export const daysBetween=(a,b)=>Math.round((Date.parse(b+'T12:00:00Z')-Date.parse(a+'T12:00:00Z'))/DAY);
 export function quarterRange(year,q){q=Math.max(0,Math.min(3,Number(q)||0));const start=year+'-'+String(q*3+1).padStart(2,'0')+'-01';const end=new Date(Date.UTC(year,q*3+3,0,12)).toISOString().slice(0,10);return {year,q,start,end,days:daysBetween(start,end)+1};}

@@ -1,544 +1,1496 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-01T08:43:16.165888+00:00",
+  "generatedAt": "2026-11-01T14:15:40.357418+00:00",
   "title": "Design System: Henry OS — Nocturne Command",
   "extensions": {
     "colorMeta": {
-      "bg-base": {
-        "displayName": "Bg Base",
+      "bg-canvas": {
+        "displayName": "Bg Canvas",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0248 267.11)",
-          "oklch(26% 0.0248 267.11)",
-          "oklch(38% 0.0248 267.11)",
-          "oklch(49% 0.0248 267.11)",
-          "oklch(61% 0.0248 267.11)",
-          "oklch(72% 0.0248 267.11)",
-          "oklch(84% 0.0248 267.11)",
-          "oklch(95% 0.0248 267.11)"
-        ]
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-bg-canvas",
+          "references": [
+            "--ref-neutral-950"
+          ]
+        }
       },
       "bg-sidebar": {
         "displayName": "Bg Sidebar",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0325 266.62)",
-          "oklch(26% 0.0325 266.62)",
-          "oklch(38% 0.0325 266.62)",
-          "oklch(49% 0.0325 266.62)",
-          "oklch(61% 0.0325 266.62)",
-          "oklch(72% 0.0325 266.62)",
-          "oklch(84% 0.0325 266.62)",
-          "oklch(95% 0.0325 266.62)"
-        ]
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-bg-sidebar",
+          "references": [
+            "--ref-neutral-925"
+          ]
+        }
       },
-      "bg-main": {
-        "displayName": "Bg Main",
+      "bg-surface": {
+        "displayName": "Bg Surface",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0346 267.28)",
-          "oklch(26% 0.0346 267.28)",
-          "oklch(38% 0.0346 267.28)",
-          "oklch(49% 0.0346 267.28)",
-          "oklch(61% 0.0346 267.28)",
-          "oklch(72% 0.0346 267.28)",
-          "oklch(84% 0.0346 267.28)",
-          "oklch(95% 0.0346 267.28)"
-        ]
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-bg-surface",
+          "references": [
+            "--ref-neutral-900"
+          ]
+        }
       },
-      "surface-1": {
-        "displayName": "Surface 1",
+      "bg-surface-raised": {
+        "displayName": "Bg Surface Raised",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0381 263.31)",
-          "oklch(26% 0.0381 263.31)",
-          "oklch(38% 0.0381 263.31)",
-          "oklch(49% 0.0381 263.31)",
-          "oklch(61% 0.0381 263.31)",
-          "oklch(72% 0.0381 263.31)",
-          "oklch(84% 0.0381 263.31)",
-          "oklch(95% 0.0381 263.31)"
-        ]
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-bg-surface-raised",
+          "references": [
+            "--ref-neutral-850"
+          ]
+        }
       },
-      "surface-2": {
-        "displayName": "Surface 2",
+      "bg-surface-hover": {
+        "displayName": "Bg Surface Hover",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0430 264.08)",
-          "oklch(26% 0.0430 264.08)",
-          "oklch(38% 0.0430 264.08)",
-          "oklch(49% 0.0430 264.08)",
-          "oklch(61% 0.0430 264.08)",
-          "oklch(72% 0.0430 264.08)",
-          "oklch(84% 0.0430 264.08)",
-          "oklch(95% 0.0430 264.08)"
-        ]
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-bg-surface-hover",
+          "references": [
+            "--ref-neutral-800"
+          ]
+        }
       },
-      "surface-3": {
-        "displayName": "Surface 3",
+      "bg-surface-pressed": {
+        "displayName": "Bg Surface Pressed",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0482 262.01)",
-          "oklch(26% 0.0482 262.01)",
-          "oklch(38% 0.0482 262.01)",
-          "oklch(49% 0.0482 262.01)",
-          "oklch(61% 0.0482 262.01)",
-          "oklch(72% 0.0482 262.01)",
-          "oklch(84% 0.0482 262.01)",
-          "oklch(95% 0.0482 262.01)"
-        ]
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-bg-surface-pressed",
+          "references": [
+            "--ref-neutral-700"
+          ]
+        }
       },
-      "surface-hover": {
-        "displayName": "Surface Hover",
+      "bg-inset": {
+        "displayName": "Bg Inset",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0511 262.14)",
-          "oklch(26% 0.0511 262.14)",
-          "oklch(38% 0.0511 262.14)",
-          "oklch(49% 0.0511 262.14)",
-          "oklch(61% 0.0511 262.14)",
-          "oklch(72% 0.0511 262.14)",
-          "oklch(84% 0.0511 262.14)",
-          "oklch(95% 0.0511 262.14)"
-        ]
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-bg-inset",
+          "references": [
+            "--ref-neutral-925"
+          ]
+        }
+      },
+      "bg-accent": {
+        "displayName": "Bg Accent",
+        "role": "neutral",
+        "tonalRamp": [
+          "#1a1530",
+          "#292044",
+          "#50359f",
+          "#6442ca",
+          "#7456e8",
+          "#9175f3",
+          "#a996ff",
+          "#b59eff",
+          "#cabaff",
+          "#e5dbff",
+          "#f3efff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-bg-accent",
+          "references": [
+            "--ref-violet-950"
+          ]
+        }
+      },
+      "fg-primary": {
+        "displayName": "Fg Primary",
+        "role": "neutral",
+        "tonalRamp": [
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-fg-primary",
+          "references": [
+            "--ref-neutral-50"
+          ]
+        }
+      },
+      "fg-secondary": {
+        "displayName": "Fg Secondary",
+        "role": "neutral",
+        "tonalRamp": [
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-fg-secondary",
+          "references": [
+            "--ref-neutral-200"
+          ]
+        }
+      },
+      "fg-tertiary": {
+        "displayName": "Fg Tertiary",
+        "role": "neutral",
+        "tonalRamp": [
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-fg-tertiary",
+          "references": [
+            "--ref-neutral-300"
+          ]
+        }
+      },
+      "fg-disabled": {
+        "displayName": "Fg Disabled",
+        "role": "neutral",
+        "tonalRamp": [
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-fg-disabled",
+          "references": [
+            "--ref-neutral-500"
+          ]
+        }
+      },
+      "fg-inverse": {
+        "displayName": "Fg Inverse",
+        "role": "neutral",
+        "tonalRamp": [
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-fg-inverse",
+          "references": [
+            "--ref-neutral-950"
+          ]
+        }
+      },
+      "fg-accent": {
+        "displayName": "Fg Accent",
+        "role": "primary",
+        "tonalRamp": [
+          "#1a1530",
+          "#292044",
+          "#50359f",
+          "#6442ca",
+          "#7456e8",
+          "#9175f3",
+          "#a996ff",
+          "#b59eff",
+          "#cabaff",
+          "#e5dbff",
+          "#f3efff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-fg-accent",
+          "references": [
+            "--ref-violet-300"
+          ]
+        }
       },
       "border-subtle": {
         "displayName": "Border Subtle",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0684 266.91)",
-          "oklch(26% 0.0684 266.91)",
-          "oklch(38% 0.0684 266.91)",
-          "oklch(49% 0.0684 266.91)",
-          "oklch(61% 0.0684 266.91)",
-          "oklch(72% 0.0684 266.91)",
-          "oklch(84% 0.0684 266.91)",
-          "oklch(95% 0.0684 266.91)"
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
         ],
-        "note": "Ramp uses the opaque base hue; source token retains alpha."
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-border-subtle",
+          "references": [
+            "--ref-neutral-800"
+          ]
+        }
       },
       "border-default": {
         "displayName": "Border Default",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0684 266.91)",
-          "oklch(26% 0.0684 266.91)",
-          "oklch(38% 0.0684 266.91)",
-          "oklch(49% 0.0684 266.91)",
-          "oklch(61% 0.0684 266.91)",
-          "oklch(72% 0.0684 266.91)",
-          "oklch(84% 0.0684 266.91)",
-          "oklch(95% 0.0684 266.91)"
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
         ],
-        "note": "Ramp uses the opaque base hue; source token retains alpha."
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-border-default",
+          "references": [
+            "--ref-neutral-700"
+          ]
+        }
       },
-      "border-strong": {
-        "displayName": "Border Strong",
+      "border-interactive": {
+        "displayName": "Border Interactive",
         "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.0684 266.91)",
-          "oklch(26% 0.0684 266.91)",
-          "oklch(38% 0.0684 266.91)",
-          "oklch(49% 0.0684 266.91)",
-          "oklch(61% 0.0684 266.91)",
-          "oklch(72% 0.0684 266.91)",
-          "oklch(84% 0.0684 266.91)",
-          "oklch(95% 0.0684 266.91)"
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
         ],
-        "note": "Ramp uses the opaque base hue; source token retains alpha."
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-border-interactive",
+          "references": [
+            "--ref-neutral-500"
+          ]
+        }
       },
-      "primary": {
-        "displayName": "Primary",
-        "role": "primary",
+      "border-accent": {
+        "displayName": "Border Accent",
+        "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.2098 292.79)",
-          "oklch(26% 0.2098 292.79)",
-          "oklch(38% 0.2098 292.79)",
-          "oklch(49% 0.2098 292.79)",
-          "oklch(61% 0.2098 292.79)",
-          "oklch(72% 0.2098 292.79)",
-          "oklch(84% 0.2098 292.79)",
-          "oklch(95% 0.2098 292.79)"
-        ]
-      },
-      "primary-hover": {
-        "displayName": "Primary Hover",
-        "role": "primary",
-        "tonalRamp": [
-          "oklch(15% 0.1758 292.87)",
-          "oklch(26% 0.1758 292.87)",
-          "oklch(38% 0.1758 292.87)",
-          "oklch(49% 0.1758 292.87)",
-          "oklch(61% 0.1758 292.87)",
-          "oklch(72% 0.1758 292.87)",
-          "oklch(84% 0.1758 292.87)",
-          "oklch(95% 0.1758 292.87)"
-        ]
-      },
-      "primary-muted": {
-        "displayName": "Primary Muted",
-        "role": "primary",
-        "tonalRamp": [
-          "oklch(15% 0.2098 292.79)",
-          "oklch(26% 0.2098 292.79)",
-          "oklch(38% 0.2098 292.79)",
-          "oklch(49% 0.2098 292.79)",
-          "oklch(61% 0.2098 292.79)",
-          "oklch(72% 0.2098 292.79)",
-          "oklch(84% 0.2098 292.79)",
-          "oklch(95% 0.2098 292.79)"
+          "#1a1530",
+          "#292044",
+          "#50359f",
+          "#6442ca",
+          "#7456e8",
+          "#9175f3",
+          "#a996ff",
+          "#b59eff",
+          "#cabaff",
+          "#e5dbff",
+          "#f3efff"
         ],
-        "note": "Ramp uses the opaque base hue; source token retains alpha."
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-border-accent",
+          "references": [
+            "--ref-violet-500"
+          ]
+        }
       },
-      "violet": {
-        "displayName": "Violet",
+      "action-primary-bg": {
+        "displayName": "Action Primary Bg",
         "role": "primary",
         "tonalRamp": [
-          "oklch(15% 0.1438 293.54)",
-          "oklch(26% 0.1438 293.54)",
-          "oklch(38% 0.1438 293.54)",
-          "oklch(49% 0.1438 293.54)",
-          "oklch(61% 0.1438 293.54)",
-          "oklch(72% 0.1438 293.54)",
-          "oklch(84% 0.1438 293.54)",
-          "oklch(95% 0.1438 293.54)"
-        ]
+          "#1a1530",
+          "#292044",
+          "#50359f",
+          "#6442ca",
+          "#7456e8",
+          "#9175f3",
+          "#a996ff",
+          "#b59eff",
+          "#cabaff",
+          "#e5dbff",
+          "#f3efff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-action-primary-bg",
+          "references": [
+            "--ref-violet-700"
+          ]
+        }
       },
-      "indigo": {
-        "displayName": "Indigo",
-        "role": "secondary",
-        "tonalRamp": [
-          "oklch(15% 0.1536 275.62)",
-          "oklch(26% 0.1536 275.62)",
-          "oklch(38% 0.1536 275.62)",
-          "oklch(49% 0.1536 275.62)",
-          "oklch(61% 0.1536 275.62)",
-          "oklch(72% 0.1536 275.62)",
-          "oklch(84% 0.1536 275.62)",
-          "oklch(95% 0.1536 275.62)"
-        ]
-      },
-      "blue": {
-        "displayName": "Blue",
+      "action-primary-fg": {
+        "displayName": "Action Primary Fg",
         "role": "primary",
         "tonalRamp": [
-          "oklch(15% 0.1419 254.04)",
-          "oklch(26% 0.1419 254.04)",
-          "oklch(38% 0.1419 254.04)",
-          "oklch(49% 0.1419 254.04)",
-          "oklch(61% 0.1419 254.04)",
-          "oklch(72% 0.1419 254.04)",
-          "oklch(84% 0.1419 254.04)",
-          "oklch(95% 0.1419 254.04)"
-        ]
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-action-primary-fg",
+          "references": [
+            "--ref-neutral-0"
+          ]
+        }
       },
-      "cyan": {
-        "displayName": "Cyan",
+      "action-primary-hover": {
+        "displayName": "Action Primary Hover",
         "role": "primary",
         "tonalRamp": [
-          "oklch(15% 0.1210 216.57)",
-          "oklch(26% 0.1210 216.57)",
-          "oklch(38% 0.1210 216.57)",
-          "oklch(49% 0.1210 216.57)",
-          "oklch(61% 0.1210 216.57)",
-          "oklch(72% 0.1210 216.57)",
-          "oklch(84% 0.1210 216.57)",
-          "oklch(95% 0.1210 216.57)"
-        ]
+          "#1a1530",
+          "#292044",
+          "#50359f",
+          "#6442ca",
+          "#7456e8",
+          "#9175f3",
+          "#a996ff",
+          "#b59eff",
+          "#cabaff",
+          "#e5dbff",
+          "#f3efff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-action-primary-hover",
+          "references": [
+            "--ref-violet-600"
+          ]
+        }
       },
-      "success": {
-        "displayName": "Success",
+      "action-primary-pressed": {
+        "displayName": "Action Primary Pressed",
+        "role": "primary",
+        "tonalRamp": [
+          "#1a1530",
+          "#292044",
+          "#50359f",
+          "#6442ca",
+          "#7456e8",
+          "#9175f3",
+          "#a996ff",
+          "#b59eff",
+          "#cabaff",
+          "#e5dbff",
+          "#f3efff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-action-primary-pressed",
+          "references": [
+            "--ref-violet-800"
+          ]
+        }
+      },
+      "action-danger-bg": {
+        "displayName": "Action Danger Bg",
+        "role": "neutral",
+        "tonalRamp": [
+          "#331a28",
+          "#4d1e31",
+          "#7e2440",
+          "#a02c4a",
+          "#bf3656",
+          "#e04a65",
+          "#ff6878",
+          "#ff8fa2",
+          "#ffb0bd",
+          "#ffd8df",
+          "#fff0f1"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-action-danger-bg",
+          "references": [
+            "--ref-danger-700"
+          ]
+        }
+      },
+      "action-danger-fg": {
+        "displayName": "Action Danger Fg",
+        "role": "neutral",
+        "tonalRamp": [
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-action-danger-fg",
+          "references": [
+            "--ref-neutral-0"
+          ]
+        }
+      },
+      "action-danger-hover": {
+        "displayName": "Action Danger Hover",
+        "role": "neutral",
+        "tonalRamp": [
+          "#331a28",
+          "#4d1e31",
+          "#7e2440",
+          "#a02c4a",
+          "#bf3656",
+          "#e04a65",
+          "#ff6878",
+          "#ff8fa2",
+          "#ffb0bd",
+          "#ffd8df",
+          "#fff0f1"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-action-danger-hover",
+          "references": [
+            "--ref-danger-600"
+          ]
+        }
+      },
+      "action-danger-pressed": {
+        "displayName": "Action Danger Pressed",
+        "role": "neutral",
+        "tonalRamp": [
+          "#331a28",
+          "#4d1e31",
+          "#7e2440",
+          "#a02c4a",
+          "#bf3656",
+          "#e04a65",
+          "#ff6878",
+          "#ff8fa2",
+          "#ffb0bd",
+          "#ffd8df",
+          "#fff0f1"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-action-danger-pressed",
+          "references": [
+            "--ref-danger-800"
+          ]
+        }
+      },
+      "focus-ring": {
+        "displayName": "Focus Ring",
+        "role": "neutral",
+        "tonalRamp": [
+          "#0d2432",
+          "#113545",
+          "#125066",
+          "#14687e",
+          "#14859e",
+          "#1ea8c6",
+          "#42c9e8",
+          "#5ad5ea",
+          "#8be5f3",
+          "#c0f3fa",
+          "#e3fcff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-focus-ring",
+          "references": [
+            "--ref-cyan-300"
+          ]
+        }
+      },
+      "feedback-success": {
+        "displayName": "Feedback Success",
         "role": "tertiary",
         "tonalRamp": [
-          "oklch(15% 0.1472 167.92)",
-          "oklch(26% 0.1472 167.92)",
-          "oklch(38% 0.1472 167.92)",
-          "oklch(49% 0.1472 167.92)",
-          "oklch(61% 0.1472 167.92)",
-          "oklch(72% 0.1472 167.92)",
-          "oklch(84% 0.1472 167.92)",
-          "oklch(95% 0.1472 167.92)"
-        ]
+          "#0c2925",
+          "#103b32",
+          "#155444",
+          "#176e59",
+          "#1a8f70",
+          "#22b58b",
+          "#38d9a9",
+          "#65deb0",
+          "#8ceac2",
+          "#bcf8df",
+          "#e5fff3"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-feedback-success",
+          "references": [
+            "--ref-success-300"
+          ]
+        }
       },
-      "warning": {
-        "displayName": "Warning",
+      "feedback-warning": {
+        "displayName": "Feedback Warning",
         "role": "tertiary",
         "tonalRamp": [
-          "oklch(15% 0.1408 70.17)",
-          "oklch(26% 0.1408 70.17)",
-          "oklch(38% 0.1408 70.17)",
-          "oklch(49% 0.1408 70.17)",
-          "oklch(61% 0.1408 70.17)",
-          "oklch(72% 0.1408 70.17)",
-          "oklch(84% 0.1408 70.17)",
-          "oklch(95% 0.1408 70.17)"
-        ]
+          "#302419",
+          "#492f19",
+          "#6d421c",
+          "#8f5720",
+          "#b47325",
+          "#df9434",
+          "#ffb454",
+          "#ffca6d",
+          "#ffdc8e",
+          "#ffedbc",
+          "#fff7df"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-feedback-warning",
+          "references": [
+            "--ref-warning-300"
+          ]
+        }
       },
-      "danger": {
-        "displayName": "Danger",
+      "feedback-danger": {
+        "displayName": "Feedback Danger",
         "role": "tertiary",
         "tonalRamp": [
-          "oklch(15% 0.1839 16.74)",
-          "oklch(26% 0.1839 16.74)",
-          "oklch(38% 0.1839 16.74)",
-          "oklch(49% 0.1839 16.74)",
-          "oklch(61% 0.1839 16.74)",
-          "oklch(72% 0.1839 16.74)",
-          "oklch(84% 0.1839 16.74)",
-          "oklch(95% 0.1839 16.74)"
-        ]
+          "#331a28",
+          "#4d1e31",
+          "#7e2440",
+          "#a02c4a",
+          "#bf3656",
+          "#e04a65",
+          "#ff6878",
+          "#ff8fa2",
+          "#ffb0bd",
+          "#ffd8df",
+          "#fff0f1"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-feedback-danger",
+          "references": [
+            "--ref-danger-300"
+          ]
+        }
       },
-      "text-primary": {
-        "displayName": "Text Primary",
-        "role": "neutral",
+      "feedback-info": {
+        "displayName": "Feedback Info",
+        "role": "tertiary",
         "tonalRamp": [
-          "oklch(15% 0.0140 268.49)",
-          "oklch(26% 0.0140 268.49)",
-          "oklch(38% 0.0140 268.49)",
-          "oklch(49% 0.0140 268.49)",
-          "oklch(61% 0.0140 268.49)",
-          "oklch(72% 0.0140 268.49)",
-          "oklch(84% 0.0140 268.49)",
-          "oklch(95% 0.0140 268.49)"
-        ]
+          "#102137",
+          "#132d46",
+          "#19486a",
+          "#1b6091",
+          "#237bb5",
+          "#329de0",
+          "#59bdf2",
+          "#7dcbff",
+          "#a1d7ff",
+          "#cce8ff",
+          "#e8f5ff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-feedback-info",
+          "references": [
+            "--ref-blue-300"
+          ]
+        }
       },
-      "text-secondary": {
-        "displayName": "Text Secondary",
-        "role": "neutral",
+      "feedback-success-bg": {
+        "displayName": "Feedback Success Bg",
+        "role": "tertiary",
         "tonalRamp": [
-          "oklch(15% 0.0427 265.63)",
-          "oklch(26% 0.0427 265.63)",
-          "oklch(38% 0.0427 265.63)",
-          "oklch(49% 0.0427 265.63)",
-          "oklch(61% 0.0427 265.63)",
-          "oklch(72% 0.0427 265.63)",
-          "oklch(84% 0.0427 265.63)",
-          "oklch(95% 0.0427 265.63)"
-        ]
+          "#0c2925",
+          "#103b32",
+          "#155444",
+          "#176e59",
+          "#1a8f70",
+          "#22b58b",
+          "#38d9a9",
+          "#65deb0",
+          "#8ceac2",
+          "#bcf8df",
+          "#e5fff3"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-feedback-success-bg",
+          "references": [
+            "--ref-success-950"
+          ]
+        }
       },
-      "text-muted": {
-        "displayName": "Text Muted",
-        "role": "neutral",
+      "feedback-warning-bg": {
+        "displayName": "Feedback Warning Bg",
+        "role": "tertiary",
         "tonalRamp": [
-          "oklch(15% 0.0470 264.22)",
-          "oklch(26% 0.0470 264.22)",
-          "oklch(38% 0.0470 264.22)",
-          "oklch(49% 0.0470 264.22)",
-          "oklch(61% 0.0470 264.22)",
-          "oklch(72% 0.0470 264.22)",
-          "oklch(84% 0.0470 264.22)",
-          "oklch(95% 0.0470 264.22)"
-        ]
+          "#302419",
+          "#492f19",
+          "#6d421c",
+          "#8f5720",
+          "#b47325",
+          "#df9434",
+          "#ffb454",
+          "#ffca6d",
+          "#ffdc8e",
+          "#ffedbc",
+          "#fff7df"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-feedback-warning-bg",
+          "references": [
+            "--ref-warning-950"
+          ]
+        }
       },
-      "text-disabled": {
-        "displayName": "Text Disabled",
-        "role": "neutral",
+      "feedback-danger-bg": {
+        "displayName": "Feedback Danger Bg",
+        "role": "tertiary",
         "tonalRamp": [
-          "oklch(15% 0.0479 265.39)",
-          "oklch(26% 0.0479 265.39)",
-          "oklch(38% 0.0479 265.39)",
-          "oklch(49% 0.0479 265.39)",
-          "oklch(61% 0.0479 265.39)",
-          "oklch(72% 0.0479 265.39)",
-          "oklch(84% 0.0479 265.39)",
-          "oklch(95% 0.0479 265.39)"
-        ]
+          "#331a28",
+          "#4d1e31",
+          "#7e2440",
+          "#a02c4a",
+          "#bf3656",
+          "#e04a65",
+          "#ff6878",
+          "#ff8fa2",
+          "#ffb0bd",
+          "#ffd8df",
+          "#fff0f1"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-feedback-danger-bg",
+          "references": [
+            "--ref-danger-950"
+          ]
+        }
       },
-      "jade": {
-        "displayName": "Jade",
+      "feedback-info-bg": {
+        "displayName": "Feedback Info Bg",
+        "role": "tertiary",
+        "tonalRamp": [
+          "#102137",
+          "#132d46",
+          "#19486a",
+          "#1b6091",
+          "#237bb5",
+          "#329de0",
+          "#59bdf2",
+          "#7dcbff",
+          "#a1d7ff",
+          "#cce8ff",
+          "#e8f5ff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-feedback-info-bg",
+          "references": [
+            "--ref-blue-950"
+          ]
+        }
+      },
+      "domain-personal": {
+        "displayName": "Domain Personal",
         "role": "secondary",
         "tonalRamp": [
-          "oklch(15% 0.1205 178.90)",
-          "oklch(26% 0.1205 178.90)",
-          "oklch(38% 0.1205 178.90)",
-          "oklch(49% 0.1205 178.90)",
-          "oklch(61% 0.1205 178.90)",
-          "oklch(72% 0.1205 178.90)",
-          "oklch(84% 0.1205 178.90)",
-          "oklch(95% 0.1205 178.90)"
-        ]
+          "#1a1530",
+          "#292044",
+          "#50359f",
+          "#6442ca",
+          "#7456e8",
+          "#9175f3",
+          "#a996ff",
+          "#b59eff",
+          "#cabaff",
+          "#e5dbff",
+          "#f3efff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-domain-personal",
+          "references": [
+            "--ref-violet-300"
+          ]
+        }
       },
-      "bronze": {
-        "displayName": "Bronze",
+      "domain-servicebio": {
+        "displayName": "Domain Servicebio",
         "role": "secondary",
         "tonalRamp": [
-          "oklch(15% 0.0912 69.16)",
-          "oklch(26% 0.0912 69.16)",
-          "oklch(38% 0.0912 69.16)",
-          "oklch(49% 0.0912 69.16)",
-          "oklch(61% 0.0912 69.16)",
-          "oklch(72% 0.0912 69.16)",
-          "oklch(84% 0.0912 69.16)",
-          "oklch(95% 0.0912 69.16)"
-        ]
+          "#0c2726",
+          "#113832",
+          "#144e49",
+          "#16675d",
+          "#1b8273",
+          "#26a591",
+          "#42c9b5",
+          "#63ddc3",
+          "#87e8cf",
+          "#b9f5e3",
+          "#e3fff6"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-domain-servicebio",
+          "references": [
+            "--ref-jade-300"
+          ]
+        }
+      },
+      "domain-ventures": {
+        "displayName": "Domain Ventures",
+        "role": "secondary",
+        "tonalRamp": [
+          "#2b211b",
+          "#412b1d",
+          "#663e20",
+          "#865123",
+          "#aa6c30",
+          "#cd8b47",
+          "#e8ae6b",
+          "#efbd82",
+          "#f3cd9d",
+          "#f8e3c4",
+          "#fff5e7"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-domain-ventures",
+          "references": [
+            "--ref-bronze-300"
+          ]
+        }
+      },
+      "domain-enexia": {
+        "displayName": "Domain Enexia",
+        "role": "secondary",
+        "tonalRamp": [
+          "#102137",
+          "#132d46",
+          "#19486a",
+          "#1b6091",
+          "#237bb5",
+          "#329de0",
+          "#59bdf2",
+          "#7dcbff",
+          "#a1d7ff",
+          "#cce8ff",
+          "#e8f5ff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-domain-enexia",
+          "references": [
+            "--ref-blue-300"
+          ]
+        }
+      },
+      "radar-level-4-bg": {
+        "displayName": "Radar Level 4 Bg",
+        "role": "tertiary",
+        "tonalRamp": [
+          "#0c2726",
+          "#113832",
+          "#144e49",
+          "#16675d",
+          "#1b8273",
+          "#26a591",
+          "#42c9b5",
+          "#63ddc3",
+          "#87e8cf",
+          "#b9f5e3",
+          "#e3fff6"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-radar-level-4-bg",
+          "references": [
+            "--ref-jade-950"
+          ]
+        }
+      },
+      "radar-level-3-bg": {
+        "displayName": "Radar Level 3 Bg",
+        "role": "tertiary",
+        "tonalRamp": [
+          "#2b211b",
+          "#412b1d",
+          "#663e20",
+          "#865123",
+          "#aa6c30",
+          "#cd8b47",
+          "#e8ae6b",
+          "#efbd82",
+          "#f3cd9d",
+          "#f8e3c4",
+          "#fff5e7"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-radar-level-3-bg",
+          "references": [
+            "--ref-bronze-950"
+          ]
+        }
+      },
+      "radar-level-2-bg": {
+        "displayName": "Radar Level 2 Bg",
+        "role": "tertiary",
+        "tonalRamp": [
+          "#302419",
+          "#492f19",
+          "#6d421c",
+          "#8f5720",
+          "#b47325",
+          "#df9434",
+          "#ffb454",
+          "#ffca6d",
+          "#ffdc8e",
+          "#ffedbc",
+          "#fff7df"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-radar-level-2-bg",
+          "references": [
+            "--ref-warning-950"
+          ]
+        }
+      },
+      "radar-level-1-bg": {
+        "displayName": "Radar Level 1 Bg",
+        "role": "tertiary",
+        "tonalRamp": [
+          "#331a28",
+          "#4d1e31",
+          "#7e2440",
+          "#a02c4a",
+          "#bf3656",
+          "#e04a65",
+          "#ff6878",
+          "#ff8fa2",
+          "#ffb0bd",
+          "#ffd8df",
+          "#fff0f1"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-radar-level-1-bg",
+          "references": [
+            "--ref-danger-950"
+          ]
+        }
+      },
+      "chart-plan": {
+        "displayName": "Chart Plan",
+        "role": "tertiary",
+        "tonalRamp": [
+          "#1a1530",
+          "#292044",
+          "#50359f",
+          "#6442ca",
+          "#7456e8",
+          "#9175f3",
+          "#a996ff",
+          "#b59eff",
+          "#cabaff",
+          "#e5dbff",
+          "#f3efff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-chart-plan",
+          "references": [
+            "--ref-violet-400"
+          ]
+        }
+      },
+      "chart-doing": {
+        "displayName": "Chart Doing",
+        "role": "tertiary",
+        "tonalRamp": [
+          "#102137",
+          "#132d46",
+          "#19486a",
+          "#1b6091",
+          "#237bb5",
+          "#329de0",
+          "#59bdf2",
+          "#7dcbff",
+          "#a1d7ff",
+          "#cce8ff",
+          "#e8f5ff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-chart-doing",
+          "references": [
+            "--ref-blue-400"
+          ]
+        }
+      },
+      "chart-reported": {
+        "displayName": "Chart Reported",
+        "role": "tertiary",
+        "tonalRamp": [
+          "#0d2432",
+          "#113545",
+          "#125066",
+          "#14687e",
+          "#14859e",
+          "#1ea8c6",
+          "#42c9e8",
+          "#5ad5ea",
+          "#8be5f3",
+          "#c0f3fa",
+          "#e3fcff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-chart-reported",
+          "references": [
+            "--ref-cyan-400"
+          ]
+        }
+      },
+      "chart-verified": {
+        "displayName": "Chart Verified",
+        "role": "tertiary",
+        "tonalRamp": [
+          "#0c2925",
+          "#103b32",
+          "#155444",
+          "#176e59",
+          "#1a8f70",
+          "#22b58b",
+          "#38d9a9",
+          "#65deb0",
+          "#8ceac2",
+          "#bcf8df",
+          "#e5fff3"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-chart-verified",
+          "references": [
+            "--ref-success-400"
+          ]
+        }
+      },
+      "chart-blocked": {
+        "displayName": "Chart Blocked",
+        "role": "tertiary",
+        "tonalRamp": [
+          "#331a28",
+          "#4d1e31",
+          "#7e2440",
+          "#a02c4a",
+          "#bf3656",
+          "#e04a65",
+          "#ff6878",
+          "#ff8fa2",
+          "#ffb0bd",
+          "#ffd8df",
+          "#fff0f1"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-chart-blocked",
+          "references": [
+            "--ref-danger-400"
+          ]
+        }
+      },
+      "chart-unknown": {
+        "displayName": "Chart Unknown",
+        "role": "tertiary",
+        "tonalRamp": [
+          "#060a12",
+          "#080d18",
+          "#0b1220",
+          "#101827",
+          "#192438",
+          "#223149",
+          "#34455f",
+          "#52647e",
+          "#6e82a0",
+          "#8fa2be",
+          "#a5b6ce",
+          "#bdcce0",
+          "#dde6f5",
+          "#f0f4ff",
+          "#ffffff"
+        ],
+        "source": {
+          "file": "apps/personal-os-v1/design-system/semantic.css",
+          "token": "--sys-chart-unknown",
+          "references": [
+            "--ref-neutral-400"
+          ]
+        }
       }
     },
     "typographyMeta": {
-      "display": {
-        "displayName": "Display",
-        "purpose": "Compact home greeting."
-      },
       "headline": {
         "displayName": "Headline",
-        "purpose": "Working page titles."
+        "purpose": "Shared title role; inherited host headings have documented exceptions."
       },
       "title": {
         "displayName": "Title",
-        "purpose": "Shared panel headings."
+        "purpose": "Shared component titles."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Application copy with Vietnamese support."
+        "purpose": "Vietnamese application copy."
       },
-      "navigation": {
-        "displayName": "Navigation",
-        "purpose": "Existing route labels."
+      "label": {
+        "displayName": "Label",
+        "purpose": "Controls and supporting data."
       },
-      "kpi": {
-        "displayName": "Kpi",
-        "purpose": "Source-backed weekly counts."
+      "metadata": {
+        "displayName": "Metadata",
+        "purpose": "Reference metadata role."
+      },
+      "value": {
+        "displayName": "Value",
+        "purpose": "Tabular source-backed numeric values."
       }
     },
     "shadows": [
       {
-        "name": "card",
-        "value": "0 8px 28px #00000029",
-        "purpose": "Working cards."
+        "name": "flat",
+        "value": "none",
+        "purpose": "Shared semantic elevation."
+      },
+      {
+        "name": "raised",
+        "value": "0 4px 16px rgb(0 0 0 / .16)",
+        "purpose": "Shared semantic elevation."
       },
       {
         "name": "floating",
-        "value": "0 18px 48px #00000059",
-        "purpose": "Dialogs and overlays."
-      }
-    ],
-    "gradients": [
-      {
-        "name": "gradient-primary",
-        "value": "linear-gradient(135deg,#6840cc,#7953d8)",
-        "purpose": "Primary actions."
+        "value": "0 12px 36px rgb(0 0 0 / .28)",
+        "purpose": "Shared semantic elevation."
       },
       {
-        "name": "gradient-surface",
-        "value": "linear-gradient(145deg,#18243e,#0c1425)",
-        "purpose": "KPI surface depth."
+        "name": "overlay",
+        "value": "0 24px 72px rgb(0 0 0 / .48)",
+        "purpose": "Shared semantic elevation."
       }
     ],
     "motion": [
       {
-        "name": "button-state",
-        "value": "background-color .15s,border-color .15s,color .15s",
-        "purpose": "Subtle states; reduced-motion preference removes transitions."
+        "name": "motion-fast",
+        "value": "120ms",
+        "purpose": "Shared motion, minimized by reduced-motion preference."
+      },
+      {
+        "name": "motion-normal",
+        "value": "180ms",
+        "purpose": "Shared motion, minimized by reduced-motion preference."
+      },
+      {
+        "name": "motion-slow",
+        "value": "260ms",
+        "purpose": "Shared motion, minimized by reduced-motion preference."
+      },
+      {
+        "name": "ease",
+        "value": "cubic-bezier(.2,.8,.2,1)",
+        "purpose": "Shared motion, minimized by reduced-motion preference."
       }
     ],
     "breakpoints": [
       {
-        "name": "utility-stack",
-        "value": "1380px"
+        "name": "touch-controls",
+        "value": "600px"
       },
       {
-        "name": "narrow-desktop",
+        "name": "host-mobile",
+        "value": "760px"
+      },
+      {
+        "name": "host-narrow",
         "value": "1100px"
       },
       {
-        "name": "mobile",
-        "value": "760px"
+        "name": "home-utility-stack",
+        "value": "1380px"
       }
-    ]
+    ],
+    "density": {
+      "normal": {
+        "controlHeight": "40px",
+        "panelPadding": "20px",
+        "gap": "16px",
+        "rowPadding": "12px"
+      },
+      "compact": {
+        "controlHeight": "32px",
+        "panelPadding": "16px",
+        "gap": "12px",
+        "rowPadding": "8px"
+      },
+      "touch": {
+        "condition": "pointer: coarse or max-width:600px",
+        "controlHeight": "44px",
+        "smallControlHeight": "44px"
+      }
+    },
+    "architecture": {
+      "tierA": "design-system/primitives.css",
+      "tierB": "design-system/semantic.css",
+      "tierC": "design-system/components/tokens.css",
+      "legacyBridge": "design-system/compatibility.css",
+      "catalog": "design-system/catalog.mjs",
+      "laboratory": "apps/personal-os-v1/design-system.html",
+      "contractCount": 26,
+      "sectionCount": 11
+    },
+    "verification": {
+      "independentReview": {
+        "disposition": "ship",
+        "scope": "Fix list F1/F2/F3 only; not universal full-surface approval.",
+        "findings": {
+          "F1": "resolved",
+          "F2": "resolved",
+          "F3": "resolved"
+        },
+        "requiredRecapturesReopened": 18,
+        "fixScreenshotsReopened": 5
+      },
+      "detector": "Not available; no detector result claimed.",
+      "publication": "Pending separate work; no production publication claimed."
+    }
   },
   "components": [
     {
-      "name": "Primary action",
+      "name": "Primary Button",
       "kind": "button",
-      "description": "Actual gradient primary action.",
-      "html": "<button class=\"ds-primary\">Mở kế hoạch tuần</button>",
-      "css": ".ds-primary{font:400 12px/1.6 'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:38px;padding:8px 12px;border-radius:9px;border:1px solid #b79bff55;background:var(--os-gradient-primary,linear-gradient(135deg,#6840cc,#7953d8));color:white;cursor:pointer;transition:filter .15s}.ds-primary:hover{filter:brightness(1.08)}.ds-primary:active{filter:brightness(1.05)}.ds-primary:focus-visible{outline:2px solid var(--os-cyan,#42c9e8);outline-offset:3px;}"
+      "description": "Actual shared button with native state styling.",
+      "html": "<button type=\"button\" class=\"ds-button ds-button--primary\"><span>Mở kế hoạch</span></button>",
+      "css": ":host{font:14px/1.6 \"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif;color:var(--sys-fg-primary,#f0f4ff)}:where(.ds-button){display:inline-flex}\n\n.ds-button{align-items:center;justify-content:center;gap:var(--ref-space-8, 8px);height:var(--cmp-button-height-md, 40px);min-height:var(--cmp-button-height-md, 40px);padding:0 var(--sys-space-control-x, 12px);border:var(--sys-border-width, 1px) solid var(--sys-border-interactive, #6e82a0);border-radius:var(--cmp-button-primary-radius, 8px);background:var(--sys-bg-surface-raised, #192438);color:var(--sys-fg-primary, #f0f4ff);font:var(--sys-weight-strong, 700) var(--ref-font-size-13, 13px)/var(--sys-leading-label, 1.4) var(--sys-font-family, \"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif);text-decoration:none;white-space:nowrap;box-shadow:var(--sys-elevation-flat, none);cursor:pointer;transition:background var(--sys-motion-fast, 120ms) var(--sys-ease, cubic-bezier(.2,.8,.2,1)),border-color var(--sys-motion-fast, 120ms) var(--sys-ease, cubic-bezier(.2,.8,.2,1)),color var(--sys-motion-fast, 120ms) var(--sys-ease, cubic-bezier(.2,.8,.2,1))}\n.ds-button:hover,.ds-button[data-state=hover]{background:var(--sys-bg-surface-hover, #223149)}.ds-button:active,.ds-button[data-state=pressed]{background:var(--sys-bg-surface-pressed, #34455f)}\n.ds-button.ds-button--primary{background:var(--cmp-button-primary-bg-default, #6442ca);border-color:var(--cmp-button-primary-bg-default, #6442ca);color:var(--cmp-button-primary-fg, #ffffff);filter:none}.ds-button--primary:hover,.ds-button--primary[data-state=hover]{background:var(--cmp-button-primary-bg-hover, #7456e8);border-color:var(--cmp-button-primary-bg-hover, #7456e8)}.ds-button--primary:active,.ds-button--primary[data-state=pressed]{background:var(--cmp-button-primary-bg-pressed, #50359f);border-color:var(--cmp-button-primary-bg-pressed, #50359f)}\n.ds-button.ds-button--tertiary{background:transparent;border-color:transparent;color:var(--sys-fg-accent, #b59eff)}.ds-button.ds-button--ghost{background:transparent;border-color:transparent;color:var(--sys-fg-secondary, #bdcce0)}.ds-button--tertiary:hover,.ds-button--ghost:hover,.ds-button--tertiary[data-state=hover],.ds-button--ghost[data-state=hover]{background:var(--sys-bg-surface-hover, #223149);color:var(--sys-fg-primary, #f0f4ff)}\n.ds-button.ds-button--destructive{background:var(--sys-action-danger-bg, #a02c4a);color:var(--sys-action-danger-fg, #ffffff);border-color:var(--sys-action-danger-bg, #a02c4a)}.ds-button--destructive:hover,.ds-button--destructive[data-state=hover]{background:var(--sys-action-danger-hover, #bf3656);border-color:var(--sys-action-danger-hover, #bf3656)}.ds-button--destructive:active,.ds-button--destructive[data-state=pressed]{background:var(--sys-action-danger-pressed, #7e2440)}\n.ds-button.ds-button--sm{height:var(--cmp-button-height-sm, 32px);min-height:var(--cmp-button-height-sm, 32px);font-size:var(--ref-font-size-12, 12px)}.ds-button.ds-button--lg{height:var(--cmp-button-height-lg, 44px);min-height:var(--cmp-button-height-lg, 44px);padding-inline:var(--ref-space-16, 16px)}\n.ds-button:disabled,.ds-button[aria-disabled=true]{background:var(--sys-bg-surface-raised, #192438);color:var(--sys-fg-disabled, #6e82a0);border-color:var(--sys-border-subtle, #223149);cursor:not-allowed;opacity:1;filter:none;pointer-events:none}.ds-button[aria-busy=true]{cursor:progress;pointer-events:none}.ds-button[aria-busy=true]::before{content:\"\";width:var(--ref-icon-12, 12px);height:var(--ref-icon-12, 12px);border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:ds-spin .8s linear infinite}.ds-button[data-state=focus]{outline:var(--sys-focus-width, 2px) solid var(--sys-focus-ring, #5ad5ea);outline-offset:3px}\n.ds-icon-button{width:var(--cmp-button-height-md, 40px);min-width:var(--cmp-button-height-md, 40px);padding:0;flex:none}.ds-icon-button.ds-icon-button--subtle{background:transparent;border-color:transparent}.ds-icon-button[aria-pressed=true],.ds-icon-button.ds-icon-button--active{color:var(--sys-fg-accent, #b59eff);border-color:var(--sys-border-accent, #9175f3);background:var(--sys-bg-accent, #1a1530)}\n.ds-button svg{width:var(--sys-icon-size, 16px);height:var(--sys-icon-size, 16px);flex:none}.ds-button--sm svg{width:var(--ref-icon-16, 16px);height:var(--ref-icon-16, 16px)}@keyframes ds-spin{to{transform:rotate(360deg)}}\n:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:var(--sys-focus-width,2px) solid var(--sys-focus-ring,#5ad5ea);outline-offset:3px}",
+      "refersTo": "button-primary"
     },
     {
-      "name": "Secondary action",
+      "name": "Secondary Button",
       "kind": "button",
-      "description": "Dark bordered action.",
-      "html": "<button class=\"ds-secondary\">Mở lịch</button>",
-      "css": ".ds-secondary{font:400 12px/1.6 'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:38px;padding:8px 12px;border-radius:9px;background:var(--os-surface-2,#151f34);color:var(--os-text-primary,#f1f5ff);border:1px solid var(--os-border-strong,#9cafdc47);cursor:pointer}.ds-secondary:hover{background:var(--os-surface-hover,#202e48);border-color:var(--os-violet,#b29aff)}.ds-secondary:focus-visible{outline:2px solid var(--os-cyan,#42c9e8);outline-offset:3px;}",
+      "description": "Actual shared button with native state styling.",
+      "html": "<button type=\"button\" class=\"ds-button ds-button--secondary\"><span>Xem chi tiết</span></button>",
+      "css": ":host{font:14px/1.6 \"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif;color:var(--sys-fg-primary,#f0f4ff)}:where(.ds-button){display:inline-flex}\n\n.ds-button{align-items:center;justify-content:center;gap:var(--ref-space-8, 8px);height:var(--cmp-button-height-md, 40px);min-height:var(--cmp-button-height-md, 40px);padding:0 var(--sys-space-control-x, 12px);border:var(--sys-border-width, 1px) solid var(--sys-border-interactive, #6e82a0);border-radius:var(--cmp-button-primary-radius, 8px);background:var(--sys-bg-surface-raised, #192438);color:var(--sys-fg-primary, #f0f4ff);font:var(--sys-weight-strong, 700) var(--ref-font-size-13, 13px)/var(--sys-leading-label, 1.4) var(--sys-font-family, \"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif);text-decoration:none;white-space:nowrap;box-shadow:var(--sys-elevation-flat, none);cursor:pointer;transition:background var(--sys-motion-fast, 120ms) var(--sys-ease, cubic-bezier(.2,.8,.2,1)),border-color var(--sys-motion-fast, 120ms) var(--sys-ease, cubic-bezier(.2,.8,.2,1)),color var(--sys-motion-fast, 120ms) var(--sys-ease, cubic-bezier(.2,.8,.2,1))}\n.ds-button:hover,.ds-button[data-state=hover]{background:var(--sys-bg-surface-hover, #223149)}.ds-button:active,.ds-button[data-state=pressed]{background:var(--sys-bg-surface-pressed, #34455f)}\n.ds-button.ds-button--primary{background:var(--cmp-button-primary-bg-default, #6442ca);border-color:var(--cmp-button-primary-bg-default, #6442ca);color:var(--cmp-button-primary-fg, #ffffff);filter:none}.ds-button--primary:hover,.ds-button--primary[data-state=hover]{background:var(--cmp-button-primary-bg-hover, #7456e8);border-color:var(--cmp-button-primary-bg-hover, #7456e8)}.ds-button--primary:active,.ds-button--primary[data-state=pressed]{background:var(--cmp-button-primary-bg-pressed, #50359f);border-color:var(--cmp-button-primary-bg-pressed, #50359f)}\n.ds-button.ds-button--tertiary{background:transparent;border-color:transparent;color:var(--sys-fg-accent, #b59eff)}.ds-button.ds-button--ghost{background:transparent;border-color:transparent;color:var(--sys-fg-secondary, #bdcce0)}.ds-button--tertiary:hover,.ds-button--ghost:hover,.ds-button--tertiary[data-state=hover],.ds-button--ghost[data-state=hover]{background:var(--sys-bg-surface-hover, #223149);color:var(--sys-fg-primary, #f0f4ff)}\n.ds-button.ds-button--destructive{background:var(--sys-action-danger-bg, #a02c4a);color:var(--sys-action-danger-fg, #ffffff);border-color:var(--sys-action-danger-bg, #a02c4a)}.ds-button--destructive:hover,.ds-button--destructive[data-state=hover]{background:var(--sys-action-danger-hover, #bf3656);border-color:var(--sys-action-danger-hover, #bf3656)}.ds-button--destructive:active,.ds-button--destructive[data-state=pressed]{background:var(--sys-action-danger-pressed, #7e2440)}\n.ds-button.ds-button--sm{height:var(--cmp-button-height-sm, 32px);min-height:var(--cmp-button-height-sm, 32px);font-size:var(--ref-font-size-12, 12px)}.ds-button.ds-button--lg{height:var(--cmp-button-height-lg, 44px);min-height:var(--cmp-button-height-lg, 44px);padding-inline:var(--ref-space-16, 16px)}\n.ds-button:disabled,.ds-button[aria-disabled=true]{background:var(--sys-bg-surface-raised, #192438);color:var(--sys-fg-disabled, #6e82a0);border-color:var(--sys-border-subtle, #223149);cursor:not-allowed;opacity:1;filter:none;pointer-events:none}.ds-button[aria-busy=true]{cursor:progress;pointer-events:none}.ds-button[aria-busy=true]::before{content:\"\";width:var(--ref-icon-12, 12px);height:var(--ref-icon-12, 12px);border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:ds-spin .8s linear infinite}.ds-button[data-state=focus]{outline:var(--sys-focus-width, 2px) solid var(--sys-focus-ring, #5ad5ea);outline-offset:3px}\n.ds-icon-button{width:var(--cmp-button-height-md, 40px);min-width:var(--cmp-button-height-md, 40px);padding:0;flex:none}.ds-icon-button.ds-icon-button--subtle{background:transparent;border-color:transparent}.ds-icon-button[aria-pressed=true],.ds-icon-button.ds-icon-button--active{color:var(--sys-fg-accent, #b59eff);border-color:var(--sys-border-accent, #9175f3);background:var(--sys-bg-accent, #1a1530)}\n.ds-button svg{width:var(--sys-icon-size, 16px);height:var(--sys-icon-size, 16px);flex:none}.ds-button--sm svg{width:var(--ref-icon-16, 16px);height:var(--ref-icon-16, 16px)}@keyframes ds-spin{to{transform:rotate(360deg)}}\n:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:var(--sys-focus-width,2px) solid var(--sys-focus-ring,#5ad5ea);outline-offset:3px}",
       "refersTo": "button-secondary"
     },
     {
-      "name": "Source field",
+      "name": "Ghost Button",
+      "kind": "button",
+      "description": "Actual shared button with native state styling.",
+      "html": "<button type=\"button\" class=\"ds-button ds-button--ghost\"><span>Bỏ qua</span></button>",
+      "css": ":host{font:14px/1.6 \"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif;color:var(--sys-fg-primary,#f0f4ff)}:where(.ds-button){display:inline-flex}\n\n.ds-button{align-items:center;justify-content:center;gap:var(--ref-space-8, 8px);height:var(--cmp-button-height-md, 40px);min-height:var(--cmp-button-height-md, 40px);padding:0 var(--sys-space-control-x, 12px);border:var(--sys-border-width, 1px) solid var(--sys-border-interactive, #6e82a0);border-radius:var(--cmp-button-primary-radius, 8px);background:var(--sys-bg-surface-raised, #192438);color:var(--sys-fg-primary, #f0f4ff);font:var(--sys-weight-strong, 700) var(--ref-font-size-13, 13px)/var(--sys-leading-label, 1.4) var(--sys-font-family, \"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif);text-decoration:none;white-space:nowrap;box-shadow:var(--sys-elevation-flat, none);cursor:pointer;transition:background var(--sys-motion-fast, 120ms) var(--sys-ease, cubic-bezier(.2,.8,.2,1)),border-color var(--sys-motion-fast, 120ms) var(--sys-ease, cubic-bezier(.2,.8,.2,1)),color var(--sys-motion-fast, 120ms) var(--sys-ease, cubic-bezier(.2,.8,.2,1))}\n.ds-button:hover,.ds-button[data-state=hover]{background:var(--sys-bg-surface-hover, #223149)}.ds-button:active,.ds-button[data-state=pressed]{background:var(--sys-bg-surface-pressed, #34455f)}\n.ds-button.ds-button--primary{background:var(--cmp-button-primary-bg-default, #6442ca);border-color:var(--cmp-button-primary-bg-default, #6442ca);color:var(--cmp-button-primary-fg, #ffffff);filter:none}.ds-button--primary:hover,.ds-button--primary[data-state=hover]{background:var(--cmp-button-primary-bg-hover, #7456e8);border-color:var(--cmp-button-primary-bg-hover, #7456e8)}.ds-button--primary:active,.ds-button--primary[data-state=pressed]{background:var(--cmp-button-primary-bg-pressed, #50359f);border-color:var(--cmp-button-primary-bg-pressed, #50359f)}\n.ds-button.ds-button--tertiary{background:transparent;border-color:transparent;color:var(--sys-fg-accent, #b59eff)}.ds-button.ds-button--ghost{background:transparent;border-color:transparent;color:var(--sys-fg-secondary, #bdcce0)}.ds-button--tertiary:hover,.ds-button--ghost:hover,.ds-button--tertiary[data-state=hover],.ds-button--ghost[data-state=hover]{background:var(--sys-bg-surface-hover, #223149);color:var(--sys-fg-primary, #f0f4ff)}\n.ds-button.ds-button--destructive{background:var(--sys-action-danger-bg, #a02c4a);color:var(--sys-action-danger-fg, #ffffff);border-color:var(--sys-action-danger-bg, #a02c4a)}.ds-button--destructive:hover,.ds-button--destructive[data-state=hover]{background:var(--sys-action-danger-hover, #bf3656);border-color:var(--sys-action-danger-hover, #bf3656)}.ds-button--destructive:active,.ds-button--destructive[data-state=pressed]{background:var(--sys-action-danger-pressed, #7e2440)}\n.ds-button.ds-button--sm{height:var(--cmp-button-height-sm, 32px);min-height:var(--cmp-button-height-sm, 32px);font-size:var(--ref-font-size-12, 12px)}.ds-button.ds-button--lg{height:var(--cmp-button-height-lg, 44px);min-height:var(--cmp-button-height-lg, 44px);padding-inline:var(--ref-space-16, 16px)}\n.ds-button:disabled,.ds-button[aria-disabled=true]{background:var(--sys-bg-surface-raised, #192438);color:var(--sys-fg-disabled, #6e82a0);border-color:var(--sys-border-subtle, #223149);cursor:not-allowed;opacity:1;filter:none;pointer-events:none}.ds-button[aria-busy=true]{cursor:progress;pointer-events:none}.ds-button[aria-busy=true]::before{content:\"\";width:var(--ref-icon-12, 12px);height:var(--ref-icon-12, 12px);border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:ds-spin .8s linear infinite}.ds-button[data-state=focus]{outline:var(--sys-focus-width, 2px) solid var(--sys-focus-ring, #5ad5ea);outline-offset:3px}\n.ds-icon-button{width:var(--cmp-button-height-md, 40px);min-width:var(--cmp-button-height-md, 40px);padding:0;flex:none}.ds-icon-button.ds-icon-button--subtle{background:transparent;border-color:transparent}.ds-icon-button[aria-pressed=true],.ds-icon-button.ds-icon-button--active{color:var(--sys-fg-accent, #b59eff);border-color:var(--sys-border-accent, #9175f3);background:var(--sys-bg-accent, #1a1530)}\n.ds-button svg{width:var(--sys-icon-size, 16px);height:var(--sys-icon-size, 16px);flex:none}.ds-button--sm svg{width:var(--ref-icon-16, 16px);height:var(--ref-icon-16, 16px)}@keyframes ds-spin{to{transform:rotate(360deg)}}\n:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:var(--sys-focus-width,2px) solid var(--sys-focus-ring,#5ad5ea);outline-offset:3px}",
+      "refersTo": "button-ghost"
+    },
+    {
+      "name": "Destructive Button",
+      "kind": "button",
+      "description": "Actual shared button with native state styling.",
+      "html": "<button type=\"button\" class=\"ds-button ds-button--destructive\"><span>Xóa mục</span></button>",
+      "css": ":host{font:14px/1.6 \"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif;color:var(--sys-fg-primary,#f0f4ff)}:where(.ds-button){display:inline-flex}\n\n.ds-button{align-items:center;justify-content:center;gap:var(--ref-space-8, 8px);height:var(--cmp-button-height-md, 40px);min-height:var(--cmp-button-height-md, 40px);padding:0 var(--sys-space-control-x, 12px);border:var(--sys-border-width, 1px) solid var(--sys-border-interactive, #6e82a0);border-radius:var(--cmp-button-primary-radius, 8px);background:var(--sys-bg-surface-raised, #192438);color:var(--sys-fg-primary, #f0f4ff);font:var(--sys-weight-strong, 700) var(--ref-font-size-13, 13px)/var(--sys-leading-label, 1.4) var(--sys-font-family, \"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif);text-decoration:none;white-space:nowrap;box-shadow:var(--sys-elevation-flat, none);cursor:pointer;transition:background var(--sys-motion-fast, 120ms) var(--sys-ease, cubic-bezier(.2,.8,.2,1)),border-color var(--sys-motion-fast, 120ms) var(--sys-ease, cubic-bezier(.2,.8,.2,1)),color var(--sys-motion-fast, 120ms) var(--sys-ease, cubic-bezier(.2,.8,.2,1))}\n.ds-button:hover,.ds-button[data-state=hover]{background:var(--sys-bg-surface-hover, #223149)}.ds-button:active,.ds-button[data-state=pressed]{background:var(--sys-bg-surface-pressed, #34455f)}\n.ds-button.ds-button--primary{background:var(--cmp-button-primary-bg-default, #6442ca);border-color:var(--cmp-button-primary-bg-default, #6442ca);color:var(--cmp-button-primary-fg, #ffffff);filter:none}.ds-button--primary:hover,.ds-button--primary[data-state=hover]{background:var(--cmp-button-primary-bg-hover, #7456e8);border-color:var(--cmp-button-primary-bg-hover, #7456e8)}.ds-button--primary:active,.ds-button--primary[data-state=pressed]{background:var(--cmp-button-primary-bg-pressed, #50359f);border-color:var(--cmp-button-primary-bg-pressed, #50359f)}\n.ds-button.ds-button--tertiary{background:transparent;border-color:transparent;color:var(--sys-fg-accent, #b59eff)}.ds-button.ds-button--ghost{background:transparent;border-color:transparent;color:var(--sys-fg-secondary, #bdcce0)}.ds-button--tertiary:hover,.ds-button--ghost:hover,.ds-button--tertiary[data-state=hover],.ds-button--ghost[data-state=hover]{background:var(--sys-bg-surface-hover, #223149);color:var(--sys-fg-primary, #f0f4ff)}\n.ds-button.ds-button--destructive{background:var(--sys-action-danger-bg, #a02c4a);color:var(--sys-action-danger-fg, #ffffff);border-color:var(--sys-action-danger-bg, #a02c4a)}.ds-button--destructive:hover,.ds-button--destructive[data-state=hover]{background:var(--sys-action-danger-hover, #bf3656);border-color:var(--sys-action-danger-hover, #bf3656)}.ds-button--destructive:active,.ds-button--destructive[data-state=pressed]{background:var(--sys-action-danger-pressed, #7e2440)}\n.ds-button.ds-button--sm{height:var(--cmp-button-height-sm, 32px);min-height:var(--cmp-button-height-sm, 32px);font-size:var(--ref-font-size-12, 12px)}.ds-button.ds-button--lg{height:var(--cmp-button-height-lg, 44px);min-height:var(--cmp-button-height-lg, 44px);padding-inline:var(--ref-space-16, 16px)}\n.ds-button:disabled,.ds-button[aria-disabled=true]{background:var(--sys-bg-surface-raised, #192438);color:var(--sys-fg-disabled, #6e82a0);border-color:var(--sys-border-subtle, #223149);cursor:not-allowed;opacity:1;filter:none;pointer-events:none}.ds-button[aria-busy=true]{cursor:progress;pointer-events:none}.ds-button[aria-busy=true]::before{content:\"\";width:var(--ref-icon-12, 12px);height:var(--ref-icon-12, 12px);border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:ds-spin .8s linear infinite}.ds-button[data-state=focus]{outline:var(--sys-focus-width, 2px) solid var(--sys-focus-ring, #5ad5ea);outline-offset:3px}\n.ds-icon-button{width:var(--cmp-button-height-md, 40px);min-width:var(--cmp-button-height-md, 40px);padding:0;flex:none}.ds-icon-button.ds-icon-button--subtle{background:transparent;border-color:transparent}.ds-icon-button[aria-pressed=true],.ds-icon-button.ds-icon-button--active{color:var(--sys-fg-accent, #b59eff);border-color:var(--sys-border-accent, #9175f3);background:var(--sys-bg-accent, #1a1530)}\n.ds-button svg{width:var(--sys-icon-size, 16px);height:var(--sys-icon-size, 16px);flex:none}.ds-button--sm svg{width:var(--ref-icon-16, 16px);height:var(--ref-icon-16, 16px)}@keyframes ds-spin{to{transform:rotate(360deg)}}\n:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:var(--sys-focus-width,2px) solid var(--sys-focus-ring,#5ad5ea);outline-offset:3px}",
+      "refersTo": "button-destructive"
+    },
+    {
+      "name": "Labeled Input",
       "kind": "input",
-      "description": "Dark editable field with visible focus.",
-      "html": "<label class=\"ds-field\">Tìm công việc<input aria-label=\"Tìm công việc\" placeholder=\"Tìm trong tuần\"></label>",
-      "css": ".ds-field{display:grid;gap:8px;font:400 12px/1.6 'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--os-text-secondary,#a7b4d0)}.ds-field input{font:400 12px/1.6 'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:38px;padding:8px 12px;background:var(--os-surface-2,#151f34);color:var(--os-text-primary,#f1f5ff);border:1px solid var(--os-border-strong,#9cafdc47);border-radius:8px}.ds-field input::placeholder{color:var(--os-text-muted,#95a4c2)}.ds-field input:focus-visible{outline:2px solid var(--os-cyan,#42c9e8);outline-offset:3px;}",
-      "refersTo": "field"
+      "description": "Actual associated field/help and validation states.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-label\">Tìm công việc</span><input class=\"ds-input\" placeholder=\"Tìm trong tuần\" aria-describedby=\"ds-search-help\"><small class=\"ds-help\" id=\"ds-search-help\">Tìm trong phạm vi hiện tại.</small></label>",
+      "css": ":host{font:14px/1.6 \"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif;color:var(--sys-fg-primary,#f0f4ff)}.ds-field{display:grid;gap:var(--ref-space-6, 6px);min-width:0}.ds-label{font-size:var(--ref-font-size-13, 13px);font-weight:var(--sys-weight-strong, 700);color:var(--sys-fg-primary, #f0f4ff)}.ds-help,.ds-error{font-size:var(--sys-font-label, 12px);line-height:var(--sys-leading-body, 1.6);margin:0;color:var(--sys-fg-tertiary, #a5b6ce)}.ds-error{color:var(--sys-feedback-danger, #ff8fa2)}\n.ds-input,.ds-select{width:100%;min-width:0;min-height:var(--cmp-input-height, 40px);padding:var(--ref-space-8, 8px) var(--ref-space-12, 12px);border:var(--sys-border-width, 1px) solid var(--cmp-input-border-default, #6e82a0);border-radius:var(--sys-radius-control, 8px);background:var(--cmp-input-bg, #0b1220);color:var(--sys-fg-primary, #f0f4ff);font:var(--ref-font-size-14, 14px)/var(--sys-leading-label, 1.4) var(--sys-font-family, \"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif);box-shadow:none;transition:border-color var(--sys-motion-fast, 120ms) var(--sys-ease, cubic-bezier(.2,.8,.2,1));accent-color:var(--sys-action-primary-bg, #6442ca)}textarea.ds-input{min-height:112px;resize:vertical;line-height:var(--sys-leading-body, 1.6)}\n.ds-input::placeholder{color:var(--sys-fg-tertiary, #a5b6ce);opacity:1}.ds-input:hover,.ds-select:hover{border-color:var(--sys-fg-tertiary, #a5b6ce)}.ds-input:focus-visible,.ds-select:focus-visible,.ds-input[data-state=focus]{border-color:var(--cmp-input-border-focus, #5ad5ea);outline:var(--sys-focus-width, 2px) solid var(--sys-focus-ring, #5ad5ea);outline-offset:2px}.ds-input[aria-invalid=true],.ds-select[aria-invalid=true]{border-color:var(--cmp-input-border-error, #ff8fa2)}.ds-input:disabled,.ds-select:disabled{color:var(--sys-fg-disabled, #6e82a0);border-color:var(--sys-border-subtle, #223149);background:var(--sys-bg-surface-raised, #192438);cursor:not-allowed;opacity:1}.ds-input[readonly]{color:var(--sys-fg-secondary, #bdcce0);border-style:dashed}\n.ds-check{appearance:none;display:inline-grid;place-items:center;width:var(--ref-icon-20, 20px);height:var(--ref-icon-20, 20px);min-height:0;margin:0;vertical-align:middle;border:var(--sys-border-width, 1px) solid var(--sys-border-interactive, #6e82a0);border-radius:var(--ref-radius-4, 4px);background:var(--sys-bg-inset, #0b1220);color:var(--sys-action-primary-fg, #ffffff);cursor:pointer}.ds-check:checked,.ds-check:indeterminate{background:var(--sys-action-primary-bg, #6442ca);border-color:var(--sys-action-primary-bg, #6442ca)}.ds-check:checked::before{content:\"\";width:10px;height:6px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg) translateY(-1px)}.ds-check:indeterminate::before{content:\"\";width:10px;height:2px;background:currentColor}.ds-check:disabled{opacity:.45;cursor:not-allowed}.ds-choice{display:flex;gap:var(--ref-space-8, 8px);align-items:center;min-height:var(--ref-control-44, 44px);font-size:var(--ref-font-size-13, 13px);color:var(--sys-fg-secondary, #bdcce0);cursor:pointer}\n.ds-switch{position:relative;appearance:none;width:36px;height:22px;min-height:0;flex:none;border:1px solid var(--sys-border-interactive, #6e82a0);border-radius:20px;background:var(--sys-bg-surface-hover, #223149);cursor:pointer;margin:0}.ds-switch::before{content:\"\";display:block;width:14px;height:14px;position:absolute;left:3px;top:3px;border-radius:50%;background:var(--sys-fg-secondary, #bdcce0);transition:transform var(--sys-motion-fast, 120ms) var(--sys-ease, cubic-bezier(.2,.8,.2,1))}.ds-switch:checked{background:var(--sys-action-primary-bg, #6442ca);border-color:var(--sys-action-primary-bg, #6442ca)}.ds-switch:checked::before{background:var(--sys-action-primary-fg, #ffffff);transform:translateX(14px)}.ds-switch:disabled{opacity:.5;cursor:not-allowed}\n.ds-combobox{position:relative}.ds-combobox-list{position:absolute;z-index:var(--sys-z-dropdown, 40);inset:calc(100% + var(--ref-space-4, 4px)) 0 auto;max-height:240px;overflow:auto;margin:0;padding:var(--ref-space-4, 4px);list-style:none;background:var(--cmp-overlay-bg, #192438);border:1px solid var(--sys-border-interactive, #6e82a0);border-radius:var(--sys-radius-control, 8px);box-shadow:var(--sys-elevation-floating, 0 12px 36px rgb(0 0 0 / .28))}.ds-combobox-list [role=option]{padding:var(--ref-space-8, 8px) var(--ref-space-12, 12px);border-radius:var(--ref-radius-4, 4px);font-size:var(--ref-font-size-13, 13px);cursor:pointer}.ds-combobox-list [aria-selected=true]{color:var(--sys-fg-accent, #b59eff);background:var(--sys-bg-accent, #1a1530)}\n:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:var(--sys-focus-width,2px) solid var(--sys-focus-ring,#5ad5ea);outline-offset:3px}",
+      "refersTo": "input"
     },
     {
-      "name": "Midnight navigation",
+      "name": "Local Navigation",
       "kind": "nav",
-      "description": "Local navigation with active gradient.",
-      "html": "<nav class=\"ds-nav\"><button class=\"ds-current\" aria-current=\"page\">Tuần của tôi</button><button>Lịch công việc</button></nav>",
-      "css": ".ds-nav{background:var(--os-bg-sidebar,#0b1120);padding:12px}.ds-nav button{font:400 13px/1.5 'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;display:block;width:100%;min-height:44px;padding:11px;background:none;color:var(--os-text-secondary,#a7b4d0);border:1px solid transparent;border-radius:9px;text-align:left;cursor:pointer}.ds-nav .ds-current{background:linear-gradient(105deg,#6840cc35,#6840cc13);color:#e4daff;border-color:#9065f838;font-weight:700}.ds-nav button:hover{background:var(--os-surface-2,#151f34)}.ds-nav button:focus-visible{outline:2px solid var(--os-cyan,#42c9e8);outline-offset:3px;}"
+      "description": "Current, hover and focus navigation.",
+      "html": "<nav aria-label=\"Personal OS\"><button class=\"ds-nav-item\" aria-current=\"page\">Tuần của tôi</button><button class=\"ds-nav-item\">Lịch công việc</button></nav>",
+      "css": ":host{font:14px/1.6 \"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif;color:var(--sys-fg-primary,#f0f4ff)}.ds-tabs{display:flex;gap:var(--ref-space-4, 4px);overflow:auto;border-bottom:1px solid var(--sys-border-default, #34455f);scrollbar-width:thin}.ds-tabs [role=tab]{position:relative;flex:none;min-height:var(--sys-control-height, 40px);padding:var(--ref-space-8, 8px) var(--ref-space-12, 12px);border:0;background:transparent;color:var(--sys-fg-tertiary, #a5b6ce);font-size:var(--ref-font-size-13, 13px);font-weight:var(--sys-weight-strong, 700);border-radius:var(--ref-radius-4, 4px) var(--ref-radius-4, 4px) 0 0}.ds-tabs [role=tab]:hover{background:var(--sys-bg-surface-hover, #223149);color:var(--sys-fg-primary, #f0f4ff)}.ds-tabs [aria-selected=true]{color:var(--sys-fg-accent, #b59eff)}.ds-tabs [aria-selected=true]::after{content:\"\";position:absolute;inset:auto var(--ref-space-12, 12px) 0;height:2px;background:var(--sys-fg-accent, #b59eff)}\n.ds-tabs--segmented{display:inline-flex;max-width:100%;border:1px solid var(--sys-border-default, #34455f);padding:var(--ref-space-4, 4px);border-radius:var(--sys-radius-control, 8px);background:var(--sys-bg-inset, #0b1220)}.ds-tabs--segmented [role=tab]{border-radius:var(--ref-radius-4, 4px);min-height:var(--sys-control-height-sm, 32px)}.ds-tabs--segmented [aria-selected=true]{background:var(--sys-bg-surface-hover, #223149);color:var(--sys-fg-primary, #f0f4ff)}.ds-tabs--segmented [aria-selected=true]::after{display:none}.ds-tab-panel{padding-block:var(--ref-space-16, 16px)}\n.ds-nav-item{display:flex;align-items:center;gap:var(--ref-space-12, 12px);padding:var(--ref-space-8, 8px) var(--ref-space-12, 12px);min-height:var(--sys-control-height, 40px);font-size:var(--ref-font-size-13, 13px);border:1px solid transparent;background:transparent;color:var(--sys-fg-secondary, #bdcce0);border-radius:var(--sys-radius-control, 8px);text-align:left;text-decoration:none}.ds-nav-item:hover{background:var(--sys-bg-surface-hover, #223149)}.ds-nav-item[aria-current=page]{background:var(--cmp-nav-bg-selected, #1a1530);color:var(--cmp-nav-fg-selected, #b59eff);border-color:var(--sys-border-subtle, #223149)}.ds-nav-item svg{height:var(--ref-icon-16, 16px);width:var(--ref-icon-16, 16px)}\n:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:var(--sys-focus-width,2px) solid var(--sys-focus-ring,#5ad5ea);outline-offset:3px}",
+      "refersTo": "nav-selected"
     },
     {
-      "name": "Status badge",
+      "name": "Verified Badge",
       "kind": "chip",
-      "description": "Text accompanies status color.",
-      "html": "<span class=\"ds-status\">Đã xác minh</span>",
-      "css": ".ds-status{font:400 12px/1.6 'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:10px;padding:3px 6px;border-radius:5px;background:#38d9a918;color:var(--os-success,#38d9a9)}"
+      "description": "Informational status label, not an action.",
+      "html": "<span class=\"ds-badge ds-badge--success\">Đã xác minh</span>",
+      "css": ":host{font:14px/1.6 \"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif;color:var(--sys-fg-primary,#f0f4ff)}.ds-badge{display:inline-flex;align-items:center;gap:var(--ref-space-6, 6px);min-height:24px;max-width:100%;padding:var(--ref-space-2, 2px) var(--ref-space-8, 8px);border:1px solid var(--sys-border-subtle, #223149);border-radius:var(--cmp-badge-radius, 4px);background:var(--sys-bg-surface-raised, #192438);color:var(--sys-fg-secondary, #bdcce0);font-size:var(--sys-font-label, 12px);line-height:var(--sys-leading-label, 1.4);white-space:normal}.ds-badge--accent{background:var(--sys-bg-accent, #1a1530);color:var(--sys-fg-accent, #b59eff)}.ds-badge--success{background:var(--sys-feedback-success-bg, #0c2925);color:var(--sys-feedback-success, #65deb0)}.ds-badge--warning{background:var(--sys-feedback-warning-bg, #302419);color:var(--sys-feedback-warning, #ffca6d)}.ds-badge--danger{background:var(--sys-feedback-danger-bg, #331a28);color:var(--sys-feedback-danger, #ff8fa2)}.ds-badge svg{height:var(--ref-icon-12, 12px);width:var(--ref-icon-12, 12px)}\n:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:var(--sys-focus-width,2px) solid var(--sys-focus-ring,#5ad5ea);outline-offset:3px}"
     },
     {
-      "name": "Working panel",
+      "name": "Unavailable KPI",
       "kind": "card",
-      "description": "Shared neutral dark content container.",
-      "html": "<section class=\"ds-panel\"><h2>Dòng thực thi</h2><p>Ngày ghi nhận chính xác · không suy diễn deadline</p></section>",
-      "css": ".ds-panel{font:400 12px/1.6 'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--os-surface-1,#10192b);color:var(--os-text-primary,#f1f5ff);padding:20px;border:1px solid var(--os-border-default,#9cafdc2b);border-radius:16px;box-shadow:var(--os-shadow-card,0 8px 28px #00000029)}.ds-panel h2{font-size:15px;margin:0 0 16px}.ds-panel p{font-size:11px;color:var(--os-text-secondary,#a7b4d0);margin:0}",
-      "refersTo": "panel"
-    },
-    {
-      "name": "Missing-source KPI",
-      "kind": "custom",
-      "description": "Truthful missing-week state, without invented metrics.",
-      "html": "<button class=\"ds-kpi\"><span>Công việc trong tuần</span><b>—</b><small>Từ nguồn Notion</small></button>",
-      "css": ".ds-kpi{font:400 12px/1.6 'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;display:grid;gap:8px;text-align:left;padding:16px;background:var(--os-gradient-surface,linear-gradient(145deg,#18243e,#0c1425));border:1px solid var(--os-border-default,#9cafdc2b);border-radius:14px;color:var(--os-text-primary,#f1f5ff);cursor:pointer}.ds-kpi span{font-size:11px;color:var(--os-text-secondary,#a7b4d0)}.ds-kpi b{font-size:30px;line-height:1.2;letter-spacing:-1px}.ds-kpi small{font-size:10px;color:var(--os-text-muted,#95a4c2)}.ds-kpi:hover{border-color:#9065f870}.ds-kpi:focus-visible{outline:2px solid var(--os-cyan,#42c9e8);outline-offset:3px;}"
+      "description": "Same shared card/KPI recipe as home; no fake metric or destination.",
+      "html": "<article class=\"ds-card ds-kpi\" data-tone=\"unavailable\"><span class=\"ds-kpi__label\">Ghi nhận đã xác minh</span><strong class=\"ds-kpi__value\">—</strong><span class=\"ds-kpi__context\">Chưa có nguồn tuần</span></article>",
+      "css": ":host{font:14px/1.6 \"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif;color:var(--sys-fg-primary,#f0f4ff)}.ds-card{background:var(--cmp-card-bg, #101827);color:var(--sys-fg-primary, #f0f4ff);border:var(--sys-border-width, 1px) solid var(--cmp-card-border, #34455f);border-radius:var(--cmp-card-radius, 12px);padding:var(--cmp-card-padding, 20px);box-shadow:var(--sys-elevation-flat, none);min-width:0}.ds-card--raised{background:var(--sys-bg-surface-raised, #192438)}.ds-card__header{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--ref-space-12, 12px);margin-bottom:var(--ref-space-16, 16px)}.ds-card__title{font-size:var(--sys-font-title, 16px);font-weight:var(--sys-weight-strong, 700);line-height:var(--sys-leading-label, 1.4);margin:0}.ds-card__description{font-size:var(--sys-font-label, 12px);color:var(--sys-fg-tertiary, #a5b6ce);margin:var(--ref-space-6, 6px) 0 0}.ds-card__footer{border-top:1px solid var(--sys-border-subtle, #223149);padding-top:var(--ref-space-16, 16px);margin-top:var(--ref-space-16, 16px);display:flex;gap:var(--ref-space-8, 8px);align-items:center;flex-wrap:wrap}.ds-card[data-interactive]{transition:border-color var(--sys-motion-fast, 120ms) var(--sys-ease, cubic-bezier(.2,.8,.2,1));cursor:pointer}.ds-card[data-interactive]:hover{border-color:var(--sys-border-interactive, #6e82a0)}\n.ds-kpi{display:grid;gap:var(--ref-space-12, 12px);text-align:left}.ds-kpi__label{display:flex;align-items:center;justify-content:space-between;gap:var(--ref-space-8, 8px);font-size:var(--ref-font-size-13, 13px);color:var(--sys-fg-secondary, #bdcce0)}.ds-kpi__label svg{width:var(--ref-icon-16, 16px);height:var(--ref-icon-16, 16px);color:var(--sys-fg-tertiary, #a5b6ce)}.ds-kpi__value{font-size:var(--sys-font-value, 32px);font-weight:var(--sys-weight-strong, 700);line-height:var(--sys-leading-tight, 1.25);font-variant-numeric:tabular-nums;letter-spacing:var(--sys-tracking-heading, -.02em)}.ds-kpi__context{color:var(--sys-fg-tertiary, #a5b6ce);font-size:var(--sys-font-label, 12px)}.ds-kpi[data-tone=attention] .ds-kpi__label svg{color:var(--sys-feedback-warning, #ffca6d)}.ds-kpi[data-tone=critical] .ds-kpi__label svg{color:var(--sys-feedback-danger, #ff8fa2)}.ds-kpi[data-tone=accent] .ds-kpi__label svg{color:var(--sys-fg-accent, #b59eff)}.ds-kpi[data-tone=unavailable] .ds-kpi__value{color:var(--sys-fg-tertiary, #a5b6ce)}\n.ds-insight__reason{font-size:var(--ref-font-size-14, 14px);color:var(--sys-fg-secondary, #bdcce0);margin:var(--ref-space-12, 12px) 0}.ds-evidence{display:flex;align-items:center;gap:var(--ref-space-8, 8px);color:var(--sys-fg-tertiary, #a5b6ce);font-size:var(--sys-font-label, 12px);padding:var(--ref-space-8, 8px) 0}.ds-evidence svg{width:var(--ref-icon-16, 16px);height:var(--ref-icon-16, 16px)}\n.ds-empty{display:grid;justify-items:start;gap:var(--ref-space-12, 12px);padding:var(--ref-space-20, 20px) 0;max-width:55ch}.ds-empty>svg{color:var(--sys-fg-tertiary, #a5b6ce);width:var(--ref-icon-24, 24px);height:var(--ref-icon-24, 24px)}.ds-empty h3{font-size:var(--ref-font-size-16, 16px);margin:0}.ds-empty p{font-size:var(--ref-font-size-13, 13px);color:var(--sys-fg-secondary, #bdcce0);margin:0}\n.ds-kpi[data-state=hover]{border-color:var(--sys-border-interactive, #6e82a0)}.ds-kpi[data-state=focus]{outline:var(--sys-focus-width, 2px) solid var(--sys-focus-ring, #5ad5ea);outline-offset:3px}.ds-kpi[data-state=error] .ds-kpi__context{color:var(--sys-feedback-danger, #ff8fa2)}.ds-kpi[data-state=loading] .ds-skeleton{display:block;width:80px;height:32px}\n.ds-kpi__trend{font-size:var(--sys-font-label, 12px);color:var(--sys-fg-secondary, #bdcce0)}\n:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:var(--sys-focus-width,2px) solid var(--sys-focus-ring,#5ad5ea);outline-offset:3px}",
+      "refersTo": "card"
     }
   ],
   "narrative": {
     "northStar": "Nocturne Command",
-    "overview": "Nocturne Command is a midnight working environment with layered blue surfaces, violet and indigo actions, cyan keyboard focus and restrained atmospheric depth. A compact twilight mountain hero gives home a recognizable identity; real task lists, source facts, charts and utilities remain interactive UI.\n\nThe user’s detailed Nocturne mission supersedes the previous Studio and light-system restrictions, including prohibitions on gradients and atmospheric artwork. No reference image was actually available in this session: the implementation follows the supplied textual mission and must not be described as verified visual fidelity to an unseen image.",
+    "overview": "Nocturne Command combines Dark Productivity and Command Center: matte midnight layers, deliberate violet actions, readable data and a restrained atmospheric home identity. Jade, bronze and blue distinguish workspaces; labeled semantic states distinguish evidence and status. Polish comes from coherent anatomy, spacing, native behavior and reliable states rather than decorative glow.\n\nThe implemented foundation has three explicit tiers: reference primitives (`--ref-*`), usage semantics (`--sys-*`) and component decisions (`--cmp-*`). The compatibility bridge maps inherited names into that hierarchy. New component work consumes semantic/component roles instead of introducing a parallel palette or adding new legacy aliases.",
     "keyCharacteristics": [
-      "Midnight navigation and layered dark working surfaces",
-      "Self-hosted Noto Sans with Vietnamese coverage",
-      "Four truthful weekly count cards and visible source caveats",
-      "Interactive today tasks, status distribution and dated observation timeline",
-      "Existing AI Manager integration and a real local focus timer"
+      "Matte midnight surfaces with deliberate violet actions",
+      "Actual primitive ramps and semantic domain/status roles",
+      "Self-hosted Vietnamese-compatible Noto Sans",
+      "Shared normal, compact and touch control contracts",
+      "Real product components and Laboratory share recipes and renderers"
     ],
     "rules": [
       {
-        "name": "The Selective Light Rule",
-        "body": "Use gradient and bright accent for hierarchy; keep ordinary information panels calm and avoid glowing every boundary.",
+        "name": "The Role Before Hue Rule",
+        "body": "Choose a semantic usage role before choosing a primitive swatch; component recipes never own an independent palette.",
         "section": "colors"
       },
       {
-        "name": "The Working Depth Rule",
-        "body": "Depth should separate navigation, content and overlays while keeping labels and chart data clear.",
+        "name": "The Flat Working Surface Rule",
+        "body": "Use tonal layers and boundaries for work; reserve stronger elevation for floating content and overlays.",
         "section": "elevation"
       },
       {
         "name": "The Source Before Certainty Rule",
-        "body": "Keep dates, missing sources and verification semantics explicit; neither attractive charts nor AI presentation create evidence.",
+        "body": "Keep missing sources, exact dates and verification semantics explicit; visual polish does not create evidence or approval.",
         "section": "components"
       }
     ],
     "dos": [
-      "Do preserve original logo bytes, every existing route, domain, permission and source record.",
-      "Do keep missing source states, undated work and reported-versus-verified completion explicit.",
-      "Do use gradients and decorative mountains selectively, keeping operational content legible.",
-      "Do preserve native chart geometry and full wrapping Vietnamese task titles.",
-      "Do distinguish local UI actions, saved analysis reads and provider-triggering requests."
+      "Do use reference → semantic → component token ownership and keep recipes free of independent color literals.",
+      "Do preserve the original logo bytes, existing source ownership, authentication and navigation contracts.",
+      "Do keep exact dates, missing sources, real zero values and reported-versus-verified completion distinct.",
+      "Do implement native and ARIA behavior as well as visual states; label every icon-only action.",
+      "Do consume portable shared artifacts through isolated workspaces’ native build workflows."
     ],
     "donts": [
-      "Don't claim fidelity to a reference image that was not available.",
-      "Don't turn task counts or status shares into goal-attainment percentages.",
-      "Don't invent deadline spans, achievements, goals, notifications or AI advice.",
-      "Don't replace or recolor the original logo, authentication or owner checks.",
-      "Don't claim full private Servicebio/Ventures redesign or QA without their actual source packages."
+      "Don't restore the superseded flat Nocturne palette, gradient primary buttons or a second independent component theme.",
+      "Don't invent attainment percentages, project spans, deadlines, trends, evidence or AI certainty.",
+      "Don't make informational cards look actionable without a real destination.",
+      "Don't ship Laboratory fixtures as product records or invoke providers from the Laboratory.",
+      "Don't infer universal accessibility certification, production publication or private-source disclosure from local verification."
     ]
   }
 }
