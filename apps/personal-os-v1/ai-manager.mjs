@@ -149,6 +149,7 @@ function settingsView(){
 }
 function draw(){
  if(!state.open)return;
+ overlay.dataset.tab=state.tab;
  overlay.querySelectorAll('[data-tab]').forEach(b=>{const active=b.dataset.tab===state.tab;b.classList.toggle('selected',active);b.setAttribute('aria-selected',String(active));});
  sourceLine();body.replaceChildren();
  const pending=state.actions.filter(a=>a.status==='proposed');
