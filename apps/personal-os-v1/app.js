@@ -1,6 +1,6 @@
 import {createCalendar,fallbackTasks} from './calendar.mjs';
 import {MODULES,parseWorkspaceHash,renderWorkspaceHome,createWorkspaceGateway} from './workspaces.mjs';
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.58.0";
+import {client as db} from './supabase-client.mjs';
 import { STATUSES, todayVN, weekRange, canonicalWeeks, uniqueItems, currentSnapshot, periodItems, explicitDate, dailyEvidence } from "./model.mjs";
 import { buildWeekAnalytics, filterAnalysisRecords, STATUS_META } from "./analytics.mjs";
 import { renderAnalyticsSummary, renderAnalyticsPanels, axisLabel } from "./analytics-view.mjs";
@@ -11,7 +11,6 @@ import {buildGanttModel,filterGanttTasks,ganttCsv,quarterRange} from './gantt.mj
 import {renderGanttSurface,renderGanttTimeline,renderGanttAgenda} from './gantt-view.mjs';
 import {buildProgressModel,validLevel as validProgressLevel,LEVELS as PROGRESS_LEVELS,checkpointLabel,progressDelta} from './progress.mjs';
 import {renderProgress,renderRadarCard,facetDimensions} from './progress-view.mjs';
-const db=createClient(PROJECT_URL,PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const PILLARS=[
 ["career","Sự nghiệp & lãnh đạo","◈","#dcebf8"],
 ["education","Học tập & năng lực","✦","#ebe4f9"],

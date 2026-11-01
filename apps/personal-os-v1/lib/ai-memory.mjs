@@ -77,7 +77,9 @@ export function memoryEngine(db,user){
    db(user,'personal_os_module_snapshots',{query:{select:'module,revision_hash,source_updated_at,mirrored_at',owner_id:'eq.'+user.id}}),
    db(user,'personal_os_enexia_snapshots',{query:{select:'source_updated_at,updated_at',owner_id:'eq.'+user.id,limit:1}})
   ]);
-  const [known,knownWorking]=await Promise.all([read('memory_sources'),read('working_memory')]);
+  const activeKeys=[...weeks.map(w=>'notion:'+w.page_id),...years.map(y=>'year:'+y.year),...modules.map(m=>'module:'+m.module),...(enexia.length?['module:enexia']:[])];
+  const keys='in.('+activeKeys.join(',')+')';
+  const [known,knownWorking]=activeKeys.length?await Promise.all([read('memory_sources',{source_key:keys}),read('working_memory',{memory_key:keys})]):[[],[]];
   const unchanged=(key,signature)=>known.find(s=>s.source_key===key)?.content_hash===signature&&knownWorking.find(w=>w.memory_key===key)?.summary?.source_signature===signature;
   let updated=0;
   for(const w of weeks){
@@ -102,9 +104,19 @@ export function memoryEngine(db,user){
   }
   return {updated};
  }
- async function view(){const [core,working,sources,events,decisions]=await Promise.all([read('core_memory',{order:'updated_at.desc',limit:100}),read('working_memory',{order:'updated_at.desc',limit:20}),read('memory_sources',{order:'checked_at.desc',limit:100}),read('memory_events',{order:'occurred_at.desc',limit:40}),db(user,'personal_os_ai_events',{query:{select:'action_id,event_type,occurred_at,personal_os_ai_actions!inner(scope,title)',owner_id:'eq.'+user.id,event_type:'in.(executed,dismissed)',order:'occurred_at.desc',limit:20}})]);return {core,working,sources,events,decisions};}
+ async function relevant(){
+  const [core,working]=await Promise.all([read('core_memory',{order:'updated_at.desc',limit:100}),read('working_memory',{order:'updated_at.desc',limit:20})]);
+  const ids=[...new Set([...core,...working].flatMap(r=>[r.source_id,r.proposed_source_id]).filter(Boolean))];
+  const sources=ids.length?await read('memory_sources',{id:'in.('+ids.join(',')+')'}):[];
+  return {core,working,sources};
+ }
+ async function view(){
+  const [v,events,decisions]=await Promise.all([relevant(),read('memory_events',{order:'occurred_at.desc',limit:40}),db(user,'personal_os_ai_events',{query:{select:'action_id,event_type,occurred_at,personal_os_ai_actions!inner(scope,title)',owner_id:'eq.'+user.id,event_type:'in.(executed,dismissed)',order:'occurred_at.desc',limit:20}})]);
+  return {...v,events,decisions};
+ }
+
  async function context(scope,question,includeDetails){
-  await refresh();const [v,runs,decisions]=await Promise.all([Promise.all([read('core_memory',{order:'updated_at.desc',limit:100}),read('working_memory',{order:'updated_at.desc',limit:20}),read('memory_sources',{order:'checked_at.desc',limit:100})]).then(([core,working,sources])=>({core,working,sources})),db(user,'personal_os_ai_runs',{query:{select:'id,question,status,scope,summary,created_at,context_manifest',owner_id:'eq.'+user.id,scope:'eq.'+scope,status:'eq.stopped',order:'created_at.desc',limit:8}}),db(user,'personal_os_ai_events',{query:{select:'action_id,event_type,occurred_at',owner_id:'eq.'+user.id,event_type:'in.(executed,dismissed)',order:'occurred_at.desc',limit:8}})]);
+  await refresh();const [v,runs,decisions]=await Promise.all([relevant(),db(user,'personal_os_ai_runs',{query:{select:'id,question,status,scope,summary,created_at,context_manifest',owner_id:'eq.'+user.id,scope:'eq.'+scope,status:'eq.stopped',order:'created_at.desc',limit:8}}),db(user,'personal_os_ai_events',{query:{select:'action_id,event_type,occurred_at',owner_id:'eq.'+user.id,event_type:'in.(executed,dismissed)',order:'occurred_at.desc',limit:8}})]);
   const scopedActions=decisions.length?await db(user,'personal_os_ai_actions',{query:{select:'id',owner_id:'eq.'+user.id,scope:'eq.'+scope,id:'in.('+[...new Set(decisions.map(d=>d.action_id).filter(Boolean))].join(',')+')'}}):[];
   const actionIds=new Set(scopedActions.map(a=>a.id));
   const pack=packContext({...v,history:runs,decisions:decisions.filter(d=>actionIds.has(d.action_id)),scope,question,includeDetails,maxChars:12000});

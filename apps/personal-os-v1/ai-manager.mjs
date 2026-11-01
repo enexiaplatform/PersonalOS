@@ -1,6 +1,4 @@
-import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.58.0';
-import {PROJECT_URL,PUBLISHABLE_KEY} from './config.js';
-const sb=createClient(PROJECT_URL,PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+import {client as sb} from './supabase-client.mjs';
 const make=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=String(text);return x;};
 const put=(parent,tag,cls,text)=>{const x=make(tag,cls,text);parent.append(x);return x;};
 const time=x=>{if(!x)return 'Chưa rõ';const d=new Date(x);return Number.isNaN(d.getTime())?'Chưa rõ':d.toLocaleString('vi-VN',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Ho_Chi_Minh'});};
@@ -29,7 +27,7 @@ function open(){state.open=true;overlay.classList.add('open');document.body.clas
 function close(){state.open=false;overlay.classList.remove('open');document.body.classList.remove('aom-active');launch.focus();}
 launch.addEventListener('click',open);
 overlay.querySelectorAll('[data-close]').forEach(x=>x.addEventListener('click',close));
-overlay.querySelectorAll('[data-tab]').forEach(x=>x.addEventListener('click',()=>{state.tab=x.dataset.tab;draw();if(state.tab==='memory')void loadMemory();}));
+overlay.querySelectorAll('[data-tab]').forEach(x=>x.addEventListener('click',()=>{state.tab=x.dataset.tab;draw();$('.aom-main').scrollTop=0;if(state.tab==='memory')void loadMemory();}));
 $('[data-refresh]').addEventListener('click',()=>void load(true));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.open)close();});
 window.addEventListener('hashchange',()=>{if(state.open){draw();if(state.tab==='memory')void loadMemory();}});
@@ -142,6 +140,7 @@ function historyView(){
  state.runs.forEach(r=>{const b=make('button','aom-history');b.type='button';const top=make('div','aom-history-meta');put(top,'span','',scopeTitles[r.scope]||'Personal OS');put(top,'span','',time(r.created_at));b.append(top);put(b,'strong','',r.question);if(r.context_manifest?.version)para(b,'Bộ nhớ: '+(r.context_manifest.core_ids?.length||0)+' dài hạn · '+(r.context_manifest.working_ids?.length||0)+' snapshot · '+(r.context_manifest.history_ids?.length||0)+' phân tích trước','aom-evidence');put(b,'span','aom-history-status',r.status==='stopped'?'Đã hoàn tất':r.status==='running'?'Đang xử lý':r.status==='waiting'?'Cần thao tác':'Lỗi');b.addEventListener('click',()=>{state.output=r;state.tab='overview';draw();if(r.status==='running')void watch(r.id);});root.append(b);});
  return root;
 }
+const memoryLabels={'identity.preferred_name':'Tên & cách xưng hô','communication.preferences':'Cách giao tiếp','career.north_star':'Định hướng sự nghiệp 2031','operating.autonomy':'Quyền tự vận hành','operating.source_of_truth':'Nguồn dữ liệu chính thức','operating.evidence':'Cách đánh giá bằng chứng','operating.capacity':'Giới hạn kế hoạch & thời gian nghỉ','career.current_priority':'Ưu tiên trong giai đoạn chuyển việc','learning.direction':'Định hướng học tập','ventures.focus':'Trọng tâm Ventures','b2c.screening':'Tiêu chí Better Living','transition.onboarding':'Mốc bàn giao & onboarding'};
 const memoryStatus={active:'Đã xác nhận',pending:'Chờ duyệt',conflict:'Có mâu thuẫn',archived:'Đã lưu trữ'};
 function memoryView(){
  const root=make('section','aom-page aom-memory');put(root,'span','aom-eyebrow','PERSONAL OS MEMORY');put(root,'h2','','AI đang nhớ gì?');
@@ -149,7 +148,7 @@ function memoryView(){
  const tools=make('div','aom-memory-tools'),filter=make('select');filter.setAttribute('aria-label','Lọc bộ nhớ theo domain');
  for(const [id,name] of [['all','Tất cả domain'],['global','Dùng chung'],...Object.entries(scopeTitles)]){const o=put(filter,'option','',name);o.value=id;}filter.value=state.memoryFilter;filter.addEventListener('change',()=>{state.memoryFilter=filter.value;draw();});tools.append(filter);
  const refresh=put(tools,'button','aom-save',state.memoryLoading?'Đang đối chiếu…':'Đối chiếu nguồn');refresh.disabled=state.memoryLoading||state.busy;refresh.addEventListener('click',()=>void loadMemory(true));
- const add=put(tools,'button','aom-save','+ Ghi nhớ mới');add.disabled=state.busy;add.addEventListener('click',()=>{state.memoryEditor={new:true};draw();});root.append(tools);
+ const add=put(tools,'button','aom-save','+ Ghi nhớ mới');add.disabled=state.busy;add.addEventListener('click',()=>{state.memoryEditor={new:true};draw();$('.aom-main').scrollTop=0;});root.append(tools);
  if(state.memoryLoading&&!state.memory){para(root,'Đang đọc bộ nhớ…');return root;}
  const m=state.memory;if(!m){para(root,'Chưa đọc được bộ nhớ. Chọn đối chiếu nguồn để thử lại.');return root;}
  const allowed=x=>state.memoryFilter==='all'||x.scope===state.memoryFilter;
@@ -158,7 +157,7 @@ function memoryView(){
  if(state.memoryEditor)root.append(memoryEditor());
  put(root,'h3','','Thông tin dài hạn');
  for(const row of core){
-  const card=make('article','aom-memory-card'+(row.status==='conflict'?' conflict':'')),top=make('div','aom-action-top');put(top,'strong','',row.memory_key);put(top,'span','',memoryStatus[row.status]);card.append(top);
+  const card=make('article','aom-memory-card'+(row.status==='conflict'?' conflict':'')),top=make('div','aom-action-top');put(top,'strong','',memoryLabels[row.memory_key]||row.memory_key);put(top,'span','',memoryStatus[row.status]);card.append(top);
   if(row.value)para(card,row.value,'aom-memory-value');if(row.proposed_value){const p=make('div','aom-unknown');put(p,'strong','','Đề xuất mới · chưa dùng làm sự thật');para(p,row.proposed_value);card.append(p);}
   const source=m.sources.find(s=>s.id===row.source_id),pendingSource=m.sources.find(s=>s.id===row.proposed_source_id);
   para(card,(row.scope==='global'?'Dùng chung':scopeTitles[row.scope])+' · Nguồn: '+(source?.title||'Chưa rõ')+' · v'+row.version+' · '+time(row.updated_at),'aom-evidence');
@@ -168,7 +167,7 @@ function memoryView(){
   const controls=make('div','aom-action-buttons');
   if(row.proposed_value)for(const [choice,label] of [['accept','Duyệt thông tin'],['reject','Từ chối']]){const b=put(controls,'button','aom-save',label);b.disabled=state.busy;b.addEventListener('click',()=>void changeMemory(row,choice));}
   if(row.status!=='archived'){
-   const edit=put(controls,'button','aom-dismiss','Sửa');edit.disabled=state.busy;edit.addEventListener('click',()=>{state.memoryEditor={row};draw();});
+   const edit=put(controls,'button','aom-dismiss','Sửa');edit.disabled=state.busy;edit.addEventListener('click',()=>{state.memoryEditor={row};draw();$('.aom-main').scrollTop=0;});
    const archive=put(controls,'button','aom-dismiss','Ngừng sử dụng');archive.disabled=state.busy;archive.addEventListener('click',()=>void changeMemory(row,'archive'));
   }
   if(row.status==='archived'){const restore=put(controls,'button','aom-save','Khôi phục');restore.disabled=state.busy||!row.value;restore.addEventListener('click',()=>void changeMemory(row,'edit',{value:row.value}));}
@@ -194,7 +193,7 @@ function memoryView(){
  for(const d of (m.decisions||[]).filter(d=>allowed(d.personal_os_ai_actions||{scope:'unknown'})).slice(0,12)){const line=make('div','aom-memory-event');put(line,'strong','',d.personal_os_ai_actions?.title||'Đề xuất AI');para(line,(d.event_type==='dismissed'?'Bạn đã bỏ qua đề xuất':'Bạn đã lưu review, chưa đồng nghĩa duyệt thay đổi kế hoạch')+' · '+time(d.occurred_at),'aom-evidence');root.append(line);}
  if(!m.decisions?.length)para(root,'Chưa có quyết định được ghi nhận. Không tự suy ra quyết định từ câu trả lời AI.');
  put(root,'h3','','Lịch sử thay đổi');
- for(const e of m.events.filter(allowed).slice(0,15)){const line=make('div','aom-memory-event');put(line,'strong','',e.after_value?.memory_key||e.entity_table);para(line,(e.event_type==='created'?'Tạo mới':'Cập nhật')+' · '+time(e.occurred_at),'aom-evidence');if(e.before_value?.value!==undefined&&e.before_value?.value!==e.after_value?.value){para(line,'Trước: '+(e.before_value.value||'(trống)'));para(line,'Sau: '+(e.after_value?.value||'(trống)'));}root.append(line);}
+ for(const e of m.events.filter(allowed).slice(0,15)){const line=make('div','aom-memory-event');put(line,'strong','',memoryLabels[e.after_value?.memory_key]||e.after_value?.memory_key||e.entity_table);para(line,(e.event_type==='created'?'Tạo mới':'Cập nhật')+' · '+time(e.occurred_at),'aom-evidence');if(e.before_value?.value!==undefined&&e.before_value?.value!==e.after_value?.value){para(line,'Trước: '+(e.before_value.value||'(trống)'));para(line,'Sau: '+(e.after_value?.value||'(trống)'));}root.append(line);}
  return root;
 }
 function memoryEditor(){

@@ -12,7 +12,7 @@ Memory v1 (2026-11-01) extends the existing controlled Level B AI Manager. Supab
 
 ## Incremental refresh
 
-On AI Manager open, explicit source check and before a new analysis, read source metadata. Read full payload only when its signature differs from the persisted working signature. Unchanged sources cause no working-memory write. A failed working write is retryable even when its source record was already saved. Refreshing memory does not call Manus.
+Content hashes in SECURITY INVOKER metadata views catch source edits even when import timestamps are unchanged. On AI Manager open, explicit source check and before a new analysis, read source metadata. Read full payload only when its signature differs from the persisted working signature. Unchanged sources cause no working-memory write. A failed working write is retryable even when its source record was already saved. Refreshing memory does not call Manus.
 
 Week summaries expire at the end of the relevant Vietnam week; module summaries after 48 hours; annual snapshots after 30 days. Expired data is flagged and its task detail is withheld. Source freshness and working expiry are distinct signals. OneNote plan values remain internal in v1; the provider sees annual source metadata, while confirmed shareable goals come from Core.
 
@@ -30,7 +30,7 @@ AI Manager → Bộ nhớ shows core, working, decisions and revision history. U
 
 ## Schema and deployment
 
-Canonical schema: `apps/personal-os-v1/sql/ai-memory.sql`. Live migrations: `personal_os_memory_engine`, `personal_os_memory_explicit_sharing`. Existing `personal_os_ai_runs` receives a context_manifest column. Existing action and decision tables are reused.
+Canonical schema: `apps/personal-os-v1/sql/ai-memory.sql`. Live migrations: `personal_os_memory_engine`, `personal_os_memory_explicit_sharing`, `personal_os_memory_source_versions`. Existing `personal_os_ai_runs` receives a context_manifest column. Existing action and decision tables are reused.
 
 API operations: GET memory; POST memory_refresh, memory_propose, memory_edit. All share the existing owner-verified JWT gate. Every core edit and working write has a separate database readback. AI completion is persisted after proposals/queue writes, so failed extraction is retryable.
 
