@@ -1,152 +1,189 @@
 ---
 name: Henry OS
-description: Dense productivity interface for weekly work and source evidence
+description: Operate — a compact workspace for weekly work and source evidence
 colors:
-  canvas: "#f2f4f6"
+  canvas: "#f6f7f9"
   surface: "#fff"
-  inset: "#f7f8fa"
-  ink: "#22333e"
-  muted: "#596b78"
-  line: "#dce3e8"
-  line-strong: "#c2cfd8"
-  nav: "#192a32"
-  nav-text: "#becdd5"
-  purple: "#7753a7"
-  jade: "#18776e"
-  bronze: "#925f32"
-  indigo: "#62559c"
-  success: "#21734f"
-  warning: "#925e15"
-  danger: "#b64146"
-  purple-hover: "#65448f"
-  jade-hover: "#125e57"
-  bronze-hover: "#754b27"
-  indigo-hover: "#514481"
+  inset: "#f1f3f6"
+  ink: "#202534"
+  muted: "#626b7c"
+  line: "#e3e6ed"
+  line-strong: "#bcc3d0"
+  purple: "#7250a3"
+  jade: "#16746a"
+  bronze: "#925c2e"
+  indigo: "#65519e"
+  success: "#18734e"
+  danger: "#b63a4b"
+  warning: "#8e5c0b"
+  sidebar: "#f1f2f6"
+  purple-hover: "#5e3e8b"
+  jade-hover: "#10594f"
+  bronze-hover: "#754725"
+  indigo-hover: "#4f3d81"
+  fulltime: "#ae6655"
 typography:
   headline:
-    fontFamily: "'Henry Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    fontFamily: "'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"
     fontSize: "22px"
     fontWeight: 700
     lineHeight: 1.35
-    letterSpacing: "-.35px"
+    letterSpacing: "-.5px"
   title:
-    fontFamily: "'Henry Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    fontFamily: "'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"
     fontSize: "15px"
     fontWeight: 700
-    lineHeight: 1.45
+    lineHeight: 1.4
+    letterSpacing: "-.2px"
   body:
-    fontFamily: "'Henry Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    fontFamily: "'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"
     fontSize: "14px"
     fontWeight: 400
     lineHeight: 1.55
   label:
     fontSize: "12px"
     fontWeight: 400
+  metadata:
+    fontSize: "11px"
 rounded:
-  panel: "8px"
+  panel: "12px"
   control: "6px"
-  nav: "5px"
-  day-cell: "4px"
+  strip: "10px"
+  status: "4px"
 spacing:
   control-y: "8px"
-  control-x: "13px"
-  gap: "16px"
-  panel: "18px"
-  mobile-panel: "15px"
-  main: "24px"
-  mobile-main: "14px"
+  control-x: "12px"
+  panel: "20px"
+  mobile-panel: "16px"
+  gap: "20px"
+  mobile-gap: "14px"
+  main-x: "28px"
+  mobile-main-x: "14px"
 components:
   button-primary:
     backgroundColor: "{colors.purple}"
     textColor: "{colors.surface}"
     rounded: "{rounded.control}"
-    padding: "8px 13px"
+    padding: "8px 12px"
   button-primary-hover:
     backgroundColor: "{colors.purple-hover}"
   button-secondary:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
     rounded: "{rounded.control}"
-    padding: "8px 13px"
+    padding: "8px 12px"
   panel:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
     rounded: "{rounded.panel}"
-    padding: "18px"
+    padding: "20px"
+  calendar-field:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.control}"
+    padding: "7px 10px"
 ---
 
 # Design System: Henry OS
 
 ## Overview
 
-Henry OS is a high density productivity interface. Weekly work, task groups, evidence and actions determine the hierarchy. Compact titles, quiet surfaces and persistent navigation support desktop work; mobile keeps domain navigation and task inspection available. This document records the implemented shared layer in `apps/personal-os-v1/orbit.css`; it does not certify every inherited view's computed appearance.
+**Creative North Star: "Operate"**
 
-The original orbital mark at `apps/personal-os-v1/henry-os-mark.png` is immutable byte for byte. Its lavender, jade and bronze ribbons remain the visual origin. Every domain, menu item, route, source record and permission remains unchanged. No slogans, oversized promotional headers, decorative prose panels or display serif typography belong in this system.
+Operate is a compact working environment: a light navigation frame, restrained domain color and white working surfaces on a cool canvas. Information density comes from aligned rows, short headings and clear separators. Weekly work, priorities and source status lead the home surface; the calendar exposes full task titles in grouped rows.
+
+This records the implemented shared layer in apps/personal-os-v1/executive.css, with the home composition in workspaces.mjs and calendar behavior in calendar.mjs. The existing orbital logo remains the visual origin and must remain byte for byte unchanged. Every domain, menu item, route, source record and permission remains intact.
+
+**Key Characteristics:**
+- Light global bar and sidebar
+- Self hosted Noto Sans with Vietnamese support
+- Restrained purple, jade, bronze and indigo accents
+- Compact inline pulse, weekly matrix and priorities
+- Grouped full width calendar rows with a day rail
+
+Tokens in the frontmatter are normative and match the implemented CSS. The component primary color shown there is the personal/default purple; workspace adapters resolve the current domain accent. This is a source-based record, not a claim that every inherited view has been normalized.
 
 ## Colors
 
-The canvas is cool gray with white working surfaces, dark blue gray navigation and restrained domain accents. CSS custom properties `--os-*` are the implementation source of truth.
+Purple anchors the default workspace; jade identifies Servicebio, bronze Ventures, and indigo Enexia. Neutral surfaces carry the bulk of each screen.
 
-| Role | CSS token | Use |
-| --- | --- | --- |
-| Canvas / surface / inset | `--os-canvas`, `--os-surface`, `--os-inset` | Page background, containers, low emphasis cells |
-| Ink / muted | `--os-ink`, `--os-muted` | Primary text and supporting labels |
-| Line / strong line | `--os-line`, `--os-line-strong` | Separators, panels and control borders |
-| Navigation / navigation text | `--os-nav`, `--os-nav-text` | Shared dark shell |
-| Purple | `--os-purple` | Default and personal accent |
-| Jade | `--os-jade` | Servicebio |
-| Bronze | `--os-bronze` | Ventures |
-| Indigo | `--os-indigo` | Enexia |
-| Success / warning / danger | `--os-success`, `--os-warning`, `--os-danger` | Semantic tokens; danger also marks focused invalid fields |
+### Primary
 
-`--accent` and `--accent-hover` resolve by domain. Selected navigation also uses text and borders, rather than color alone. The full-time task matrix retains its observed terracotta `#a85e4a` marker; do not collapse existing groups into the four domain accents. Domain task cells use `color-mix()` against white (9% fill, 14% border in the weekly matrix; 6% fill for calendar tasks).
+- **Working Purple:** default/personal actions, focused controls and selected home navigation.
+- **Purple Hover:** darkened default primary action state.
+
+### Secondary
+
+- **Servicebio Jade**, **Ventures Bronze**, **Enexia Indigo:** domain actions and small identifiers; each has a corresponding hover token.
+- **Full-time Terracotta:** existing full-time work marker. Preserve its distinction from the four main domain accents.
+
+### Tertiary
+
+- **Success**, **Warning**, **Danger:** semantic state colors. Never use domain color alone to communicate task status or verification.
+
+### Neutral
+
+- **Canvas**, **Surface**, **Inset**, **Sidebar:** cool working ground, white content, quiet nested areas and light navigation.
+- **Ink**, **Muted:** primary copy and secondary explanation.
+- **Line**, **Strong Line:** surface separators and control boundaries.
+
+**The Quiet Frame Rule.** Keep the navigation frame light; reserve domain accents for selected navigation, actions and small data markers.
+
+Tinted selected states are contextual CSS values rather than one universal tint. Weekly populated cells use `color-mix(in srgb,var(--domain) 11%,white)`; private module selection uses the active domain at 10% against white. Calendar lane dots retain the source lane colors in calendar.mjs; they are not completion signals and need not match the shell domain tokens.
 
 ## Typography
 
-Self hosted Noto Sans is declared as `Henry Noto Sans`, with regular 400 and bold 700 WOFF files in `apps/personal-os-v1/fonts/`, `font-display: swap`, then platform sans fallbacks. Preserve Vietnamese diacritics. Headings, labels, controls and content all use this family; `--exec-serif` intentionally resolves to the same sans family.
+Self hosted Noto Sans is registered as `Henry Noto Sans` with regular (400) and bold (700) WOFF files, `font-display: swap`, and platform sans fallbacks. Preserve Vietnamese diacritics. Headings, controls and content share the family; the legacy serif alias also resolves to this sans family.
 
-Page headings are 22px/1.35 bold, reducing to 20px at 760px. Panel titles are generally 15px/1.45 bold. Body is 14px/1.55; records commonly use 13px, controls 12px, and metadata 11px. Matrix secondary labels use 10px. These are observed context-specific sizes, not a mandate to shrink task details. Authentication headings retain a larger 38px desktop / 32px mobile role. Metrics use 26–28px bold and tabular numerals; tables, calendar dates and day counts also use tabular numerals. There is no display font role.
+The frontmatter defines the default body, page heading, panel title, label and metadata roles. Common record/task copy uses 13px with 1.6 line height. Contextual calendar status labels and matrix secondary labels use 10px; they do not replace the body role. Pulse values use 24px, analytical values 26px, and tabular numerals support dates, counts and tables. Mobile page headings reduce to 20px. Authentication retains its specific 38px desktop / 30px mobile heading; it does not establish a promotional display role elsewhere.
 
 ## Layout
 
-Desktop shell: 56px domain bar, 216px local navigation column and flexible main column. Main width is capped at 1800px with 24px horizontal padding. The local topbar is 54px high. The common grid gap is 16px, panel padding 18px, section spacing commonly 18px and control padding 8px 13px. Values are contextual rather than an invented universal spacing progression.
+The desktop shell uses a white 52px global workspace bar, a 212px light local sidebar and a flexible main column. The main canvas has 28px horizontal padding and a maximum width of 1800px. Its local topbar is 50px. Panels use the frontmatter padding and gap values; the global bar has 20px horizontal padding and a 24px internal gap.
 
-The home work grid uses `minmax(0,2.5fr) minmax(255px,1fr)`. Domain portals form four adjacent cells. Weekly matrix scrolls within its container at a minimum 600px width (610px on mobile). The calendar keeps a minimum 1050px board, a 132px group column, seven day columns and an undated column. Its bounded scroller is `calc(100dvh - 230px)` on desktop; chart and calendar geometry remain owned by their native view styles.
+Home leads with a short heading and one inline pulse strip containing task count, self-reported done, verified done and undated tasks, plus the source week. Missing week data displays an em dash. The weekly allocation matrix and attention priorities follow in `minmax(0,1.9fr) minmax(270px,.9fr)` columns, ahead of workload and domain portals. This composition is intended to bring allocation and priorities into the first desktop viewport; viewport fit remains unverified without browser QA. The matrix has a 580px minimum width, a 144px label column, seven days and an undated column. The matrix scrolls inside its panel instead of compressing labels.
 
-At 1200px the home grid becomes one column, attention rows form three columns, and the analytics calendar spans the summary. At 760px the domain bar wraps to 102px, the shell becomes block layout, main horizontal padding becomes 14px and panels commonly use 15px. Home sidebar hides; personal navigation becomes a full width select. Portals become two columns, analytics summary becomes one column and attention rows stack. Calendar scrolling remains available with a 70dvh height limit. Shared primary controls become 44px high where explicitly targeted. This is not a claim that every inherited icon or navigation target is 44px.
+Calendar defaults to a grouped full width list, preceded by toolbar, filters, source status and a nine-option day rail: whole week, seven days and undated. Each row has a 56px date column plus the full task title and status. The agenda scrolls at `calc(100dvh - 340px)` with a 220px minimum height. The alternative week board keeps seven dated columns and an undated column, a 1400px minimum width and a 150px group column; its scroller is bounded at `calc(100dvh - 280px)`. It shows two tasks per cell before an overflow action opens the complete day/lane list. These calendar structures coexist; switching view does not modify source data.
+
+At 1200px, home becomes one column, attention rows form three columns and portals become two columns. At 760px, the global bar wraps to 98px, home sidebar hides, personal navigation becomes a full width select, main padding becomes 14px, panel padding 16px and major gaps 14px. Pulse keeps four columns with a source row below. Attention stacks, workload becomes one column, and the matrix retains a 570px minimum width. Calendar controls wrap, filters use two columns, the day rail scrolls horizontally, task status stacks under the title and agenda/board scrolling is bounded at 65dvh (agenda minimum 180px). Native private-module responsive rules remain in force.
+
+Shared desktop buttons and calendar filter controls have 34px minimum height. Targeted mobile buttons and filters become 40px, while home heading actions are 38px and agenda task rows are at least 44px. The mobile `--os-control` custom property is 44px, but explicit selectors govern these actual sizes; do not claim a universal 44px target. Search and utility buttons retain their smaller contextual dimensions.
 
 ## Elevation & Depth
 
-Borders and tonal layering provide most structure. Panels use `--os-shadow: 0 3px 12px #1b344008`; analytical summaries and portals are flat. Hover does not lift portals or project cards. Inspectors use `-8px 0 30px #19333f18`; overflow dialogs use `0 18px 50px #192a3222`. Dialog backdrop is `#192a3245` without blur. Do not add decorative gradients, broad ambient glows or floating surface stacks.
+Thin boundaries and tonal layering provide structure. Panels have the restrained shadow (`0 2px 6px #20253404`); bars, portals and summary strips stay flat. Hover changes fill, border or text rather than lifting cards. Right inspectors use `-6px 0 28px #20253412`; overflow dialogs use `0 16px 50px #20253424`; command dialogs use `0 20px 70px #20253426`. The dialog backdrop is `#20253450`, without blur. Do not introduce decorative gradients or ambient glows.
 
 ## Shapes
 
-Panels use 8px corners, controls 6px, navigation and task tiles commonly 5px, and matrix cells 4px. Thin borders separate dense content. Domain dots are circular; the original logo is never reconstructed from CSS. Side inspectors have square corners and a left separator. Command and authentication containers retain 10px corners.
+Panels use the frontmatter panel radius; controls, navigation and matrix cells use the control radius. Summary strips, pulse and portals use the strip radius. Calendar board task cards retain a contextual 7px radius, while full width agenda tasks are flat rows. Side inspectors have square corners and a left divider. Circular domain dots are small identifiers. The logo is the original image asset, never a CSS reconstruction.
 
 ## Components
 
-- **Buttons:** default white surface, ink text, strong line border, 36px minimum height, 6px radius and 8px 13px padding. Hover uses inset background and `#a9bac6` border. Primary buttons use the current domain accent with its domain hover color. Soft buttons use `#eee8f6` fill, `#674292` text and `#dcd2eb` border.
-- **Focus and disabled states:** buttons, links, summaries and fields share a 2px accent outline offset by 3px. Disabled buttons, inputs and selects have opacity .52 and a not-allowed cursor. Focused invalid non-placeholder fields use danger border color. No general error-message component is defined by this layer.
-- **Fields:** common filter controls use the shared 36px minimum height, white fill, strong line border and 6px radius; dialog inputs/selects use 14px text and a 40px minimum height. The mobile personal navigation select uses a dark fill and 44px minimum height.
-- **Navigation:** dark shell with 12px labels. Domain hover uses translucent white; selected domain buttons use white text, a translucent surface/border and a domain underline. Local navigation active state uses a translucent purple surface and pale text. Preserve all labels and route bindings.
-- **Panels and records:** white, 1px line border, 8px radius and 18px padding. Panel headings use a bottom separator. Record and attention rows prioritize task text with muted metadata; attention text clamps to three lines, two on mobile. Full details belong in the inspector.
-- **Counts, statuses and day chips:** metadata commonly uses 11px; count labels use inset fill. Weekly day cells use a 4px radius, 40px minimum height (44px mobile), tabular 16px counts, and an accent border on hover. Existing status semantics and completion calculations are preserved.
-- **Calendar tasks:** 5px corners, 9px 8px padding, low tint fill and 12px/1.5 task text. Board labels clamp to two lines; metadata truncates with ellipsis. Overflow opens a bounded list with full task text; the more control gains underline and purple tint on hover.
-- **Inspectors/dialogs:** detail and calendar edit inspectors attach to the right edge at `min(540px,100%)`, full dynamic viewport height, 25px padding (20px mobile), white fill and a left border. Overflow dialog stays separate with 560px maximum width and a 60vh scrollable list. No new modal behavior is implied by these visual rules.
-- **Motion:** button color/border transitions are .12s. Reduced-motion preference disables animations and transitions and restores automatic scrolling.
+- **Buttons:** white secondary fill, strong line border, compact text and frontmatter padding. Primary fill and hover resolve from the current domain. Secondary hover uses `#f1f2f6` fill and `#a6afbf` border. Disabled buttons and fields use opacity .5 and a not-allowed cursor.
+- **Fields:** toolbar/filter inputs use white fill, strong line border, 6px radius and 12px text; calendar dialog fields use 14px text and 40px minimum height. The mobile personal navigation select is white and at least 40px tall.
+- **Focus:** buttons, links, summaries, fields and focusable regions use a 2px domain-accent outline offset by 3px. Preserve that visible keyboard treatment when adapting legacy views.
+- **Navigation:** the light global bar uses 12px labels, quiet hover fill and domain-tinted selected states. The light sidebar uses 12px labels, 38px minimum rows, 6px corners and a purple selected state. Private modules use their domain tint for selection. All labels, domains and bindings remain unchanged.
+- **Panels and records:** white bordered surfaces, compact titles and aligned task rows. Source caveats remain adjacent to the records they qualify. Full details remain accessible through the existing inspector.
+- **Pulse and weekly matrix:** counts are clickable source-derived facts. The matrix preserves separate work groups and an undated column, with light tint only on populated cells. No completion percentage is inferred from these task counts.
+- **Day rail and agenda:** selected day buttons use tint and pressed state. Group headers have lane dots and counts; rows expose full wrapping task titles, date and status. Source verification/edit queue labels remain visible. The alternative board and overflow dialog retain task inspection and editing behavior.
+- **Inspectors:** detail/calendar edit panels attach to the right at `min(520px,100%)`, full dynamic viewport height and 28px padding (22px mobile). Overflow remains a separate dialog with a list bounded at 60vh. Native dialog and source-update semantics remain unchanged.
+- **Analytics and private modules:** shared surfaces, text, controls and table styling adapt the native views. Existing chart geometry, plotting dimensions, interaction semantics and source calculations remain owned by those views.
+- **Motion:** button color and border transitions last .16s. Reduced-motion preference removes transitions and animations and restores automatic scrolling.
 
-The shared layer overlays inherited `styles.css`, `workspaces.css`, `calendar.css`, `gantt.css`, `progress.css`, module styles and existing inline rules. `executive.css` currently contains the same shared rule set as `orbit.css`. Legacy aliases (`--bg`, `--paper`, `--ink`, `--exec-*`, `--gp-*`, `--pr-*`, `--bi-*`) bridge into the system. Native chart geometry, private module markup and view-specific breakpoint rules remain present. Do not infer a clean component rewrite, complete legacy removal or universal breakpoint behavior from these overrides.
+**The Source Before Certainty Rule.** Keep missing dates and source caveats visible; task counts are not completion percentages.
+
+Implementation bridges legacy tokens into the shared palette and overlays inherited styles. This document does not imply a full component rewrite or removal of private module CSS. QA for this revision is source-only: the browser was unavailable, no screenshots were captured, and rendered desktop/mobile layout, clipping, contrast and focus behavior have not been visually verified.
 
 ## Do's and Don'ts
 
-- Do preserve the orbital logo bytes and every domain, menu, route, permission and source record.
-- Do use domain accents consistently, compact titles, clear separators and self hosted Vietnamese Noto Sans.
-- Do keep source caveats, uncertain evidence and actual completion semantics visible where they affect decisions.
-- Do preserve horizontal overflow for dense calendar and matrix views, with task inspection available on phones.
-- Don't invent revenue, completion percentages, business claims or evidence during visual work.
-- Don't add slogans, oversized headers, display serif typography or decorative text panels.
-- Don't treat inherited chart layouts, mobile target sizes or inline module styling as fully normalized without inspecting their actual rules.
+- Do preserve the original logo bytes, every domain, menu item, route, permission and source record.
+- Do use the shared domain accent, Noto Sans, compact headings and visible keyboard focus.
+- Do keep source caveats, missing data, uncertainty and actual completion semantics visible.
+- Do preserve dense-view scrolling and access to complete task details on phones.
+- Do verify inherited module layouts in a browser before claiming universal visual consistency.
 
-
-## Studio revision
-The application uses a white global workspace switcher and dark local navigation. Raised white cards use 18px radii, dark 25px page headings, 16px section labels and 13px task copy. Home adds four source-backed task statistics; missing week stays a dash. Calendar defaults to a full-title agenda grouped by workstream, with explicit day filtering including undated tasks. An alternative week board retains original lane/calendar semantics and edit dialogs. A bounded scroller prevents task density from consuming the entire page. Private domain cards and tables inherit the shared visual system without modifying their data or navigation. Native plotting geometry remains unchanged.
+- Don't add slogans, oversized headers, display serif typography or decorative prose panels.
+- Don't invent revenue, completion percentages, business claims or source evidence.
+- Don't redraw, recolor, filter or decorate the orbital logo.
+- Don't change native chart geometry, domain structure, menu labels or navigation contracts during visual work.
+- Don't describe source inspection as rendered QA or claim screenshots that were not captured.
