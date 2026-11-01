@@ -182,7 +182,7 @@ async function watch(id){
   if(d.done){state.message='Đã nhận Executive Brief. Các khuyến nghị đã được đưa vào Action Queue, không sửa nguồn Notion.';break;}
   draw();
  }
- await load(false);
+ await load(true);
  }catch(e){state.message='Không thể theo dõi tiến độ Manus: '+e.message;}
  finally{watching.delete(id);state.busy=false;draw();}
 }
