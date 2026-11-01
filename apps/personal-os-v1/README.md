@@ -69,3 +69,8 @@ Dedicated evidence-based radar workspace with annual, per-axis and 2031 competen
 Ratings require integer levels 0–4, explicit confidence, source references and rationale. Missing evidence stays null. Annual summaries require 60% coverage and use a lower median; do not represent attainment percent or a peer percentile. Partial radars remain open; comparisons require the same rubric and annual goal signature. 2027 annual progress is not copied from 2026.
 
 See [progress-checkpoints.md](progress-checkpoints.md) for the review / append contract used by Weekly Executive Review. Automated source refresh does not automatically increase ratings.
+
+
+## Nocturne Command interface
+
+The current design uses `tokens.css` as the portable foundation and `executive.css` for component recipes. Home is composed in `nocturne-home.mjs`; local sidebar, utility and focus interactions live in `nocturne-ui.mjs` and `focus-timer.mjs`. See the repository-root `DESIGN.md` and `docs/nocturne-implementation.md` for current visual guidance and QA scope. The 2026-10-27 design record is historical. Protected Servicebio/Ventures packages still need their original source/publishing workflow for full integration.

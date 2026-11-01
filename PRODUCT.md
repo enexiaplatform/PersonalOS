@@ -17,7 +17,7 @@ Notion is the weekly source of truth. OneNote supplies annual objectives. Authen
 Keep every domain, menu item, route, source record and permission unchanged. Existing static web app with private HTML modules. Shared design layer may change visual hierarchy and density, not product facts or completion semantics. Do not invent revenue, completion percentages or evidence.
 
 ## Brand Commitments
-Preserve apps/personal-os-v1/henry-os-mark.png byte for byte. Its interwoven lavender, jade and bronze ribbons are the visual origin. User explicitly delegates the replacement design system and rejects slogans, oversized headers, and text-heavy decorative panels.
+Preserve apps/personal-os-v1/henry-os-mark.png byte for byte. Its interwoven lavender, jade and bronze ribbons are the visual origin. The approved direction is Nocturne Command: midnight surfaces, violet/indigo/cyan accents, a compact twilight mountain home hero, truthful KPI cards and a contextual AI utility rail. This supersedes prior light-theme and no-gradient restrictions. Preserve functional copy and source transparency; avoid oversized decorative panels outside Home.
 
 ## Product Principles
 - Task completion and comprehension over decoration.

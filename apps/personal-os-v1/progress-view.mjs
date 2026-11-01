@@ -7,26 +7,26 @@ const displayLevel=v=>validLevel(v)?v+'/4':'—';
 const annualNames={career:'Sự nghiệp',business:'Business',entrepreneurship:'Business',freelance:'Freelance',education:'Học tập',health:'Sức khỏe',finance:'Tài chính',growth:'Sáng tạo',relationships:'Quan hệ'};
 function splitLabel(s,limit=14){const words=s.split(' '),lines=[''];for(const word of words){const n=lines.length-1;if((lines[n]+' '+word).trim().length>limit&&lines[n])lines.push(word);else lines[n]=(lines[n]+' '+word).trim();}return lines.length<=2?lines:[lines[0],lines.slice(1).join(' ')];}
 function ringPoints(n,level,r,cx,cy){return Array.from({length:n},(_,i)=>{const p=radialPoint(i,n,level,r,cx,cy);return p.x.toFixed(2)+','+p.y.toFixed(2);}).join(' ');}
-const ringColors={4:'#d4f1df',3:'#fff7ca',2:'#ffe1b7',1:'#f2c9bd'};
+const ringColors={4:'#163a37',3:'#393a28',2:'#423329',1:'#402c37'};
 function radarSvg(dimensions,{id,title,compact=false,mini=false,asOf='',comparison='',scope='annual',group=''}={}){
  const n=dimensions.length,cx=compact?180:270,cy=compact?157:220,r=compact?106:137,labelRadius=compact?133:176,w=compact?360:540,h=compact?324:450;
  const values=dimensions.map(f=>f.level),previous=dimensions.map(f=>f.previous),path=radarPaths(values,r,cx,cy),old=radarPaths(previous,r,cx,cy);
- let svg='<svg id="'+esc(id)+'" data-checkpoint-date="'+esc(asOf)+'" class="pr-radar '+(compact?'pr-radar-compact':'pr-radar-desktop')+'" viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="'+esc(id)+'-title '+esc(id)+'-desc"><title id="'+esc(id)+'-title">'+esc(title)+'</title><desc id="'+esc(id)+'-desc">'+esc('Mốc '+asOf+'. Thang mức độ bằng chứng 0–4, không phải percentile hoặc phần trăm mục tiêu. '+dimensions.map(f=>f.label+': '+(validLevel(f.level)?f.level+'/4':'chưa đủ dữ liệu')).join('; '))+'</desc><rect width="100%" height="100%" fill="#fff"/>';
- for(const level of [4,3,2,1])svg+='<polygon points="'+ringPoints(n,level,r,cx,cy)+'" fill="'+ringColors[level]+'" stroke="#fff" stroke-width="1.2"/>';
- for(let i=0;i<n;i++){const p=radialPoint(i,n,4,r,cx,cy);svg+='<line x1="'+cx+'" y1="'+cy+'" x2="'+p.x+'" y2="'+p.y+'" stroke="#fff" stroke-width="1.2"/>';}
+ let svg='<svg id="'+esc(id)+'" data-checkpoint-date="'+esc(asOf)+'" class="pr-radar '+(compact?'pr-radar-compact':'pr-radar-desktop')+'" viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="'+esc(id)+'-title '+esc(id)+'-desc"><title id="'+esc(id)+'-title">'+esc(title)+'</title><desc id="'+esc(id)+'-desc">'+esc('Mốc '+asOf+'. Thang mức độ bằng chứng 0–4, không phải percentile hoặc phần trăm mục tiêu. '+dimensions.map(f=>f.label+': '+(validLevel(f.level)?f.level+'/4':'chưa đủ dữ liệu')).join('; '))+'</desc><rect width="100%" height="100%" fill="#10192b"/>';
+ for(const level of [4,3,2,1])svg+='<polygon points="'+ringPoints(n,level,r,cx,cy)+'" fill="'+ringColors[level]+'" stroke="#657c9c" stroke-width="1.2"/>';
+ for(let i=0;i<n;i++){const p=radialPoint(i,n,4,r,cx,cy);svg+='<line x1="'+cx+'" y1="'+cy+'" x2="'+p.x+'" y2="'+p.y+'" stroke="#657c9c" stroke-width="1.2"/>';}
  if(comparison)for(const p of old.paths)svg+='<path d="'+p+'" stroke="#8e7ab8" stroke-width="2" stroke-dasharray="5 5" fill="none"/>';
  if(path.closed)svg+='<path d="'+path.paths[0]+'" fill="#1f2d4210" stroke="none"/>';
- for(const p of path.paths)svg+='<path d="'+p+'" fill="none" stroke="#24344b" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>';
+ for(const p of path.paths)svg+='<path d="'+p+'" fill="none" stroke="#a477ff" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>';
  for(let i=0;i<n;i++){
   const f=dimensions[i],p=path.points[i],op=old.points[i],label=radialPoint(i,n,4,labelRadius,cx,cy),anchor=Math.abs(label.x-cx)<12?'middle':label.x>cx?'start':'end';
-  if(comparison&&op)svg+='<circle cx="'+op.x+'" cy="'+op.y+'" r="3.5" fill="#fff" stroke="#8e7ab8" stroke-width="1.5"/>';
-  if(p)svg+='<circle cx="'+p.x+'" cy="'+p.y+'" r="4.1" fill="#fff" stroke="#24344b" stroke-width="2.2"/>';
+  if(comparison&&op)svg+='<circle cx="'+op.x+'" cy="'+op.y+'" r="3.5" fill="#10192b" stroke="#8e7ab8" stroke-width="1.5"/>';
+  if(p)svg+='<circle cx="'+p.x+'" cy="'+p.y+'" r="4.1" fill="#10192b" stroke="#a477ff" stroke-width="2.2"/>';
   const lines=compact?[String(i+1)]:splitLabel(f.label),known=validLevel(f.level),labelY=label.y-(lines.length-1)*6;
   svg+='<g role="button" tabindex="0" '+action('dimension',{scope,group,dimension:f.id})+' aria-label="'+esc(f.label+': '+(known?f.level+'/4 · '+LEVELS[f.level].label:'chưa đủ dữ liệu')+'; mở bằng chứng')+'" class="pr-radar-label"><title>'+esc(f.label+' · '+(known?LEVELS[f.level].label:'Chưa đủ dữ liệu'))+'</title><rect x="'+(label.x-(anchor==='end'?105:anchor==='middle'?52:0))+'" y="'+(labelY-15)+'" width="105" height="44" fill="transparent"/>';
-  lines.forEach((line,j)=>svg+='<text x="'+label.x+'" y="'+(labelY+j*13)+'" text-anchor="'+anchor+'" font-family="Segoe UI,Arial,sans-serif" font-size="'+(compact?12:12)+'" font-weight="600" fill="#46546b">'+esc(line)+'</text>');
-  svg+='<text x="'+label.x+'" y="'+(labelY+lines.length*13+3)+'" text-anchor="'+anchor+'" font-family="Segoe UI,Arial,sans-serif" font-size="'+(compact?10:10.5)+'" fill="'+(known?'#596a80':'#9199a8')+'">'+(known?f.level+'/4':compact?'—':'Chưa đủ dữ liệu')+'</text></g>';
+  lines.forEach((line,j)=>svg+='<text x="'+label.x+'" y="'+(labelY+j*13)+'" text-anchor="'+anchor+'" font-family="Segoe UI,Arial,sans-serif" font-size="'+(compact?12:12)+'" font-weight="600" fill="#e1e9ff">'+esc(line)+'</text>');
+  svg+='<text x="'+label.x+'" y="'+(labelY+lines.length*13+3)+'" text-anchor="'+anchor+'" font-family="Segoe UI,Arial,sans-serif" font-size="'+(compact?10:10.5)+'" fill="'+(known?'#c1cce0':'#a7b4d0')+'">'+(known?f.level+'/4':compact?'—':'Chưa đủ dữ liệu')+'</text></g>';
  }
- for(const level of [1,2,3,4]){const y=cy-r*level/4;svg+='<rect x="'+(cx+5)+'" y="'+(y-8)+'" width="13" height="14" rx="2" fill="#ffffffbd"/><text x="'+(cx+11.5)+'" y="'+(y+2)+'" text-anchor="middle" fill="#788292" font-family="Segoe UI,Arial,sans-serif" font-size="9">'+level+'</text>';}
+ for(const level of [1,2,3,4]){const y=cy-r*level/4;svg+='<rect x="'+(cx+5)+'" y="'+(y-8)+'" width="13" height="14" rx="2" fill="#1b2840"/><text x="'+(cx+11.5)+'" y="'+(y+2)+'" text-anchor="middle" fill="#c1cce0" font-family="Segoe UI,Arial,sans-serif" font-size="9">'+level+'</text>';}
  svg+='<text x="'+cx+'" y="'+(cy+12)+'" text-anchor="middle" fill="#8f939b" font-family="Segoe UI,Arial,sans-serif" font-size="8">0</text></svg>';return svg;
 }
 export function annualDimensions(m){return m.groups.map(g=>({id:g.id,label:annualNames[g.id]||g.shortName,level:g.summary.level,previous:g.previousSummary.level}));}

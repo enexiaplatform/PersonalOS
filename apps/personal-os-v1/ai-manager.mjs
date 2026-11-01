@@ -1,3 +1,4 @@
+import {icon} from './experience.mjs';
 import {client as sb} from './supabase-client.mjs';
 const make=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=String(text);return x;};
 const put=(parent,tag,cls,text)=>{const x=make(tag,cls,text);parent.append(x);return x;};
@@ -16,20 +17,22 @@ overlay.innerHTML=[
 '<aside class="aom-rail"><div class="aom-rail-title"><div><h3>Action Queue</h3><p>Những đề xuất cần xem xét</p></div><span id="aom-rail-count">0</span></div><div class="aom-rail-list" id="aom-rail-list"></div><div class="aom-rail-footer">Tự phát hiện rủi ro · Không tự thay đổi Notion.</div></aside></div>',
 '<div id="aom-message" class="aom-message" role="status" hidden></div>',
 '<form class="aom-composer" id="aom-form"><div class="aom-compose-title"><strong>Hỏi AI Manager</strong><small>Chỉ gọi Manus khi bạn gửi yêu cầu · Có thể tốn credits</small></div>',
-'<div class="aom-compose-input"><textarea id="aom-question" maxlength="1600" rows="2" required placeholder="Hỏi về tiến độ, việc cần ưu tiên hoặc cách tối ưu tuần…"></textarea><button class="aom-primary" id="aom-submit" type="submit">Phân tích ↗</button></div>',
+'<div class="aom-compose-input"><textarea id="aom-question" maxlength="1600" rows="2" required placeholder="Hỏi về tiến độ, việc cần ưu tiên hoặc cách tối ưu tuần…"></textarea><button class="aom-primary" id="aom-submit" type="submit">Phân tích</button></div>',
 '<div class="aom-compose-foot"><span>Ctrl/⌘ + Enter để gửi</span><button type="button" data-tab="settings">Quyền dữ liệu</button></div></form></section>'
 ].join('');
-const launch=make('button','aom-launch','✦ AI Manager');launch.type='button';
+const launch=make('button','aom-launch','AI Manager');launch.type='button';
 launch.setAttribute('aria-label','Mở AI Manager');
 document.body.append(overlay,launch);
 const $=q=>overlay.querySelector(q),body=$('#aom-body'),list=$('#aom-rail-list'),box=$('#aom-question');
-function open(){state.open=true;overlay.classList.add('open');document.body.classList.add('aom-active');state.tab='overview';draw();void load(true).then(()=>{const pending=state.runs.find(r=>r.status==='running');if(state.open&&!state.busy&&pending){state.activeRun=pending.id;state.busy=true;void watch(pending.id);draw();}});box.focus();}
-function close(){state.open=false;overlay.classList.remove('open');document.body.classList.remove('aom-active');launch.focus();}
-launch.addEventListener('click',open);
+let returnFocus=null;
+function open(tab='overview'){returnFocus=document.activeElement;state.open=true;overlay.classList.add('open');document.body.classList.add('aom-active');state.tab=tab;draw();if(tab==='memory')void loadMemory();void load(false).then(()=>{const pending=state.runs.find(r=>r.status==='running');if(state.open&&!state.busy&&pending){state.activeRun=pending.id;state.busy=true;void watch(pending.id);draw();}});box.focus();}
+function close(){state.open=false;overlay.classList.remove('open');document.body.classList.remove('aom-active');if(returnFocus?.isConnected)returnFocus.focus();else launch.focus();}
+launch.addEventListener('click',()=>open());
+document.addEventListener('click',e=>{const trigger=e.target.closest('[data-open-ai]');if(trigger)open(['overview','actions','memory'].includes(trigger.dataset.aiTab)?trigger.dataset.aiTab:'overview');});
 overlay.querySelectorAll('[data-close]').forEach(x=>x.addEventListener('click',close));
 overlay.querySelectorAll('[data-tab]').forEach(x=>x.addEventListener('click',()=>{state.tab=x.dataset.tab;draw();$('.aom-main').scrollTop=0;if(state.tab==='memory')void loadMemory();}));
 $('[data-refresh]').addEventListener('click',()=>void load(true));
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.open)close();});
+document.addEventListener('keydown',e=>{if(!state.open)return;if(e.key==='Escape')close();if(e.key==='Tab'){const nodes=[...overlay.querySelectorAll('button,input,textarea,select,a[href],[tabindex="0"]')].filter(n=>!n.disabled&&n.getClientRects().length);const first=nodes[0],last=nodes.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}}});
 window.addEventListener('hashchange',()=>{if(state.open){draw();if(state.tab==='memory')void loadMemory();}});
 async function api(method,op,fields={}){
  const {data:{session}}=await sb.auth.getSession();
@@ -77,7 +80,7 @@ function quickPrompts(){
  ['Tối ưu tuần','Giảm quá tải','Rà soát workload tuần và đề xuất việc cần hoãn, giữ nguyên lịch hẹn đã cam kết và buffer.'],
  ['Kiểm tra gap','Bằng chứng & tiến độ','Tìm các khoảng trống bằng chứng, trạng thái chưa xác minh và 3 hành động ưu tiên nhất.']
  ];
- for(const [title,subtitle,prompt] of presets){const b=make('button','aom-quick-card');b.type='button';put(b,'strong','',title);put(b,'small','',subtitle);put(b,'span','','↗');b.addEventListener('click',()=>{box.value=prompt;box.focus();});grid.append(b);}
+ for(const [title,subtitle,prompt] of presets){const b=make('button','aom-quick-card');b.type='button';put(b,'strong','',title);put(b,'small','',subtitle);put(b,'span','').innerHTML=icon('arrow');b.addEventListener('click',()=>{box.value=prompt;box.focus();});grid.append(b);}
  s.append(grid);return s;
 }
 function numbered(parent,title,arr,klass){
@@ -235,7 +238,7 @@ function draw(){
  else if(state.tab==='settings')body.append(settingsView());
  else{body.append(intro());if(state.busy){const progress=make('div','aom-progress');put(progress,'span','aom-loader','');const copy=make('div');put(copy,'strong','','Manus đang phân tích…');para(copy,'Kết quả sẽ hiển thị thành Executive Brief và danh sách đề xuất.');progress.append(copy);body.append(progress);}if(state.output)body.append(brief(state.output));else body.append(quickPrompts());}
  const msg=$('#aom-message');msg.hidden=!state.message;msg.textContent=state.message;
- const btn=$('#aom-submit');btn.disabled=state.busy;btn.textContent=state.busy?'Đang xử lý…':'Phân tích ↗';
+ const btn=$('#aom-submit');btn.disabled=state.busy;btn.textContent=state.busy?'Đang xử lý…':'Phân tích';
 }
 async function decide(action,choice){
  if(state.busy)return;state.busy=true;draw();
@@ -273,3 +276,6 @@ box.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e
 setInterval(()=>{if(state.open&&!state.busy&&Date.now()-state.lastLoad>120000)void load(false);},60000);
 
 sb.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT'||(session?.user?.id&&session.user.id!=='5b87bd58-aa3e-4167-bf62-82531597bf8a')){state.memory=null;state.memoryEditor=null;state.actions=[];state.runs=[];state.output=null;state.source=null;if(state.open)close();}});
+
+let briefGeneration=0;
+document.addEventListener('click',async e=>{const trigger=e.target.closest('[data-ai-brief]');if(!trigger)return;const target=document.getElementById('home-ai-brief');if(!target)return;const generation=++briefGeneration;trigger.disabled=true;target.textContent='Đang đọc phân tích đã lưu…';try{const data=await api('GET','dashboard');if(generation!==briefGeneration||!target.isConnected)return;const run=(data.runs||[]).find(r=>r.scope===scope()&&r.status==='stopped'&&r.summary&&Object.keys(r.summary).length);target.replaceChildren();if(run){put(target,'p','nc-sub','Phân tích đã lưu · '+time(run.created_at));para(target,String(run.summary.situation||'Có phân tích đã lưu. Mở AI Manager để xem đầy đủ.'),'quiet');}else para(target,'Chưa có phân tích đã lưu cho không gian này.','quiet');}catch(error){if(target.isConnected)target.textContent=error.message;}finally{trigger.disabled=false;}});

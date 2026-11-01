@@ -19,3 +19,6 @@ Enexia/App/data/logs.json
 
 # Vault (Optional: Uncomment if you don't want to push your personal notes)
 # Enexia/Vault/
+
+# Local browser captures and review reports (synthetic fixtures)
+.impeccable/review/

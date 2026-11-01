@@ -1,464 +1,544 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-01T07:01:20.566355+00:00",
-  "title": "Design System: Henry OS",
+  "generatedAt": "2026-11-01T08:43:16.165888+00:00",
+  "title": "Design System: Henry OS — Nocturne Command",
   "extensions": {
     "colorMeta": {
-      "canvas": {
+      "bg-base": {
+        "displayName": "Bg Base",
         "role": "neutral",
-        "displayName": "Canvas",
         "tonalRamp": [
-          "oklch(15% 0.0029 264.54)",
-          "oklch(26% 0.0029 264.54)",
-          "oklch(38% 0.0029 264.54)",
-          "oklch(49% 0.0029 264.54)",
-          "oklch(61% 0.0029 264.54)",
-          "oklch(72% 0.0029 264.54)",
-          "oklch(84% 0.0029 264.54)",
-          "oklch(95% 0.0029 264.54)"
+          "oklch(15% 0.0248 267.11)",
+          "oklch(26% 0.0248 267.11)",
+          "oklch(38% 0.0248 267.11)",
+          "oklch(49% 0.0248 267.11)",
+          "oklch(61% 0.0248 267.11)",
+          "oklch(72% 0.0248 267.11)",
+          "oklch(84% 0.0248 267.11)",
+          "oklch(95% 0.0248 267.11)"
         ]
       },
-      "surface": {
+      "bg-sidebar": {
+        "displayName": "Bg Sidebar",
         "role": "neutral",
-        "displayName": "Surface",
         "tonalRamp": [
-          "oklch(15% 0 0)",
-          "oklch(26% 0 0)",
-          "oklch(38% 0 0)",
-          "oklch(49% 0 0)",
-          "oklch(61% 0 0)",
-          "oklch(72% 0 0)",
-          "oklch(84% 0 0)",
-          "oklch(95% 0 0)"
+          "oklch(15% 0.0325 266.62)",
+          "oklch(26% 0.0325 266.62)",
+          "oklch(38% 0.0325 266.62)",
+          "oklch(49% 0.0325 266.62)",
+          "oklch(61% 0.0325 266.62)",
+          "oklch(72% 0.0325 266.62)",
+          "oklch(84% 0.0325 266.62)",
+          "oklch(95% 0.0325 266.62)"
         ]
       },
-      "inset": {
+      "bg-main": {
+        "displayName": "Bg Main",
         "role": "neutral",
-        "displayName": "Inset",
         "tonalRamp": [
-          "oklch(15% 0.0045 258.32)",
-          "oklch(26% 0.0045 258.32)",
-          "oklch(38% 0.0045 258.32)",
-          "oklch(49% 0.0045 258.32)",
-          "oklch(61% 0.0045 258.32)",
-          "oklch(72% 0.0045 258.32)",
-          "oklch(84% 0.0045 258.32)",
-          "oklch(95% 0.0045 258.32)"
+          "oklch(15% 0.0346 267.28)",
+          "oklch(26% 0.0346 267.28)",
+          "oklch(38% 0.0346 267.28)",
+          "oklch(49% 0.0346 267.28)",
+          "oklch(61% 0.0346 267.28)",
+          "oklch(72% 0.0346 267.28)",
+          "oklch(84% 0.0346 267.28)",
+          "oklch(95% 0.0346 267.28)"
         ]
       },
-      "ink": {
+      "surface-1": {
+        "displayName": "Surface 1",
         "role": "neutral",
-        "displayName": "Ink",
         "tonalRamp": [
-          "oklch(15% 0.0291 270.09)",
-          "oklch(26% 0.0291 270.09)",
-          "oklch(38% 0.0291 270.09)",
-          "oklch(49% 0.0291 270.09)",
-          "oklch(61% 0.0291 270.09)",
-          "oklch(72% 0.0291 270.09)",
-          "oklch(84% 0.0291 270.09)",
-          "oklch(95% 0.0291 270.09)"
+          "oklch(15% 0.0381 263.31)",
+          "oklch(26% 0.0381 263.31)",
+          "oklch(38% 0.0381 263.31)",
+          "oklch(49% 0.0381 263.31)",
+          "oklch(61% 0.0381 263.31)",
+          "oklch(72% 0.0381 263.31)",
+          "oklch(84% 0.0381 263.31)",
+          "oklch(95% 0.0381 263.31)"
         ]
       },
-      "muted": {
+      "surface-2": {
+        "displayName": "Surface 2",
         "role": "neutral",
-        "displayName": "Muted",
         "tonalRamp": [
-          "oklch(15% 0.0290 263.20)",
-          "oklch(26% 0.0290 263.20)",
-          "oklch(38% 0.0290 263.20)",
-          "oklch(49% 0.0290 263.20)",
-          "oklch(61% 0.0290 263.20)",
-          "oklch(72% 0.0290 263.20)",
-          "oklch(84% 0.0290 263.20)",
-          "oklch(95% 0.0290 263.20)"
+          "oklch(15% 0.0430 264.08)",
+          "oklch(26% 0.0430 264.08)",
+          "oklch(38% 0.0430 264.08)",
+          "oklch(49% 0.0430 264.08)",
+          "oklch(61% 0.0430 264.08)",
+          "oklch(72% 0.0430 264.08)",
+          "oklch(84% 0.0430 264.08)",
+          "oklch(95% 0.0430 264.08)"
         ]
       },
-      "line": {
+      "surface-3": {
+        "displayName": "Surface 3",
         "role": "neutral",
-        "displayName": "Line",
         "tonalRamp": [
-          "oklch(15% 0.0100 267.36)",
-          "oklch(26% 0.0100 267.36)",
-          "oklch(38% 0.0100 267.36)",
-          "oklch(49% 0.0100 267.36)",
-          "oklch(61% 0.0100 267.36)",
-          "oklch(72% 0.0100 267.36)",
-          "oklch(84% 0.0100 267.36)",
-          "oklch(95% 0.0100 267.36)"
+          "oklch(15% 0.0482 262.01)",
+          "oklch(26% 0.0482 262.01)",
+          "oklch(38% 0.0482 262.01)",
+          "oklch(49% 0.0482 262.01)",
+          "oklch(61% 0.0482 262.01)",
+          "oklch(72% 0.0482 262.01)",
+          "oklch(84% 0.0482 262.01)",
+          "oklch(95% 0.0482 262.01)"
         ]
       },
-      "line-strong": {
+      "surface-hover": {
+        "displayName": "Surface Hover",
         "role": "neutral",
-        "displayName": "Line Strong",
         "tonalRamp": [
-          "oklch(15% 0.0198 262.99)",
-          "oklch(26% 0.0198 262.99)",
-          "oklch(38% 0.0198 262.99)",
-          "oklch(49% 0.0198 262.99)",
-          "oklch(61% 0.0198 262.99)",
-          "oklch(72% 0.0198 262.99)",
-          "oklch(84% 0.0198 262.99)",
-          "oklch(95% 0.0198 262.99)"
+          "oklch(15% 0.0511 262.14)",
+          "oklch(26% 0.0511 262.14)",
+          "oklch(38% 0.0511 262.14)",
+          "oklch(49% 0.0511 262.14)",
+          "oklch(61% 0.0511 262.14)",
+          "oklch(72% 0.0511 262.14)",
+          "oklch(84% 0.0511 262.14)",
+          "oklch(95% 0.0511 262.14)"
         ]
       },
-      "purple": {
+      "border-subtle": {
+        "displayName": "Border Subtle",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0684 266.91)",
+          "oklch(26% 0.0684 266.91)",
+          "oklch(38% 0.0684 266.91)",
+          "oklch(49% 0.0684 266.91)",
+          "oklch(61% 0.0684 266.91)",
+          "oklch(72% 0.0684 266.91)",
+          "oklch(84% 0.0684 266.91)",
+          "oklch(95% 0.0684 266.91)"
+        ],
+        "note": "Ramp uses the opaque base hue; source token retains alpha."
+      },
+      "border-default": {
+        "displayName": "Border Default",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0684 266.91)",
+          "oklch(26% 0.0684 266.91)",
+          "oklch(38% 0.0684 266.91)",
+          "oklch(49% 0.0684 266.91)",
+          "oklch(61% 0.0684 266.91)",
+          "oklch(72% 0.0684 266.91)",
+          "oklch(84% 0.0684 266.91)",
+          "oklch(95% 0.0684 266.91)"
+        ],
+        "note": "Ramp uses the opaque base hue; source token retains alpha."
+      },
+      "border-strong": {
+        "displayName": "Border Strong",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0684 266.91)",
+          "oklch(26% 0.0684 266.91)",
+          "oklch(38% 0.0684 266.91)",
+          "oklch(49% 0.0684 266.91)",
+          "oklch(61% 0.0684 266.91)",
+          "oklch(72% 0.0684 266.91)",
+          "oklch(84% 0.0684 266.91)",
+          "oklch(95% 0.0684 266.91)"
+        ],
+        "note": "Ramp uses the opaque base hue; source token retains alpha."
+      },
+      "primary": {
+        "displayName": "Primary",
         "role": "primary",
-        "displayName": "Purple",
         "tonalRamp": [
-          "oklch(15% 0.1306 300.74)",
-          "oklch(26% 0.1306 300.74)",
-          "oklch(38% 0.1306 300.74)",
-          "oklch(49% 0.1306 300.74)",
-          "oklch(61% 0.1306 300.74)",
-          "oklch(72% 0.1306 300.74)",
-          "oklch(84% 0.1306 300.74)",
-          "oklch(95% 0.1306 300.74)"
+          "oklch(15% 0.2098 292.79)",
+          "oklch(26% 0.2098 292.79)",
+          "oklch(38% 0.2098 292.79)",
+          "oklch(49% 0.2098 292.79)",
+          "oklch(61% 0.2098 292.79)",
+          "oklch(72% 0.2098 292.79)",
+          "oklch(84% 0.2098 292.79)",
+          "oklch(95% 0.2098 292.79)"
         ]
       },
-      "jade": {
-        "role": "secondary",
-        "displayName": "Jade",
+      "primary-hover": {
+        "displayName": "Primary Hover",
+        "role": "primary",
         "tonalRamp": [
-          "oklch(15% 0.0836 183.98)",
-          "oklch(26% 0.0836 183.98)",
-          "oklch(38% 0.0836 183.98)",
-          "oklch(49% 0.0836 183.98)",
-          "oklch(61% 0.0836 183.98)",
-          "oklch(72% 0.0836 183.98)",
-          "oklch(84% 0.0836 183.98)",
-          "oklch(95% 0.0836 183.98)"
+          "oklch(15% 0.1758 292.87)",
+          "oklch(26% 0.1758 292.87)",
+          "oklch(38% 0.1758 292.87)",
+          "oklch(49% 0.1758 292.87)",
+          "oklch(61% 0.1758 292.87)",
+          "oklch(72% 0.1758 292.87)",
+          "oklch(84% 0.1758 292.87)",
+          "oklch(95% 0.1758 292.87)"
         ]
       },
-      "bronze": {
-        "role": "secondary",
-        "displayName": "Bronze",
+      "primary-muted": {
+        "displayName": "Primary Muted",
+        "role": "primary",
         "tonalRamp": [
-          "oklch(15% 0.0936 58.97)",
-          "oklch(26% 0.0936 58.97)",
-          "oklch(38% 0.0936 58.97)",
-          "oklch(49% 0.0936 58.97)",
-          "oklch(61% 0.0936 58.97)",
-          "oklch(72% 0.0936 58.97)",
-          "oklch(84% 0.0936 58.97)",
-          "oklch(95% 0.0936 58.97)"
+          "oklch(15% 0.2098 292.79)",
+          "oklch(26% 0.2098 292.79)",
+          "oklch(38% 0.2098 292.79)",
+          "oklch(49% 0.2098 292.79)",
+          "oklch(61% 0.2098 292.79)",
+          "oklch(72% 0.2098 292.79)",
+          "oklch(84% 0.2098 292.79)",
+          "oklch(95% 0.2098 292.79)"
+        ],
+        "note": "Ramp uses the opaque base hue; source token retains alpha."
+      },
+      "violet": {
+        "displayName": "Violet",
+        "role": "primary",
+        "tonalRamp": [
+          "oklch(15% 0.1438 293.54)",
+          "oklch(26% 0.1438 293.54)",
+          "oklch(38% 0.1438 293.54)",
+          "oklch(49% 0.1438 293.54)",
+          "oklch(61% 0.1438 293.54)",
+          "oklch(72% 0.1438 293.54)",
+          "oklch(84% 0.1438 293.54)",
+          "oklch(95% 0.1438 293.54)"
         ]
       },
       "indigo": {
-        "role": "secondary",
         "displayName": "Indigo",
+        "role": "secondary",
         "tonalRamp": [
-          "oklch(15% 0.1204 293.44)",
-          "oklch(26% 0.1204 293.44)",
-          "oklch(38% 0.1204 293.44)",
-          "oklch(49% 0.1204 293.44)",
-          "oklch(61% 0.1204 293.44)",
-          "oklch(72% 0.1204 293.44)",
-          "oklch(84% 0.1204 293.44)",
-          "oklch(95% 0.1204 293.44)"
+          "oklch(15% 0.1536 275.62)",
+          "oklch(26% 0.1536 275.62)",
+          "oklch(38% 0.1536 275.62)",
+          "oklch(49% 0.1536 275.62)",
+          "oklch(61% 0.1536 275.62)",
+          "oklch(72% 0.1536 275.62)",
+          "oklch(84% 0.1536 275.62)",
+          "oklch(95% 0.1536 275.62)"
+        ]
+      },
+      "blue": {
+        "displayName": "Blue",
+        "role": "primary",
+        "tonalRamp": [
+          "oklch(15% 0.1419 254.04)",
+          "oklch(26% 0.1419 254.04)",
+          "oklch(38% 0.1419 254.04)",
+          "oklch(49% 0.1419 254.04)",
+          "oklch(61% 0.1419 254.04)",
+          "oklch(72% 0.1419 254.04)",
+          "oklch(84% 0.1419 254.04)",
+          "oklch(95% 0.1419 254.04)"
+        ]
+      },
+      "cyan": {
+        "displayName": "Cyan",
+        "role": "primary",
+        "tonalRamp": [
+          "oklch(15% 0.1210 216.57)",
+          "oklch(26% 0.1210 216.57)",
+          "oklch(38% 0.1210 216.57)",
+          "oklch(49% 0.1210 216.57)",
+          "oklch(61% 0.1210 216.57)",
+          "oklch(72% 0.1210 216.57)",
+          "oklch(84% 0.1210 216.57)",
+          "oklch(95% 0.1210 216.57)"
         ]
       },
       "success": {
-        "role": "semantic",
         "displayName": "Success",
+        "role": "tertiary",
         "tonalRamp": [
-          "oklch(15% 0.1018 160.73)",
-          "oklch(26% 0.1018 160.73)",
-          "oklch(38% 0.1018 160.73)",
-          "oklch(49% 0.1018 160.73)",
-          "oklch(61% 0.1018 160.73)",
-          "oklch(72% 0.1018 160.73)",
-          "oklch(84% 0.1018 160.73)",
-          "oklch(95% 0.1018 160.73)"
-        ]
-      },
-      "danger": {
-        "role": "semantic",
-        "displayName": "Danger",
-        "tonalRamp": [
-          "oklch(15% 0.1592 16.56)",
-          "oklch(26% 0.1592 16.56)",
-          "oklch(38% 0.1592 16.56)",
-          "oklch(49% 0.1592 16.56)",
-          "oklch(61% 0.1592 16.56)",
-          "oklch(72% 0.1592 16.56)",
-          "oklch(84% 0.1592 16.56)",
-          "oklch(95% 0.1592 16.56)"
+          "oklch(15% 0.1472 167.92)",
+          "oklch(26% 0.1472 167.92)",
+          "oklch(38% 0.1472 167.92)",
+          "oklch(49% 0.1472 167.92)",
+          "oklch(61% 0.1472 167.92)",
+          "oklch(72% 0.1472 167.92)",
+          "oklch(84% 0.1472 167.92)",
+          "oklch(95% 0.1472 167.92)"
         ]
       },
       "warning": {
-        "role": "semantic",
         "displayName": "Warning",
+        "role": "tertiary",
         "tonalRamp": [
-          "oklch(15% 0.1074 71.34)",
-          "oklch(26% 0.1074 71.34)",
-          "oklch(38% 0.1074 71.34)",
-          "oklch(49% 0.1074 71.34)",
-          "oklch(61% 0.1074 71.34)",
-          "oklch(72% 0.1074 71.34)",
-          "oklch(84% 0.1074 71.34)",
-          "oklch(95% 0.1074 71.34)"
+          "oklch(15% 0.1408 70.17)",
+          "oklch(26% 0.1408 70.17)",
+          "oklch(38% 0.1408 70.17)",
+          "oklch(49% 0.1408 70.17)",
+          "oklch(61% 0.1408 70.17)",
+          "oklch(72% 0.1408 70.17)",
+          "oklch(84% 0.1408 70.17)",
+          "oklch(95% 0.1408 70.17)"
         ]
       },
-      "sidebar": {
+      "danger": {
+        "displayName": "Danger",
+        "role": "tertiary",
+        "tonalRamp": [
+          "oklch(15% 0.1839 16.74)",
+          "oklch(26% 0.1839 16.74)",
+          "oklch(38% 0.1839 16.74)",
+          "oklch(49% 0.1839 16.74)",
+          "oklch(61% 0.1839 16.74)",
+          "oklch(72% 0.1839 16.74)",
+          "oklch(84% 0.1839 16.74)",
+          "oklch(95% 0.1839 16.74)"
+        ]
+      },
+      "text-primary": {
+        "displayName": "Text Primary",
         "role": "neutral",
-        "displayName": "Sidebar",
         "tonalRamp": [
-          "oklch(15% 0.0054 274.97)",
-          "oklch(26% 0.0054 274.97)",
-          "oklch(38% 0.0054 274.97)",
-          "oklch(49% 0.0054 274.97)",
-          "oklch(61% 0.0054 274.97)",
-          "oklch(72% 0.0054 274.97)",
-          "oklch(84% 0.0054 274.97)",
-          "oklch(95% 0.0054 274.97)"
+          "oklch(15% 0.0140 268.49)",
+          "oklch(26% 0.0140 268.49)",
+          "oklch(38% 0.0140 268.49)",
+          "oklch(49% 0.0140 268.49)",
+          "oklch(61% 0.0140 268.49)",
+          "oklch(72% 0.0140 268.49)",
+          "oklch(84% 0.0140 268.49)",
+          "oklch(95% 0.0140 268.49)"
         ]
       },
-      "purple-hover": {
-        "role": "primary",
-        "displayName": "Purple Hover",
+      "text-secondary": {
+        "displayName": "Text Secondary",
+        "role": "neutral",
         "tonalRamp": [
-          "oklch(15% 0.1244 300.54)",
-          "oklch(26% 0.1244 300.54)",
-          "oklch(38% 0.1244 300.54)",
-          "oklch(49% 0.1244 300.54)",
-          "oklch(61% 0.1244 300.54)",
-          "oklch(72% 0.1244 300.54)",
-          "oklch(84% 0.1244 300.54)",
-          "oklch(95% 0.1244 300.54)"
+          "oklch(15% 0.0427 265.63)",
+          "oklch(26% 0.0427 265.63)",
+          "oklch(38% 0.0427 265.63)",
+          "oklch(49% 0.0427 265.63)",
+          "oklch(61% 0.0427 265.63)",
+          "oklch(72% 0.0427 265.63)",
+          "oklch(84% 0.0427 265.63)",
+          "oklch(95% 0.0427 265.63)"
         ]
       },
-      "jade-hover": {
+      "text-muted": {
+        "displayName": "Text Muted",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0470 264.22)",
+          "oklch(26% 0.0470 264.22)",
+          "oklch(38% 0.0470 264.22)",
+          "oklch(49% 0.0470 264.22)",
+          "oklch(61% 0.0470 264.22)",
+          "oklch(72% 0.0470 264.22)",
+          "oklch(84% 0.0470 264.22)",
+          "oklch(95% 0.0470 264.22)"
+        ]
+      },
+      "text-disabled": {
+        "displayName": "Text Disabled",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0479 265.39)",
+          "oklch(26% 0.0479 265.39)",
+          "oklch(38% 0.0479 265.39)",
+          "oklch(49% 0.0479 265.39)",
+          "oklch(61% 0.0479 265.39)",
+          "oklch(72% 0.0479 265.39)",
+          "oklch(84% 0.0479 265.39)",
+          "oklch(95% 0.0479 265.39)"
+        ]
+      },
+      "jade": {
+        "displayName": "Jade",
         "role": "secondary",
-        "displayName": "Jade Hover",
         "tonalRamp": [
-          "oklch(15% 0.0698 181.19)",
-          "oklch(26% 0.0698 181.19)",
-          "oklch(38% 0.0698 181.19)",
-          "oklch(49% 0.0698 181.19)",
-          "oklch(61% 0.0698 181.19)",
-          "oklch(72% 0.0698 181.19)",
-          "oklch(84% 0.0698 181.19)",
-          "oklch(95% 0.0698 181.19)"
+          "oklch(15% 0.1205 178.90)",
+          "oklch(26% 0.1205 178.90)",
+          "oklch(38% 0.1205 178.90)",
+          "oklch(49% 0.1205 178.90)",
+          "oklch(61% 0.1205 178.90)",
+          "oklch(72% 0.1205 178.90)",
+          "oklch(84% 0.1205 178.90)",
+          "oklch(95% 0.1205 178.90)"
         ]
       },
-      "bronze-hover": {
+      "bronze": {
+        "displayName": "Bronze",
         "role": "secondary",
-        "displayName": "Bronze Hover",
         "tonalRamp": [
-          "oklch(15% 0.0793 55.41)",
-          "oklch(26% 0.0793 55.41)",
-          "oklch(38% 0.0793 55.41)",
-          "oklch(49% 0.0793 55.41)",
-          "oklch(61% 0.0793 55.41)",
-          "oklch(72% 0.0793 55.41)",
-          "oklch(84% 0.0793 55.41)",
-          "oklch(95% 0.0793 55.41)"
-        ]
-      },
-      "indigo-hover": {
-        "role": "secondary",
-        "displayName": "Indigo Hover",
-        "tonalRamp": [
-          "oklch(15% 0.1103 293.17)",
-          "oklch(26% 0.1103 293.17)",
-          "oklch(38% 0.1103 293.17)",
-          "oklch(49% 0.1103 293.17)",
-          "oklch(61% 0.1103 293.17)",
-          "oklch(72% 0.1103 293.17)",
-          "oklch(84% 0.1103 293.17)",
-          "oklch(95% 0.1103 293.17)"
-        ]
-      },
-      "fulltime": {
-        "role": "secondary",
-        "displayName": "Fulltime",
-        "tonalRamp": [
-          "oklch(15% 0.0970 34.15)",
-          "oklch(26% 0.0970 34.15)",
-          "oklch(38% 0.0970 34.15)",
-          "oklch(49% 0.0970 34.15)",
-          "oklch(61% 0.0970 34.15)",
-          "oklch(72% 0.0970 34.15)",
-          "oklch(84% 0.0970 34.15)",
-          "oklch(95% 0.0970 34.15)"
+          "oklch(15% 0.0912 69.16)",
+          "oklch(26% 0.0912 69.16)",
+          "oklch(38% 0.0912 69.16)",
+          "oklch(49% 0.0912 69.16)",
+          "oklch(61% 0.0912 69.16)",
+          "oklch(72% 0.0912 69.16)",
+          "oklch(84% 0.0912 69.16)",
+          "oklch(95% 0.0912 69.16)"
         ]
       }
     },
     "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Compact home greeting."
+      },
       "headline": {
-        "displayName": "Page heading",
-        "purpose": "Compact page title; 20px mobile."
+        "displayName": "Headline",
+        "purpose": "Working page titles."
       },
       "title": {
-        "displayName": "Panel title",
-        "purpose": "Compact working section title."
+        "displayName": "Title",
+        "purpose": "Shared panel headings."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Default reading and content role."
+        "purpose": "Application copy with Vietnamese support."
       },
-      "label": {
-        "displayName": "Label",
-        "purpose": "Shared controls and labels."
+      "navigation": {
+        "displayName": "Navigation",
+        "purpose": "Existing route labels."
       },
-      "metadata": {
-        "displayName": "Metadata",
-        "purpose": "Source, count and supporting detail."
+      "kpi": {
+        "displayName": "Kpi",
+        "purpose": "Source-backed weekly counts."
       }
     },
     "shadows": [
       {
-        "name": "panel",
-        "value": "0 2px 6px #20253404",
-        "purpose": "Restrained working panel depth."
+        "name": "card",
+        "value": "0 8px 28px #00000029",
+        "purpose": "Working cards."
       },
       {
-        "name": "inspector",
-        "value": "-6px 0 28px #20253412",
-        "purpose": "Right edge detail panel."
+        "name": "floating",
+        "value": "0 18px 48px #00000059",
+        "purpose": "Dialogs and overlays."
+      }
+    ],
+    "gradients": [
+      {
+        "name": "gradient-primary",
+        "value": "linear-gradient(135deg,#6840cc,#7953d8)",
+        "purpose": "Primary actions."
       },
       {
-        "name": "overflow",
-        "value": "0 16px 50px #20253424",
-        "purpose": "Calendar overflow dialog."
-      },
-      {
-        "name": "command",
-        "value": "0 20px 70px #20253426",
-        "purpose": "Command dialog."
+        "name": "gradient-surface",
+        "value": "linear-gradient(145deg,#18243e,#0c1425)",
+        "purpose": "KPI surface depth."
       }
     ],
     "motion": [
       {
-        "name": "button-colors",
-        "value": "background-color .16s,border-color .16s,color .16s",
-        "purpose": "Button state changes; removed under reduced motion."
+        "name": "button-state",
+        "value": "background-color .15s,border-color .15s,color .15s",
+        "purpose": "Subtle states; reduced-motion preference removes transitions."
       }
     ],
     "breakpoints": [
       {
-        "name": "compact-desktop",
-        "value": "1200px"
+        "name": "utility-stack",
+        "value": "1380px"
+      },
+      {
+        "name": "narrow-desktop",
+        "value": "1100px"
       },
       {
         "name": "mobile",
         "value": "760px"
       }
-    ],
-    "rampProvenance": "Tonal ramps are synthesized OKLCH display metadata, not implementation palette tokens. Preserve normative CSS values in DESIGN.md frontmatter.",
-    "verification": {
-      "method": "source-only",
-      "browserAvailable": false,
-      "screenshotsCaptured": false,
-      "limitations": [
-        "Rendered desktop/mobile viewport fit, clipping, contrast and focus behavior are unverified."
-      ],
-      "sources": [
-        "apps/personal-os-v1/executive.css",
-        "apps/personal-os-v1/workspaces.mjs",
-        "apps/personal-os-v1/calendar.mjs",
-        "PRODUCT.md"
-      ]
-    }
+    ]
   },
   "components": [
     {
-      "name": "Primary button",
+      "name": "Primary action",
       "kind": "button",
-      "description": "Domain action; personal purple is the fallback.",
-      "html": "<button class=\"ds-primary\">Lưu</button>",
-      "css": ".ds-primary{font:400 12px/1.4 var(--os-font,sans-serif);min-height:34px;border-radius:6px;padding:8px 12px;cursor:pointer;transition:background-color .16s,border-color .16s,color .16s;background:var(--accent,#7250a3);color:#fff;border:1px solid var(--accent,#7250a3)}.ds-primary:hover{background:var(--accent-hover,#5e3e8b);border-color:var(--accent-hover,#5e3e8b)}.ds-primary:focus-visible{outline:2px solid var(--accent,#7250a3);outline-offset:3px}.ds-primary:disabled{opacity:.5;cursor:not-allowed}@media(max-width:760px){.ds-primary{min-height:40px}}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}",
-      "refersTo": "button-primary"
+      "description": "Actual gradient primary action.",
+      "html": "<button class=\"ds-primary\">Mở kế hoạch tuần</button>",
+      "css": ".ds-primary{font:400 12px/1.6 'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:38px;padding:8px 12px;border-radius:9px;border:1px solid #b79bff55;background:var(--os-gradient-primary,linear-gradient(135deg,#6840cc,#7953d8));color:white;cursor:pointer;transition:filter .15s}.ds-primary:hover{filter:brightness(1.08)}.ds-primary:active{filter:brightness(1.05)}.ds-primary:focus-visible{outline:2px solid var(--os-cyan,#42c9e8);outline-offset:3px;}"
     },
     {
-      "name": "Secondary button",
+      "name": "Secondary action",
       "kind": "button",
-      "description": "Supporting action with quiet hover.",
-      "html": "<button class=\"ds-secondary\">Hủy</button>",
-      "css": ".ds-secondary{font:400 12px/1.4 var(--os-font,sans-serif);min-height:34px;border-radius:6px;padding:8px 12px;cursor:pointer;transition:background-color .16s,border-color .16s,color .16s;background:#fff;color:var(--os-ink,#202534);border:1px solid var(--os-line-strong,#bcc3d0)}.ds-secondary:hover{background:#f1f2f6;border-color:#a6afbf}.ds-secondary:focus-visible{outline:2px solid var(--accent,#7250a3);outline-offset:3px}.ds-secondary:disabled{opacity:.5;cursor:not-allowed}@media(max-width:760px){.ds-secondary{min-height:40px}}@media(prefers-reduced-motion:reduce){.ds-secondary{transition:none}}",
+      "description": "Dark bordered action.",
+      "html": "<button class=\"ds-secondary\">Mở lịch</button>",
+      "css": ".ds-secondary{font:400 12px/1.6 'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:38px;padding:8px 12px;border-radius:9px;background:var(--os-surface-2,#151f34);color:var(--os-text-primary,#f1f5ff);border:1px solid var(--os-border-strong,#9cafdc47);cursor:pointer}.ds-secondary:hover{background:var(--os-surface-hover,#202e48);border-color:var(--os-violet,#b29aff)}.ds-secondary:focus-visible{outline:2px solid var(--os-cyan,#42c9e8);outline-offset:3px;}",
       "refersTo": "button-secondary"
     },
     {
-      "name": "Calendar search field",
+      "name": "Source field",
       "kind": "input",
-      "description": "Compact task filter with the shared keyboard outline.",
-      "html": "<label class=\"ds-field\">Tìm task<input placeholder=\"Tên công việc…\"></label>",
-      "css": ".ds-field{display:flex;align-items:center;gap:8px;color:var(--os-muted,#626b7c);font:400 11px var(--os-font,sans-serif)}.ds-field input{font:400 12px/1.4 var(--os-font,sans-serif);min-height:34px;border:1px solid var(--os-line-strong,#bcc3d0);border-radius:6px;background:#fff;color:var(--os-ink,#202534);padding:7px 10px;width:210px}.ds-field input::placeholder{color:#687183;opacity:1}.ds-field input:focus-visible{outline:2px solid var(--accent,#7250a3);outline-offset:3px}@media(max-width:760px){.ds-field{display:grid;gap:4px}.ds-field input{min-height:40px;width:100%}}",
-      "refersTo": "calendar-field"
+      "description": "Dark editable field with visible focus.",
+      "html": "<label class=\"ds-field\">Tìm công việc<input aria-label=\"Tìm công việc\" placeholder=\"Tìm trong tuần\"></label>",
+      "css": ".ds-field{display:grid;gap:8px;font:400 12px/1.6 'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--os-text-secondary,#a7b4d0)}.ds-field input{font:400 12px/1.6 'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:38px;padding:8px 12px;background:var(--os-surface-2,#151f34);color:var(--os-text-primary,#f1f5ff);border:1px solid var(--os-border-strong,#9cafdc47);border-radius:8px}.ds-field input::placeholder{color:var(--os-text-muted,#95a4c2)}.ds-field input:focus-visible{outline:2px solid var(--os-cyan,#42c9e8);outline-offset:3px;}",
+      "refersTo": "field"
     },
     {
-      "name": "Local navigation",
+      "name": "Midnight navigation",
       "kind": "nav",
-      "description": "Light sidebar rows with selected and hover states.",
-      "html": "<nav class=\"ds-nav\"><button class=\"ds-selected\" aria-current=\"page\">Tổng quan</button><button>Lịch công việc</button></nav>",
-      "css": ".ds-nav{background:#f1f2f6;padding:10px;width:192px}.ds-nav button{display:block;text-align:left;width:100%;font:400 12px/1.5 var(--os-font,sans-serif);min-height:38px;padding:9px 10px;margin:3px 0;border:1px solid transparent;border-radius:6px;background:none;color:#565e70;cursor:pointer}.ds-nav button:hover{background:#e8eaf0;color:var(--os-ink,#202534)}.ds-nav .ds-selected{background:#e4dcef;color:#593b85;font-weight:700}.ds-nav button:focus-visible{outline:2px solid var(--accent,#7250a3);outline-offset:3px}"
+      "description": "Local navigation with active gradient.",
+      "html": "<nav class=\"ds-nav\"><button class=\"ds-current\" aria-current=\"page\">Tuần của tôi</button><button>Lịch công việc</button></nav>",
+      "css": ".ds-nav{background:var(--os-bg-sidebar,#0b1120);padding:12px}.ds-nav button{font:400 13px/1.5 'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;display:block;width:100%;min-height:44px;padding:11px;background:none;color:var(--os-text-secondary,#a7b4d0);border:1px solid transparent;border-radius:9px;text-align:left;cursor:pointer}.ds-nav .ds-current{background:linear-gradient(105deg,#6840cc35,#6840cc13);color:#e4daff;border-color:#9065f838;font-weight:700}.ds-nav button:hover{background:var(--os-surface-2,#151f34)}.ds-nav button:focus-visible{outline:2px solid var(--os-cyan,#42c9e8);outline-offset:3px;}"
+    },
+    {
+      "name": "Status badge",
+      "kind": "chip",
+      "description": "Text accompanies status color.",
+      "html": "<span class=\"ds-status\">Đã xác minh</span>",
+      "css": ".ds-status{font:400 12px/1.6 'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:10px;padding:3px 6px;border-radius:5px;background:#38d9a918;color:var(--os-success,#38d9a9)}"
     },
     {
       "name": "Working panel",
       "kind": "card",
-      "description": "Quiet bordered surface with a compact title.",
-      "html": "<section class=\"ds-panel\"><h2>Phân bổ công việc</h2><p>Số task từ nguồn tuần · không phải tỷ lệ hoàn thành.</p></section>",
-      "css": ".ds-panel{padding:20px;border:1px solid var(--os-line,#e3e6ed);border-radius:12px;background:#fff;color:var(--os-ink,#202534);box-shadow:0 2px 6px #20253404;font-family:var(--os-font,sans-serif)}.ds-panel h2{font-size:15px;font-weight:700;letter-spacing:-.2px;margin:0 0 16px}.ds-panel p{font-size:10px;color:var(--os-muted,#626b7c);margin:14px 0 0}@media(max-width:760px){.ds-panel{padding:16px}}",
+      "description": "Shared neutral dark content container.",
+      "html": "<section class=\"ds-panel\"><h2>Dòng thực thi</h2><p>Ngày ghi nhận chính xác · không suy diễn deadline</p></section>",
+      "css": ".ds-panel{font:400 12px/1.6 'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--os-surface-1,#10192b);color:var(--os-text-primary,#f1f5ff);padding:20px;border:1px solid var(--os-border-default,#9cafdc2b);border-radius:16px;box-shadow:var(--os-shadow-card,0 8px 28px #00000029)}.ds-panel h2{font-size:15px;margin:0 0 16px}.ds-panel p{font-size:11px;color:var(--os-text-secondary,#a7b4d0);margin:0}",
       "refersTo": "panel"
     },
     {
-      "name": "Weekly count cell",
-      "kind": "chip",
-      "description": "Populated weekly matrix cell; sample count is illustrative.",
-      "html": "<button class=\"ds-count\" aria-label=\"Personal · 2 ghi nhận\"><b>2</b></button>",
-      "css": ".ds-count{font-family:var(--os-font,sans-serif);font-variant-numeric:tabular-nums;min-height:34px;margin:4px 3px;padding:4px;border:1px solid transparent;border-radius:6px;background:color-mix(in srgb,var(--os-purple,#7250a3) 11%,white);color:var(--os-purple,#7250a3);cursor:pointer}.ds-count b{font-size:14px;font-weight:700}.ds-count:hover{border-color:var(--os-purple,#7250a3)}.ds-count:focus-visible{outline:2px solid var(--accent,#7250a3);outline-offset:3px}@media(max-width:760px){.ds-count{min-height:36px}}"
-    },
-    {
-      "name": "Selected day rail item",
-      "kind": "chip",
-      "description": "Day selection uses pressed state, count and tint.",
-      "html": "<button class=\"ds-day\" aria-pressed=\"true\"><span>Cả tuần</span><b>—</b></button>",
-      "css": ".ds-day{display:flex;flex-direction:column;align-items:center;gap:4px;background:#eee7f7;border:1px solid transparent;border-radius:6px;color:#67478e;padding:10px 4px;min-width:72px;font:400 10px var(--os-font,sans-serif);cursor:pointer}.ds-day b{font-size:17px;line-height:1.3;font-weight:700;color:#67478e}.ds-day:hover{background:#f2f3f7}.ds-day:focus-visible{outline:2px solid var(--accent,#7250a3);outline-offset:3px}"
-    },
-    {
-      "name": "Agenda task row",
+      "name": "Missing-source KPI",
       "kind": "custom",
-      "description": "Full wrapping title with date and status; sample content is illustrative.",
-      "html": "<div class=\"ds-agenda\"><span class=\"ds-date\">Chưa phân ngày</span><button><strong>Kiểm tra nguồn kế hoạch tuần</strong><span>Chưa rõ</span></button></div>",
-      "css": ".ds-agenda{display:grid;grid-template-columns:56px minmax(0,1fr);gap:12px;align-items:center;border-top:1px solid #eef0f5;font-family:var(--os-font,sans-serif)}.ds-date{font-size:11px;color:var(--os-muted,#626b7c);padding:10px 0}.ds-agenda button{display:flex;align-items:center;gap:16px;min-height:44px;padding:10px 0;width:100%;border:0;border-radius:0;background:none;color:var(--os-ink,#202534);text-align:left;cursor:pointer}.ds-agenda strong{flex:1;font-size:13px;font-weight:400;line-height:1.6;white-space:normal;overflow-wrap:anywhere}.ds-agenda button span{font-size:10px;white-space:nowrap;color:var(--os-muted,#626b7c);background:#f1f3f6;border-radius:4px;padding:3px 7px}.ds-agenda button:hover{background:#f7f5fb}.ds-agenda button:focus-visible{outline:2px solid var(--accent,#7250a3);outline-offset:3px}@media(max-width:760px){.ds-agenda{grid-template-columns:43px minmax(0,1fr);gap:8px;align-items:start}.ds-date{font-size:10px;padding-top:11px}.ds-agenda button{align-items:flex-start;gap:4px;flex-direction:column}}"
+      "description": "Truthful missing-week state, without invented metrics.",
+      "html": "<button class=\"ds-kpi\"><span>Công việc trong tuần</span><b>—</b><small>Từ nguồn Notion</small></button>",
+      "css": ".ds-kpi{font:400 12px/1.6 'Henry Noto Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;display:grid;gap:8px;text-align:left;padding:16px;background:var(--os-gradient-surface,linear-gradient(145deg,#18243e,#0c1425));border:1px solid var(--os-border-default,#9cafdc2b);border-radius:14px;color:var(--os-text-primary,#f1f5ff);cursor:pointer}.ds-kpi span{font-size:11px;color:var(--os-text-secondary,#a7b4d0)}.ds-kpi b{font-size:30px;line-height:1.2;letter-spacing:-1px}.ds-kpi small{font-size:10px;color:var(--os-text-muted,#95a4c2)}.ds-kpi:hover{border-color:#9065f870}.ds-kpi:focus-visible{outline:2px solid var(--os-cyan,#42c9e8);outline-offset:3px;}"
     }
   ],
   "narrative": {
-    "northStar": "Operate",
-    "overview": "Operate is a compact working environment: a light navigation frame, restrained domain color and white working surfaces on a cool canvas. Information density comes from aligned rows, short headings and clear separators. Weekly work, priorities and source status lead the home surface; the calendar exposes full task titles in grouped rows.\n\nThis records the implemented shared layer in apps/personal-os-v1/executive.css, with the home composition in workspaces.mjs and calendar behavior in calendar.mjs. The existing orbital logo remains the visual origin and must remain byte for byte unchanged. Every domain, menu item, route, source record and permission remains intact.",
+    "northStar": "Nocturne Command",
+    "overview": "Nocturne Command is a midnight working environment with layered blue surfaces, violet and indigo actions, cyan keyboard focus and restrained atmospheric depth. A compact twilight mountain hero gives home a recognizable identity; real task lists, source facts, charts and utilities remain interactive UI.\n\nThe user’s detailed Nocturne mission supersedes the previous Studio and light-system restrictions, including prohibitions on gradients and atmospheric artwork. No reference image was actually available in this session: the implementation follows the supplied textual mission and must not be described as verified visual fidelity to an unseen image.",
     "keyCharacteristics": [
-      "Light global bar and sidebar",
-      "Self hosted Noto Sans with Vietnamese support",
-      "Restrained purple, jade, bronze and indigo accents",
-      "Compact inline pulse, weekly matrix and priorities",
-      "Grouped full width calendar rows with a day rail"
+      "Midnight navigation and layered dark working surfaces",
+      "Self-hosted Noto Sans with Vietnamese coverage",
+      "Four truthful weekly count cards and visible source caveats",
+      "Interactive today tasks, status distribution and dated observation timeline",
+      "Existing AI Manager integration and a real local focus timer"
     ],
     "rules": [
       {
-        "name": "Quiet Frame",
-        "body": "Keep the navigation frame light; reserve domain accents for selected navigation, actions and small data markers.",
+        "name": "The Selective Light Rule",
+        "body": "Use gradient and bright accent for hierarchy; keep ordinary information panels calm and avoid glowing every boundary.",
         "section": "colors"
       },
       {
-        "name": "Source Before Certainty",
-        "body": "Keep missing dates and source caveats visible; task counts are not completion percentages.",
+        "name": "The Working Depth Rule",
+        "body": "Depth should separate navigation, content and overlays while keeping labels and chart data clear.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Source Before Certainty Rule",
+        "body": "Keep dates, missing sources and verification semantics explicit; neither attractive charts nor AI presentation create evidence.",
         "section": "components"
       }
     ],
     "dos": [
-      "Do preserve the original logo bytes, every domain, menu item, route, permission and source record.",
-      "Do use the shared domain accent, Noto Sans, compact headings and visible keyboard focus.",
-      "Do keep source caveats, missing data, uncertainty and actual completion semantics visible.",
-      "Do preserve dense-view scrolling and access to complete task details on phones.",
-      "Do verify inherited module layouts in a browser before claiming universal visual consistency."
+      "Do preserve original logo bytes, every existing route, domain, permission and source record.",
+      "Do keep missing source states, undated work and reported-versus-verified completion explicit.",
+      "Do use gradients and decorative mountains selectively, keeping operational content legible.",
+      "Do preserve native chart geometry and full wrapping Vietnamese task titles.",
+      "Do distinguish local UI actions, saved analysis reads and provider-triggering requests."
     ],
     "donts": [
-      "Don't add slogans, oversized headers, display serif typography or decorative prose panels.",
-      "Don't invent revenue, completion percentages, business claims or source evidence.",
-      "Don't redraw, recolor, filter or decorate the orbital logo.",
-      "Don't change native chart geometry, domain structure, menu labels or navigation contracts during visual work.",
-      "Don't describe source inspection as rendered QA or claim screenshots that were not captured."
+      "Don't claim fidelity to a reference image that was not available.",
+      "Don't turn task counts or status shares into goal-attainment percentages.",
+      "Don't invent deadline spans, achievements, goals, notifications or AI advice.",
+      "Don't replace or recolor the original logo, authentication or owner checks.",
+      "Don't claim full private Servicebio/Ventures redesign or QA without their actual source packages."
     ]
   }
 }

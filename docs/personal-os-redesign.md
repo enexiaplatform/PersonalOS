@@ -1,4 +1,6 @@
-# Personal OS redesign — 27 October 2026
+# Personal OS redesign — 27 October 2026 (historical)
+
+> Superseded by the user-approved Nocturne Command textual mission on 1 November 2026. This file records the earlier implementation only; its light palette, serif choices and no-gradient rules are not current guidance. Use [DESIGN.md](../DESIGN.md) and [the Nocturne implementation record](nocturne-implementation.md).
 
 ## Visual specification
 
