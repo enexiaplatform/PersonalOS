@@ -38,3 +38,20 @@ body[data-workspace=home] .focus-toggle{display:none}
  .cal-more{min-height:36px}
  .exec-day-count{min-height:44px}
 }
+
+/* Compact, functional headings — leave evidence and source qualifications visible. */
+.exec-home-heading{margin:18px 0 6px;gap:16px}.exec-home-heading h1,.week-heading h1,.page-intro h1,.cal-heading h1,.gantt-heading h1,.progress-heading h1{font-family:var(--exec-font);font-size:24px;line-height:1.3;letter-spacing:-.3px;font-weight:650;margin:0}
+.exec-home-heading p:last-child{font-size:11px;margin-top:4px}.exec-source{margin:10px 0 13px}.exec-panel{padding:17px}.exec-panel>header{margin-bottom:12px}.exec-panel h2,.panel h3,.panel-heading h3,.section-header h3,.analytics-workspace .panel-heading h3,.cal-groups h2{font-family:var(--exec-font);font-size:15px;line-height:1.4;letter-spacing:0;font-weight:650}.exec-matrix-row{min-height:48px}.exec-day-count{min-height:36px}.exec-caption{margin-top:10px}
+.portal-grid{margin-top:14px}.portal{padding:15px}.portal-head{margin:0 0 8px}.portal h2{font-family:var(--exec-font);font-size:15px;line-height:1.4;letter-spacing:0;margin:0}.portal-foot{margin-top:10px;padding-top:9px}.portal-foot small{line-height:1.4}.exec-resume{margin:12px 0}.home-nav-note{display:none}
+.week-heading,.page-intro{padding-top:17px}.page-intro{margin-bottom:6px}.hero{padding:16px 0 8px;margin-bottom:7px}.hero h3{font:650 22px/1.35 var(--exec-font);letter-spacing:-.2px;margin:0}.hero p{margin:5px 0;font-size:12px}.section-header{margin:15px 0 10px}.analytics-summary{padding:18px 20px 20px;margin-bottom:15px}.analytics-workspace .panel{padding:18px}.cal-heading{margin:16px 0 12px}.cal-heading h1{font-size:24px}.cal-heading p{margin:3px 0}.cal-source{margin-bottom:10px}
+body[data-executive-module] .page-header h1,body[data-executive-module] .page-title h1,body[data-executive-module] .heading h1,body[data-executive-module] h1{font:650 24px/1.3 var(--exec-font);letter-spacing:-.3px}
+body[data-executive-module] .page-header,body[data-executive-module] .page-title,body[data-executive-module] .heading{margin-bottom:14px}
+body[data-executive-module] .page-header>div>p,body[data-executive-module] .page-title>div>p,body[data-executive-module] .heading>div>p{display:none}
+body[data-executive-module] .bi-panel h3,body[data-executive-module] .panel h2,body[data-executive-module] .panel h3,body[data-executive-module] .section-head h2,body[data-executive-module] .g-panel-head h2,body[data-executive-module] .bi-top h2{font:650 16px/1.4 var(--exec-font);letter-spacing:0}
+body[data-executive-module] .bi-panel{padding:18px}body[data-executive-module] .bi-top{margin-bottom:12px}body[data-executive-module] .bi-metrics,body[data-executive-module] .stat-strip,body[data-executive-module] .metrics{margin:12px 0 16px}
+body[data-executive-module] .g-hero-copy{padding-top:18px;padding-bottom:18px}body[data-executive-module] .g-hero-copy h2{font:650 20px/1.35 var(--exec-font)}
+body[data-executive-module=enexia] .heading .eyebrow{display:none}body[data-executive-module=enexia] .product-card h3{font:650 16px/1.4 var(--exec-font)}body[data-executive-module=enexia] .domain h2{font:650 20px/1.4 var(--exec-font)}
+@media(max-width:760px){.exec-home-heading{margin-top:16px}.exec-home-heading h1,.week-heading h1,.page-intro h1,.cal-heading h1{font-size:22px}.exec-panel h2,.analytics-workspace .panel-heading h3{font-size:15px}.portal h2{font-size:15px}.portal>p{min-height:0}body[data-executive-module] .page-header h1,body[data-executive-module] .page-title h1,body[data-executive-module] .heading h1{font-size:22px}body[data-executive-module] .bi-panel h3{font-size:16px}}
+
+.gp-heading h1,.pr-page-heading h1{font:650 24px/1.3 var(--exec-font);letter-spacing:-.3px}.gp-heading,.pr-page-heading{padding-top:16px;padding-bottom:10px}.portal-foot small{display:none}
+@media(max-width:760px){.gp-heading h1,.pr-page-heading h1{font-size:22px}}
