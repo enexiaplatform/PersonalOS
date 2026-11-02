@@ -269,3 +269,7 @@ Scoped verification records 79 Node tests; the shared browser interaction suite;
 ## Cosmic canvas
 
 The user-approved brighter appearance uses a generated blue/violet nebula wallpaper, compressed to WebP, behind opaque raised content surfaces. `--sys-canvas-image` and `--sys-canvas-tint` own the image and tint; `patterns/canvas.css` owns display. Canvas/sidebar use neutral-900, surfaces neutral-850 and raised surfaces neutral-800. Text, charts and inputs keep solid backgrounds. Native builds consume the same recipes and publish the same image; protected embedded modules use the shared public wallpaper asset.
+
+## Platform and workspace boundaries
+
+The shell and browser page are named **Personal Platform**. `#home` is a module launcher for Personal OS, Servicebio, Ventures and Enexia; it does not render personal weekly KPIs, tasks, timeline or briefing. `#personal` retains its existing weekly landing and all existing subroutes. Legacy home/personal body background shorthands no longer reset the shared cosmic canvas. Internal asset filenames, authentication storage keys and data-source identifiers remain compatible.

@@ -321,7 +321,7 @@ document.addEventListener('keydown',e=>{if(!['Enter',' '].includes(e.key)||e.tar
 function render(){
  if(!user)return;
  document.body.dataset.workspace=workspace;
- const crumb=document.querySelector('.breadcrumb>span:first-child');if(crumb)crumb.textContent=workspace==='home'?'Henry / OS':'Personal OS';
+ const crumb=document.querySelector('.breadcrumb>span:first-child');if(crumb)crumb.textContent=workspace==='home'?'Personal Platform':MODULES[workspace]?.name||'Personal Platform';
  const focusButton=document.querySelector("#toggle-focus");if(focusButton){focusButton.onclick=()=>{const on=document.body.classList.toggle("focus-mode");focusButton.setAttribute("aria-pressed",String(on));focusButton.textContent=on?"↙ Thu gọn":"⤢ Mở rộng";};}
  document.querySelectorAll('.workspace-bar [data-workspace]').forEach(b=>{const active=b.dataset.workspace===workspace;b.classList.toggle('selected',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
  void gateway.open(workspace);
@@ -329,7 +329,7 @@ function render(){
  history.replaceState(null,'','#personal/'+currentView);
 
  const previousGanttKey=$('.gantt-pro')?.dataset?.ganttKey,previousGanttScroll=$('#gantt-scroll'),ganttScrollState=previousGanttScroll?{x:previousGanttScroll.scrollLeft,y:previousGanttScroll.scrollTop}:null;
- $("#page-title").textContent=currentView==='overview'?"Tổng quan":currentView==='blueprint'?"Mục tiêu "+selectedYear:viewNames[currentView]||"Personal OS";
+ $("#page-title").textContent=currentView==='overview'?"Tuần của tôi":currentView==='blueprint'?"Mục tiêu "+selectedYear:viewNames[currentView]||"Personal OS";
  $('#os-year').value=String(selectedYear);
  if($('.year-picker'))$('.year-picker').style.display=currentView==='calendar'?'none':'';
  if($('#mobile-view'))$('#mobile-view').value=['notion','weekly','monthly','evidence','decision'].includes(currentView)?'review':currentView;
