@@ -2,10 +2,10 @@
 name: Henry OS — Nocturne Command
 description: A three-tier midnight system for truthful work, evidence and decisions
 colors:
-  bg-canvas: "#080d18"
-  bg-sidebar: "#0b1220"
-  bg-surface: "#101827"
-  bg-surface-raised: "#192438"
+  bg-canvas: "#101827"
+  bg-sidebar: "#101827"
+  bg-surface: "#192438"
+  bg-surface-raised: "#223149"
   bg-surface-hover: "#223149"
   bg-surface-pressed: "#34455f"
   bg-inset: "#0b1220"
@@ -265,3 +265,7 @@ Scoped verification records 79 Node tests; the shared browser interaction suite;
 - Don't make informational cards look actionable without a real destination.
 - Don't ship Laboratory fixtures as product records or invoke providers from the Laboratory.
 - Don't infer universal accessibility certification, production publication or private-source disclosure from local verification.
+
+## Cosmic canvas
+
+The user-approved brighter appearance uses a generated blue/violet nebula wallpaper, compressed to WebP, behind opaque raised content surfaces. `--sys-canvas-image` and `--sys-canvas-tint` own the image and tint; `patterns/canvas.css` owns display. Canvas/sidebar use neutral-900, surfaces neutral-850 and raised surfaces neutral-800. Text, charts and inputs keep solid backgrounds. Native builds consume the same recipes and publish the same image; protected embedded modules use the shared public wallpaper asset.

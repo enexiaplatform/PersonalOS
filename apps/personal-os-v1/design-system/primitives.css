@@ -1,5 +1,7 @@
 /* Tier A — reference primitives. Literal color values belong only here. */
 :root {
+  --ref-canvas-image: url('/assets/henry-cosmos.webp');
+  --ref-canvas-tint: #10182799;
   --ref-neutral-0: #ffffff;
   --ref-neutral-50: #f0f4ff;
   --ref-neutral-100: #dde6f5;

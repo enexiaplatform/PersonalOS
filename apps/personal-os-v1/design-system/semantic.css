@@ -1,9 +1,11 @@
 /* Tier B — usage contracts. Additional themes replace this mapping, not recipes. */
 :root, [data-theme="nocturne"] {
-  --sys-bg-canvas: var(--ref-neutral-950);
-  --sys-bg-sidebar: var(--ref-neutral-925);
-  --sys-bg-surface: var(--ref-neutral-900);
-  --sys-bg-surface-raised: var(--ref-neutral-850);
+  --sys-canvas-image: var(--ref-canvas-image);
+  --sys-canvas-tint: var(--ref-canvas-tint);
+  --sys-bg-canvas: var(--ref-neutral-900);
+  --sys-bg-sidebar: var(--ref-neutral-900);
+  --sys-bg-surface: var(--ref-neutral-850);
+  --sys-bg-surface-raised: var(--ref-neutral-800);
   --sys-bg-surface-hover: var(--ref-neutral-800);
   --sys-bg-surface-pressed: var(--ref-neutral-700);
   --sys-bg-inset: var(--ref-neutral-925);

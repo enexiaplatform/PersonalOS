@@ -9,3 +9,5 @@
 @import url('./components/tables.css');
 @import url('./components/charts.css');
 @import url('./patterns/product.css');
+
+@import url('./patterns/canvas.css');

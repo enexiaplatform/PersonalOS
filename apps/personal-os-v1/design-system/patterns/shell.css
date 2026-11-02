@@ -1,5 +1,5 @@
 /* Nocturne Command. Component recipes; geometry and native charts remain in their modules. */
-body,body[data-workspace],body[data-executive-module]{font:14px/1.6 var(--os-font);background:var(--os-bg-main);background-image:none;color:var(--os-text-primary);--font:var(--os-font);--bg:var(--os-bg-main);--paper:var(--os-surface-1);--surface:var(--os-surface-1);--ink:var(--os-text-primary);--text:var(--os-text-primary);--muted:var(--os-text-secondary);--line:var(--os-border-default);--border:var(--os-border-default);--accent:var(--os-primary);--accent-hover:var(--os-primary-hover);--lavender:var(--os-primary-muted);--soft:var(--os-primary-muted);-webkit-font-smoothing:antialiased}
+body,body[data-workspace],body[data-executive-module]{font:14px/1.6 var(--os-font);background-color:var(--os-bg-main);color:var(--os-text-primary);--font:var(--os-font);--bg:var(--os-bg-main);--paper:var(--os-surface-1);--surface:var(--os-surface-1);--ink:var(--os-text-primary);--text:var(--os-text-primary);--muted:var(--os-text-secondary);--line:var(--os-border-default);--border:var(--os-border-default);--accent:var(--os-primary);--accent-hover:var(--os-primary-hover);--lavender:var(--os-primary-muted);--soft:var(--os-primary-muted);-webkit-font-smoothing:antialiased}
 body[data-workspace=servicebio],body[data-executive-module=servicebio]{--accent:var(--os-jade)}
 body[data-workspace=ventures],body[data-executive-module=ventures]{--accent:var(--os-bronze)}
 body[data-workspace=enexia],body[data-executive-module=enexia]{--accent:var(--os-indigo)}
@@ -43,7 +43,7 @@ table,.value,.metric,output{font-variant-numeric:tabular-nums}
 .profile-footer b{color:var(--os-ink)}
 .profile-footer small{color:var(--os-muted);font-size:var(--sys-font-label)}
 .avatar{background:var(--os-primary-muted);color:var(--os-violet);border-radius:10px}
-.main,body[data-workspace=home] .shell>.main{padding:0 24px 24px;width:100%;max-width:1920px;margin:0 auto;background:var(--os-bg-main);min-width:0}
+.main,body[data-workspace=home] .shell>.main{padding:0 24px 24px;width:100%;max-width:1920px;margin:0 auto;background:transparent;min-width:0}
 .main>.topbar,body[data-workspace=home] .main>.topbar,body[data-workspace=personal] .main>.topbar{display:flex;background:var(--os-bg-main);height:64px;top:56px;border:0;border-bottom:1px solid var(--os-line);margin-bottom:24px;box-shadow:none;backdrop-filter:none}
 .breadcrumb{font-size:12px;color:var(--os-muted);gap:9px}
 .breadcrumb b{color:var(--os-ink);font-weight:400}

@@ -125,10 +125,10 @@
     }
   },
   "semantic": {
-    "bg-canvas": "neutral-950",
-    "bg-sidebar": "neutral-925",
-    "bg-surface": "neutral-900",
-    "bg-surface-raised": "neutral-850",
+    "bg-canvas": "neutral-900",
+    "bg-sidebar": "neutral-900",
+    "bg-surface": "neutral-850",
+    "bg-surface-raised": "neutral-800",
     "bg-surface-hover": "neutral-800",
     "bg-surface-pressed": "neutral-700",
     "bg-inset": "neutral-925",
