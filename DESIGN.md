@@ -273,3 +273,7 @@ The user-approved brighter appearance uses a generated blue/violet nebula wallpa
 ## Platform and workspace boundaries
 
 The shell and browser page are named **Personal Platform**. `#home` is a module launcher for Personal OS, Servicebio, Ventures and Enexia; it does not render personal weekly KPIs, tasks, timeline or briefing. `#personal` retains its existing weekly landing and all existing subroutes. Legacy home/personal body background shorthands no longer reset the shared cosmic canvas. Internal asset filenames, authentication storage keys and data-source identifiers remain compatible.
+
+## Navigation hierarchy and loading
+
+Workspace switching is confined to the platform bar. Personal navigation is grouped into Kế hoạch (weekly summary, day-based tasks, quarterly Gantt), Mục tiêu & đánh giá (annual commitments, evidence rubric), Theo dõi cá nhân (life and personal business logs), and Review & hệ thống (reflection/evidence/decisions, source settings). Mobile uses the same optgroups and preserved route ids. Local headers span the full content edge rather than floating over an inset image rectangle. Module HTML is prepared on intent, decoded once per session, and startup snapshot reads run in parallel; manual readback stays fresh and logout clears pending/cached private work.

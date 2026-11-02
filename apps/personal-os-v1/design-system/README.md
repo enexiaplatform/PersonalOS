@@ -40,3 +40,5 @@ Both Site builds and standalone protected-module builds consume this artifact. A
 `node --experimental-vm-modules --test tests/*.test.mjs`
 
 Serve `apps/personal-os-v1/` locally; then run `PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/design-system.mjs`. The browser suite only operates on labelled synthetic Laboratory content.
+
+Navigation regression: `PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/browser/navigation.mjs`. This uses local synthetic module HTML and 120ms source latency to verify parallel startup, request deduplication, warm frame reuse, four sidebar groups, mobile optgroups and full-width header alignment. Timings from this fixture are not production latency measurements.

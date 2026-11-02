@@ -29,7 +29,7 @@ table,.value,.metric,output{font-variant-numeric:tabular-nums}
 .workspace-bar nav button[data-workspace].selected{background:var(--os-primary-muted);border-color:var(--sys-border-default);color:var(--os-violet);box-shadow:none}
 .workspace-account{margin-left:auto;width:32px;height:32px;background:var(--os-primary-muted);border:1px solid var(--os-line);color:var(--os-violet)}
 .workspace-account span{display:none}
-.shell,body[data-workspace=home] .shell{display:grid;grid-template-columns:232px minmax(0,1fr);padding-top:56px;align-items:start}
+.shell{display:grid;grid-template-columns:232px minmax(0,1fr);padding-top:56px;align-items:start}
 .shell>.sidebar,body[data-workspace=personal] .shell>.sidebar,body[data-workspace=home] .shell>.sidebar{display:flex;position:sticky;top:56px;height:calc(100dvh - 56px);background:var(--os-bg-sidebar);padding:24px 12px 16px;border:0;border-right:1px solid var(--os-line);overflow:auto}
 .sidebar:before{display:none}
 .sidebar .brand,body[data-workspace=personal] .sidebar .brand{color:var(--os-ink);font:700 14px var(--os-font);padding:0 10px 24px;gap:10px}
@@ -38,13 +38,13 @@ table,.value,.metric,output{font-variant-numeric:tabular-nums}
 .sidebar .nav-item:hover{background:var(--os-surface-2);color:var(--os-ink)}
 .sidebar .nav-item.active,body[data-workspace=personal] .sidebar .nav-item.active{color:var(--sys-fg-primary);background:var(--sys-bg-accent);border-color:var(--sys-border-default);box-shadow:none;font-weight:700}
 .sidebar .nav-item svg{color:inherit}
-.sidebar #nav .nav-item[data-view=life],.sidebar #nav .nav-item[data-view=review]{margin-top:17px}
+
 .profile-footer{border-color:var(--os-line);padding:16px 8px 0;color:var(--os-muted)}
 .profile-footer b{color:var(--os-ink)}
 .profile-footer small{color:var(--os-muted);font-size:var(--sys-font-label)}
 .avatar{background:var(--os-primary-muted);color:var(--os-violet);border-radius:10px}
 .main,body[data-workspace=home] .shell>.main{padding:0 24px 24px;width:100%;max-width:1920px;margin:0 auto;background:transparent;min-width:0}
-.main>.topbar,body[data-workspace=home] .main>.topbar,body[data-workspace=personal] .main>.topbar{display:flex;background:var(--os-bg-main);height:64px;top:56px;border:0;border-bottom:1px solid var(--os-line);margin-bottom:24px;box-shadow:none;backdrop-filter:none}
+.main>.topbar,body[data-workspace=home] .main>.topbar,body[data-workspace=personal] .main>.topbar{display:flex;background:var(--sys-bg-sidebar);height:64px;top:56px;padding-inline:var(--shell-gutter);margin-inline:calc(-1 * var(--shell-gutter));border:0;border-bottom:1px solid var(--os-line);margin-bottom:24px;box-shadow:none;backdrop-filter:none}
 .breadcrumb{font-size:12px;color:var(--os-muted);gap:9px}
 .breadcrumb b{color:var(--os-ink);font-weight:400}
 .top-actions{gap:8px}
@@ -80,3 +80,10 @@ body[data-workspace=home] .home-space-nav{display:block}
 .domain-dot.enexia{background:var(--os-indigo)}
 .density-picker .ui-select{width:106px;font-size:var(--sys-font-label)}
 @media(max-width:760px){.density-picker .ui-select{width:82px;font-size:var(--ref-font-size-12)}.top-actions{gap:var(--ref-space-4)}}
+
+/* Sidebar owns local navigation; the platform bar owns workspace switching. */
+.sidebar #nav{flex:1;min-height:0;overflow-y:auto}.sidebar .brand{display:grid;gap:var(--ref-space-4);flex:none}.sidebar .brand small{color:var(--sys-fg-tertiary);font-size:var(--sys-font-label);font-weight:var(--sys-weight-regular)}.nav-group-title{font-size:var(--sys-font-label);font-weight:var(--sys-weight-regular);color:var(--sys-fg-tertiary);margin:var(--ref-space-20) var(--ref-space-12) var(--ref-space-6)}.personal-nav-group:first-child .nav-group-title{margin-top:0}.sidebar .nav-item .nc-nav-label{white-space:normal}.sidebar .profile-footer{flex:none;margin-top:var(--ref-space-16)}.workspace-bar nav button:focus-visible{outline:2px solid var(--sys-focus-ring);outline-offset:2px;box-shadow:none}body.sidebar-compact .nav-group-title,body.sidebar-compact .sidebar .brand small{display:none}
+
+:root{--shell-gutter:24px}@media(max-width:1100px){:root{--shell-gutter:20px}}@media(max-width:760px){:root{--shell-gutter:16px}}
+
+body[data-workspace=home] .shell{grid-template-columns:minmax(0,1fr)}body[data-workspace=home] .shell>.sidebar{display:none}

@@ -19,7 +19,7 @@ const PILLARS=[
 ["health","Sức khỏe & năng lượng","♥","#ffe9e6"],
 ["relationships","Quan hệ & gia đình","♧","#f5e5f1"],
 ["growth","Phát triển & sáng tạo","✳","#fff2d7"]];
-const viewNames={calendar:"Lịch công việc",progress:"Bản đồ tiến bộ",gantt:"Gantt Pro",life:"Nhịp sống",business:"Business cá nhân",review:"Review & bằng chứng",notion:"Dữ liệu từ Notion",blueprint:"Mục tiêu năm",overview:"Tuần của tôi",weekly:"Review tuần",monthly:"Review tháng",evidence:"Bằng chứng",decision:"Nhật ký quyết định",settings:"Nguồn & cài đặt"};
+const viewNames={calendar:"Công việc theo ngày",progress:"Bản đồ tiến bộ",gantt:"Gantt Pro",life:"Nhịp sống",business:"Business cá nhân",review:"Review & bằng chứng",notion:"Dữ liệu từ Notion",blueprint:"Mục tiêu năm",overview:"Tổng quan tuần",weekly:"Review tuần",monthly:"Review tháng",evidence:"Bằng chứng",decision:"Nhật ký quyết định",settings:"Nguồn & cài đặt"};
 let selectedYear=Number(localStorage.getItem("henry-os-year"))===2027?2027:2026;
 let progressSnapshots=[],progressError='';
 let yearPlan=null,loadingData=false,loadError="",refreshSequence=0;
@@ -31,7 +31,7 @@ const detailRegistry=new Map();
 let workspace=parseWorkspaceHash(location.hash).module,moduleMetadata={};
 let lastWorkspace=localStorage.getItem('henry-last-workspace')||'personal';
 const gateway=createWorkspaceGateway({db,getUser:()=>user,container:document.querySelector('#module-deck'),onMetadata:data=>{moduleMetadata=data;if(workspace==='home')render();}});
-function navigateWorkspace(module,view){for(const id of ['detail-dialog','command-dialog']){const dialog=document.getElementById(id);if(dialog?.open)dialog.close();}workspace=module;document.body.dataset.workspace=module;if(module==='personal'){currentView=view||currentView||'overview';}if(Object.hasOwn(MODULES,module)){lastWorkspace=module;localStorage.setItem('henry-last-workspace',module);}const hash=module==='personal'?'personal/'+currentView:module;history.replaceState(null,'','#'+hash);render();if(module==='home')void gateway.refreshMetadata();window.scrollTo(0,0);}
+function navigateWorkspace(module,view){if(workspace===module&&(module!=='personal'||!view||view===currentView))return;for(const id of ['detail-dialog','command-dialog']){const dialog=document.getElementById(id);if(dialog?.open)dialog.close();}workspace=module;document.body.dataset.workspace=module;if(module==='personal'){currentView=view||currentView||'overview';}if(Object.hasOwn(MODULES,module)){lastWorkspace=module;localStorage.setItem('henry-last-workspace',module);}const hash=module==='personal'?'personal/'+currentView:module;history.replaceState(null,'','#'+hash);render();if(module==='home')void gateway.refreshMetadata();window.scrollTo(0,0);}
 document.addEventListener('click',e=>{const homeTask=e.target.closest('[data-home-task]');if(homeTask){const start=selectedWeek()?.week_start;navigateWorkspace('personal','calendar');calendarController.inspect(homeTask.dataset.homeTask,start);return;}const target=e.target.closest('[data-workspace]');if(target?.tagName==='BUTTON')navigateWorkspace(target.dataset.workspace,target.dataset.workspaceView);});
 window.addEventListener('hashchange',()=>{const route=parseWorkspaceHash(location.hash);navigateWorkspace(route.module,route.view);});
 
@@ -325,16 +325,16 @@ function render(){
  const focusButton=document.querySelector("#toggle-focus");if(focusButton){focusButton.onclick=()=>{const on=document.body.classList.toggle("focus-mode");focusButton.setAttribute("aria-pressed",String(on));focusButton.textContent=on?"↙ Thu gọn":"⤢ Mở rộng";};}
  document.querySelectorAll('.workspace-bar [data-workspace]').forEach(b=>{const active=b.dataset.workspace===workspace;b.classList.toggle('selected',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
  void gateway.open(workspace);
- if(workspace!=='personal'){$('#view-content').innerHTML=workspace==='home'?renderWorkspaceHome({escape:safe,metadata:moduleMetadata,weekCount:loadingData?null:notionWeeks.length,last:lastWorkspace,week:selectedWeek(),tasks:fallbackTasks(selectedWeek()),yearPlan,year:selectedYear}):'';$('#page-title').textContent=MODULES[workspace]?.name||'Không gian';return;}
+ if(workspace!=='personal'){$('#view-content').innerHTML=workspace==='home'?renderWorkspaceHome({escape:safe,metadata:moduleMetadata,weekCount:loadingData?null:notionWeeks.length,last:lastWorkspace}):'';$('#page-title').textContent=MODULES[workspace]?.name||'Không gian';return;}
  history.replaceState(null,'','#personal/'+currentView);
 
  const previousGanttKey=$('.gantt-pro')?.dataset?.ganttKey,previousGanttScroll=$('#gantt-scroll'),ganttScrollState=previousGanttScroll?{x:previousGanttScroll.scrollLeft,y:previousGanttScroll.scrollTop}:null;
- $("#page-title").textContent=currentView==='overview'?"Tuần của tôi":currentView==='blueprint'?"Mục tiêu "+selectedYear:viewNames[currentView]||"Personal OS";
+ $("#page-title").textContent=currentView==='overview'?"Tổng quan tuần":currentView==='blueprint'?"Mục tiêu "+selectedYear:viewNames[currentView]||"Personal OS";
  $('#os-year').value=String(selectedYear);
  if($('.year-picker'))$('.year-picker').style.display=currentView==='calendar'?'none':'';
  if($('#mobile-view'))$('#mobile-view').value=['notion','weekly','monthly','evidence','decision'].includes(currentView)?'review':currentView;
  $('#blueprint-label').textContent='Mục tiêu '+selectedYear;
- document.querySelectorAll("#nav [data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===currentView||b.dataset.view==='review'&&['notion','weekly','monthly','evidence','decision'].includes(currentView)));
+ document.querySelectorAll("#nav [data-view]").forEach(b=>{const active=b.dataset.view===currentView||b.dataset.view==='review'&&['notion','weekly','monthly','evidence','decision'].includes(currentView);b.classList.toggle('active',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
  const fn={calendar:()=>'',progress:renderProgressTab,gantt:renderGantt,life:renderLife,business:renderBusiness,review:renderReviewHub,notion:renderNotion,blueprint:renderBlueprint,overview:renderOverview,weekly:renderWeekly,monthly:renderMonthly,evidence:renderEvidence,decision:renderDecision,settings:renderSettings}[currentView]||renderOverview;
  detailRegistry.clear();
  $("#view-content").innerHTML=fn();
@@ -442,7 +442,7 @@ document.addEventListener("click",async e=>{
  const aq=e.target.closest("[data-annual-quarter]");if(aq){window._annualQuarter=Number(aq.dataset.annualQuarter);render();return;}
  const mt=e.target.closest("[data-review-month]");if(mt){window._notionPeriod=mt.dataset.reviewMonth;window._notionMode='month';currentView='notion';render();return;}
  const qt=e.target.closest("[data-quarter]");if(qt){window._blueprintQuarter=Number(qt.dataset.quarter);render();return;}
- const nav=e.target.closest("[data-view]");if(nav){if($("#command-dialog").open)$("#command-dialog").close();currentView=nav.dataset.view;render();window.scrollTo(0,0);return;}
+ const nav=e.target.closest("[data-view]");if(nav){if(workspace!=='personal'){if($('#command-dialog').open)$('#command-dialog').close();navigateWorkspace('personal',nav.dataset.view);return;}if(currentView===nav.dataset.view&&!$('#command-dialog').open)return;if($("#command-dialog").open)$("#command-dialog").close();currentView=nav.dataset.view;render();window.scrollTo(0,0);return;}
  const del=e.target.closest("[data-delete]");if(del){
  if(!confirm("Xóa bản ghi này? Thao tác không thể hoàn tác."))return;
  const {error}=await db.from("personal_os_entries").delete().eq("id",del.dataset.delete).eq("owner_id",user.id);
@@ -488,10 +488,12 @@ db.auth.onAuthStateChange((event,session)=>{
 
 document.addEventListener("change",e=>{if(e.target.id==='progress-checkpoint'||e.target.id==='progress-compare'){const id=e.target.id;if(id==='progress-checkpoint'){progressState.checkpointId=e.target.value;progressState.compareId=null;}else progressState.compareId=e.target.value;render();$('#'+id)?.focus();return;}if(['gantt-axis','gantt-status','gantt-kind'].includes(e.target.id)){const controlId=e.target.id;ganttState[controlId.replace('gantt-','')]=e.target.value;render();$('#'+controlId)?.focus();return;}if(e.target.id==="mobile-view"){currentView=e.target.value;render();window.scrollTo(0,0);return;}if(e.target.id==="week-select"){window._weekStart=e.target.value;window._selectedDay=null;render();return;}if(e.target.id==="life-date"){if(!e.target.value.startsWith(String(selectedYear))){toast('Chọn năm ở thanh trên để xem dữ liệu năm khác.');render();return;}window._lifeDay=e.target.value;render();return;}if(e.target.id==="os-year"){selectedYear=Number(e.target.value)===2027?2027:2026;localStorage.setItem("henry-os-year",selectedYear);window._notionPeriod=monthNow();window._annualQuarter=undefined;ganttState.quarter=null;ganttState.axis='all';progressState.checkpointId=null;progressState.compareId=null;ganttState.collapsed=[];ganttState.expanded=[];window._weekStart=null;window._lifeDay=null;yearPlan=null;settings=null;refresh();return;}if(e.target.id==="notion-mode"){window._notionMode=e.target.value;render();}if(e.target.id==="notion-period"&&/^\d{4}-\d{2}$/.test(e.target.value)){if(!e.target.value.startsWith(String(selectedYear))){toast("Chọn năm ở thanh trên để chuyển toàn bộ workspace.");e.target.value=window._notionPeriod||monthNow();return;}window._notionPeriod=e.target.value;render();}});
 
-setInterval(()=>{if(user&&!document.hidden&&!loadingData&&['overview','life','business','notion','gantt','progress','calendar'].includes(currentView)&&!document.querySelector('.cal-dialog[open]')&&!document.activeElement?.matches('input,textarea,select'))void refresh(true);},60000);
-document.addEventListener('visibilitychange',()=>{if(user&&!document.hidden&&!loadingData&&!document.activeElement?.matches('input,textarea,select'))void refresh();});
+setInterval(()=>{if(user&&workspace==='personal'&&!document.hidden&&!loadingData&&['overview','life','business','notion','gantt','progress','calendar'].includes(currentView)&&!document.querySelector('.cal-dialog[open]')&&!document.activeElement?.matches('input,textarea,select'))void refresh(true);},60000);
+document.addEventListener('visibilitychange',()=>{if(user&&workspace==='personal'&&!document.hidden&&!loadingData&&!document.activeElement?.matches('input,textarea,select'))void refresh();});
 document.querySelectorAll('[data-icon]').forEach(el=>{el.innerHTML=icon(el.dataset.icon);});
 
 setInterval(()=>{if(user&&!document.hidden)void gateway.refreshMetadata();},60000);
 
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!document.querySelector("dialog[open]")){document.body.classList.remove("focus-mode");const b=document.getElementById("toggle-focus");if(b){b.setAttribute("aria-pressed","false");b.textContent="⤢ Mở rộng";}}});
+
+for(const event of ['pointerover','focusin'])document.addEventListener(event,e=>{const target=e.target.closest('button[data-workspace]');if(target&&user)void gateway.preload(target.dataset.workspace).catch(()=>{});});

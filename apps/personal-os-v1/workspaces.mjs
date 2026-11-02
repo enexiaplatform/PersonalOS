@@ -12,13 +12,36 @@ export function withExecutiveTheme(html,module){
  // Parent CSS cannot style an iframe and must not override that module's recipes.
  return html.replace(/<body\b/i,'<body data-executive-module="'+module+'"');
 }
-export function createWorkspaceGateway({db,getUser,container,onMetadata}){const frames=new Map();let generation=0;let metadata={};
- async function read(module){if(!['servicebio','ventures','enexia'].includes(module))throw Error('Module không hợp lệ');const owner=getUser()?.id;if(!owner)throw Error('Cần đăng nhập');const query=module==='enexia'?db.from('personal_os_enexia_snapshots').select('payload,source_updated_at').eq('owner_id',owner):db.from('personal_os_module_snapshots').select('payload,source_updated_at,mirrored_at').eq('owner_id',owner).eq('module',module);const {data,error}=await query.maybeSingle();if(error)throw error;if(getUser()?.id!==owner)throw Error('Phiên đã thay đổi');if(!data)throw Error('Chưa có bản dữ liệu cho tài khoản này');return data.payload;}
+export function createWorkspaceGateway({db,getUser,container,onMetadata}){
+ const frames=new Map(),prepared=new Map(),reading=new Map(),bootSnapshots=new Map();let generation=0,metadata={},metadataTask=null;
+ const valid=module=>['servicebio','ventures','enexia'].includes(module);
+ function readSource(module){
+  if(!valid(module))return Promise.reject(Error('Module không hợp lệ'));
+  const owner=getUser()?.id,stamp=generation;if(!owner)return Promise.reject(Error('Cần đăng nhập'));
+  const key=owner+':'+module;if(reading.has(key))return reading.get(key);
+  const task=(async()=>{const query=module==='enexia'?db.from('personal_os_enexia_snapshots').select('payload,source_updated_at').eq('owner_id',owner):db.from('personal_os_module_snapshots').select('payload,source_updated_at,mirrored_at').eq('owner_id',owner).eq('module',module);const {data,error}=await query.maybeSingle();if(error)throw error;if(generation!==stamp||getUser()?.id!==owner)throw Error('Phiên đã thay đổi');if(!data)throw Error('Chưa có bản dữ liệu cho tài khoản này');return data.payload;})();
+  reading.set(key,task);void task.finally(()=>{if(reading.get(key)===task)reading.delete(key);}).catch(()=>{});return task;
+ }
+ async function read(module){const boot=bootSnapshots.get(module);if(boot&&boot.owner===getUser()?.id){bootSnapshots.delete(module);return boot.task;}return readSource(module);}
  window.PersonalOSModuleBridge=Object.freeze({read});
- async function refreshMetadata(){const owner=getUser()?.id;if(!owner)return;const {data,error}=await db.from('personal_os_module_snapshots').select('module,source_updated_at,mirrored_at').eq('owner_id',owner);if(error||getUser()?.id!==owner)return;metadata=Object.fromEntries((data||[]).map(x=>[x.module,x]));onMetadata(metadata);}
- async function open(module){container.querySelectorAll?.('.module-error').forEach(n=>n.remove());for(const [key,frame]of frames)frame.hidden=key!==module;if(!['servicebio','ventures','enexia'].includes(module)){container.hidden=true;return;}container.hidden=false;if(frames.has(module))return;const owner=getUser()?.id,stamp=generation;const frame=document.createElement('iframe');frame.title=MODULES[module].name+' · Không gian làm việc';frame.className='workspace-frame';frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-downloads allow-popups allow-popups-to-escape-sandbox');frame.referrerPolicy='no-referrer';frames.set(module,frame);container.append(frame);frame.srcdoc='<link rel="stylesheet" href="/tokens.css"><body>Đang mở '+MODULES[module].name+'…</body>';
- try{if(module==='enexia'){const response=await fetch('./enexia.html',{cache:'no-cache'});if(!response.ok)throw Error('Không tải được giao diện Enexia');const html=await response.text();if(stamp!==generation||getUser()?.id!==owner)return;frame.srcdoc=withExecutiveTheme(html,module);return;}const {data,error}=await db.from('personal_os_module_assets').select('content_gzip_base64').eq('owner_id',owner).eq('module',module).maybeSingle();if(error)throw error;if(!data)throw Error('Giao diện module chưa sẵn sàng cho tài khoản này.');const bytes=Uint8Array.from(atob(data.content_gzip_base64),c=>c.charCodeAt(0));const html=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();if(stamp!==generation||getUser()?.id!==owner)return;frame.srcdoc=withExecutiveTheme(html,module);}catch(e){frame.remove();frames.delete(module);const notice=document.createElement('div');notice.className='module-error';notice.textContent='Chưa mở được '+MODULES[module].name+'. '+e.message;const retry=document.createElement('button');retry.textContent='Thử lại';retry.onclick=()=>{notice.remove();void open(module)};notice.append(retry);container.append(notice);}}
- function clear(){generation++;for(const frame of frames.values())frame.remove();frames.clear();metadata={};container.replaceChildren();container.hidden=true;}
- return {open,read,refreshMetadata,clear};}
-
-
+ async function refreshMetadata(){
+  if(metadataTask)return metadataTask;const owner=getUser()?.id,stamp=generation;if(!owner)return;
+  const task=(async()=>{const {data,error}=await db.from('personal_os_module_snapshots').select('module,source_updated_at,mirrored_at').eq('owner_id',owner);if(error||generation!==stamp||getUser()?.id!==owner)return;metadata=Object.fromEntries((data||[]).map(x=>[x.module,x]));onMetadata(metadata);})();metadataTask=task;try{await task;}finally{if(metadataTask===task)metadataTask=null;}
+ }
+ function preload(module){
+  if(!valid(module))return Promise.resolve(null);const owner=getUser()?.id,stamp=generation;if(!owner)return Promise.resolve(null);
+  const key=owner+':'+module;if(prepared.has(key))return prepared.get(key);
+  const task=(async()=>{let html;if(module==='enexia'){const response=await fetch('./enexia.html');if(!response.ok)throw Error('Không tải được giao diện Enexia');html=await response.text();}else{const {data,error}=await db.from('personal_os_module_assets').select('content_gzip_base64').eq('owner_id',owner).eq('module',module).maybeSingle();if(error)throw error;if(!data)throw Error('Giao diện module chưa sẵn sàng cho tài khoản này.');const bytes=Uint8Array.from(atob(data.content_gzip_base64),c=>c.charCodeAt(0));html=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();}if(generation!==stamp||getUser()?.id!==owner)throw Error('Phiên đã thay đổi');return withExecutiveTheme(html,module);})();
+  prepared.set(key,task);void task.catch(()=>{if(prepared.get(key)===task)prepared.delete(key);});return task;
+ }
+ async function open(module){
+  container.querySelectorAll?.('.module-error').forEach(n=>n.remove());for(const [key,frame]of frames)frame.hidden=key!==module;
+  if(!valid(module)){container.hidden=true;return;}container.hidden=false;if(frames.has(module))return;
+  const owner=getUser()?.id,stamp=generation;if(!owner)return;
+  const frame=document.createElement('iframe');frame.title=MODULES[module].name+' · Không gian làm việc';frame.className='workspace-frame';frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-downloads allow-popups allow-popups-to-escape-sandbox');frame.referrerPolicy='no-referrer';frames.set(module,frame);container.append(frame);frame.srcdoc='<link rel="stylesheet" href="/tokens.css"><body><p role="status">Đang mở '+MODULES[module].name+'…</p></body>';
+  const htmlTask=preload(module),snapshotTask=readSource(module);bootSnapshots.set(module,{owner,task:snapshotTask});void snapshotTask.catch(()=>{});
+  try{const html=await htmlTask;if(stamp!==generation||getUser()?.id!==owner)return;frame.srcdoc=html;}catch(e){if(stamp!==generation||getUser()?.id!==owner)return;frame.remove();frames.delete(module);bootSnapshots.delete(module);const notice=document.createElement('div');notice.className='module-error';notice.textContent='Chưa mở được '+MODULES[module].name+'. '+e.message;const retry=document.createElement('button');retry.textContent='Thử lại';retry.onclick=()=>{notice.remove();void open(module)};notice.append(retry);container.append(notice);}
+ }
+ function clear(){generation++;for(const frame of frames.values())frame.remove();frames.clear();prepared.clear();reading.clear();bootSnapshots.clear();metadataTask=null;metadata={};container.replaceChildren();container.hidden=true;}
+ return {open,read,preload,refreshMetadata,clear};
+}
