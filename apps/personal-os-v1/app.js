@@ -497,3 +497,8 @@ setInterval(()=>{if(user&&!document.hidden)void gateway.refreshMetadata();},6000
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!document.querySelector("dialog[open]")){document.body.classList.remove("focus-mode");const b=document.getElementById("toggle-focus");if(b){b.setAttribute("aria-pressed","false");b.textContent="⤢ Mở rộng";}}});
 
 for(const event of ['pointerover','focusin'])document.addEventListener(event,e=>{const target=e.target.closest('button[data-workspace]');if(target&&user)void gateway.preload(target.dataset.workspace).catch(()=>{});});
+
+// Prepare protected packages after sign-in, off the initial rendering path.
+function warmWorkspaces(){if(!user)return;for(const module of ['servicebio','ventures','enexia'])void gateway.preload(module).catch(()=>{});}
+setTimeout(warmWorkspaces,1800);
+db.auth.onAuthStateChange((_event,session)=>{if(session?.user)setTimeout(warmWorkspaces,1800);});
