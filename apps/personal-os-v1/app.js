@@ -499,6 +499,6 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!document.querySele
 for(const event of ['pointerover','focusin'])document.addEventListener(event,e=>{const target=e.target.closest('button[data-workspace]');if(target&&user)void gateway.preload(target.dataset.workspace).catch(()=>{});});
 
 // Prepare protected packages after sign-in, off the initial rendering path.
-function warmWorkspaces(){if(!user)return;for(const module of ['servicebio','ventures','enexia'])void gateway.preload(module).catch(()=>{});}
+function warmWorkspaces(){if(!user)return;for(const module of ['servicebio','ventures','enexia']){void gateway.preload(module).catch(()=>{});void gateway.prepareData(module).catch(()=>{});}}
 setTimeout(warmWorkspaces,1800);
 db.auth.onAuthStateChange((_event,session)=>{if(session?.user)setTimeout(warmWorkspaces,1800);});
