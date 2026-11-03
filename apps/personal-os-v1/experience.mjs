@@ -10,3 +10,8 @@ export function statementParts(text){
  if(at<0)return {title:value,detail:''};
  return {title:value.slice(0,at).trim(),detail:value.slice(at+1).trim()};
 }
+
+// Only passive views may be replaced by background source refreshes.
+export function canAutoRefresh({hasUser,workspace,view,hidden,loading,editing,modalOpen}){
+ return Boolean(hasUser&&workspace==='personal'&&!hidden&&!loading&&!editing&&!modalOpen&&['overview','life','business','notion','gantt','progress','calendar'].includes(view));
+}

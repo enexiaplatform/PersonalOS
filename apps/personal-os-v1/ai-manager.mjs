@@ -6,18 +6,19 @@ const time=x=>{if(!x)return 'Chưa rõ';const d=new Date(x);return Number.isNaN(
 const scopeTitles={personal:'Personal OS',servicebio:'Servicebio',ventures:'Ventures',enexia:'Enexia'};
 const scope=()=>{const v=location.hash.replace(/^#/,'').split('/')[0];return scopeTitles[v]?v:'personal';};
 const state={tab:'overview',open:false,busy:false,source:null,actions:[],runs:[],output:null,message:'',lastLoad:0,includeDetails:false,activeRun:null,memory:null,memoryLoading:false,memoryFilter:'all',memoryEditor:null};
-const overlay=make('div','aom-overlay');
+const overlay=make('dialog','aom-overlay');
+overlay.setAttribute('aria-labelledby','aom-title');
 overlay.innerHTML=[
 '<div class="aom-backdrop" data-close></div>',
-'<section class="aom-shell" role="dialog" aria-modal="true" aria-labelledby="aom-title">',
+'<section class="aom-shell">',
 '<header class="aom-header"><div class="aom-brand"><span class="aom-logo">✦</span><div><h2 id="aom-title">AI Manager</h2><p>Personal OS · Powered by Manus</p></div></div>',
 '<div class="aom-header-actions"><span class="aom-level">● Autonomous · Level B</span><button class="aom-icon" data-refresh title="Kiểm tra nguồn" aria-label="Kiểm tra nguồn">⟳</button><button class="aom-icon" data-close title="Đóng" aria-label="Đóng">×</button></div></header>',
 '<nav class="aom-tabs" role="tablist" aria-label="AI Manager"><button data-tab="overview" role="tab">Tổng quan</button><button data-tab="actions" role="tab">Hành động <span id="aom-count"></span></button><button data-tab="history" role="tab">Lịch sử</button><button data-tab="memory" role="tab">Bộ nhớ</button><button data-tab="settings" role="tab">Quyền & dữ liệu</button></nav>',
-'<div class="aom-content"><main class="aom-main"><div class="aom-source" id="aom-source"></div><div class="aom-body" id="aom-body" aria-live="polite"></div></main>',
+'<div class="aom-content"><div class="aom-main"><div class="aom-source" id="aom-source"></div><div class="aom-body" id="aom-body" aria-live="polite"></div></div>',
 '<aside class="aom-rail"><div class="aom-rail-title"><div><h3>Action Queue</h3><p>Những đề xuất cần xem xét</p></div><span id="aom-rail-count">0</span></div><div class="aom-rail-list" id="aom-rail-list"></div><div class="aom-rail-footer">Tự phát hiện rủi ro · Không tự thay đổi Notion.</div></aside></div>',
 '<div id="aom-message" class="aom-message" role="status" hidden></div>',
 '<form class="aom-composer" id="aom-form"><div class="aom-compose-title"><strong>Hỏi AI Manager</strong><small>Chỉ gọi Manus khi bạn gửi yêu cầu · Có thể tốn credits</small></div>',
-'<div class="aom-compose-input"><textarea id="aom-question" maxlength="1600" rows="2" required placeholder="Hỏi về tiến độ, việc cần ưu tiên hoặc cách tối ưu tuần…"></textarea><button class="aom-primary" id="aom-submit" type="submit">Phân tích</button></div>',
+'<div class="aom-compose-input"><label class="sr-only" for="aom-question">Hỏi AI Manager</label><textarea id="aom-question" maxlength="1600" rows="2" required placeholder="Hỏi về tiến độ, việc cần ưu tiên hoặc cách tối ưu tuần…"></textarea><button class="aom-primary" id="aom-submit" type="submit">Phân tích</button></div>',
 '<div class="aom-compose-foot"><span>Ctrl/⌘ + Enter để gửi</span><button type="button" data-tab="settings">Quyền dữ liệu</button></div></form></section>'
 ].join('');
 const launch=make('button','aom-launch','AI Manager');launch.type='button';
@@ -25,8 +26,9 @@ launch.setAttribute('aria-label','Mở AI Manager');
 document.body.append(overlay,launch);
 const $=q=>overlay.querySelector(q),body=$('#aom-body'),list=$('#aom-rail-list'),box=$('#aom-question');
 let returnFocus=null;
-function open(tab='overview'){returnFocus=document.activeElement;state.open=true;overlay.classList.add('open');document.body.classList.add('aom-active');state.tab=tab;draw();if(tab==='memory')void loadMemory();void load(false).then(()=>{const pending=state.runs.find(r=>r.status==='running');if(state.open&&!state.busy&&pending){state.activeRun=pending.id;state.busy=true;void watch(pending.id);draw();}});box.focus();}
-function close(){state.open=false;overlay.classList.remove('open');document.body.classList.remove('aom-active');if(returnFocus?.isConnected)returnFocus.focus();else launch.focus();}
+function open(tab='overview'){returnFocus=document.activeElement;state.open=true;if(!overlay.open)overlay.showModal();overlay.classList.add('open');document.body.classList.add('aom-active');state.tab=tab;draw();if(tab==='memory')void loadMemory();void load(false).then(()=>{const pending=state.runs.find(r=>r.status==='running');if(state.open&&!state.busy&&pending){state.activeRun=pending.id;state.busy=true;void watch(pending.id);draw();}});box.focus();}
+function close(){state.open=false;overlay.close();overlay.classList.remove('open');document.body.classList.remove('aom-active');if(returnFocus?.isConnected)returnFocus.focus();else launch.focus();}
+overlay.addEventListener('cancel',e=>{e.preventDefault();close();});
 launch.addEventListener('click',()=>open());
 document.addEventListener('click',e=>{const trigger=e.target.closest('[data-open-ai]');if(trigger)open(['overview','actions','memory'].includes(trigger.dataset.aiTab)?trigger.dataset.aiTab:'overview');});
 overlay.querySelectorAll('[data-close]').forEach(x=>x.addEventListener('click',close));
@@ -73,7 +75,7 @@ function intro(){
  area.append(cards);return area;
 }
 function quickPrompts(){
- const s=make('section','aom-quick');put(s,'h3','','Bắt đầu nhanh');
+ const s=make('section','aom-quick');put(s,'h2','','Bắt đầu nhanh');
  const grid=make('div','aom-quick-grid');
  const presets=[
  ['Executive Brief','3 ưu tiên, 3 rủi ro','Tổng hợp tình hình tuần hiện tại với tối đa 3 Must-Win outcomes, 3 risks và một stop/defer dựa trên nguồn.'],
@@ -224,7 +226,7 @@ function settingsView(){
 function draw(){
  if(!state.open)return;
  overlay.dataset.tab=state.tab;
- overlay.querySelectorAll('[data-tab]').forEach(b=>{const active=b.dataset.tab===state.tab;b.tabIndex=active?0:-1;b.id='aom-tab-'+b.dataset.tab;b.setAttribute('aria-controls','aom-body');b.classList.toggle('selected',active);b.setAttribute('aria-selected',String(active));});
+ overlay.querySelectorAll('.aom-tabs [role=tab]').forEach(b=>{const active=b.dataset.tab===state.tab;b.tabIndex=active?0:-1;b.id='aom-tab-'+b.dataset.tab;b.setAttribute('aria-controls','aom-body');b.classList.toggle('selected',active);b.setAttribute('aria-selected',String(active));});
  body.setAttribute('role','tabpanel');body.setAttribute('aria-labelledby','aom-tab-'+state.tab);sourceLine();body.replaceChildren();
  const pending=state.actions.filter(a=>a.status==='proposed');
  $('#aom-count').textContent=pending.length?'('+pending.length+')':'';

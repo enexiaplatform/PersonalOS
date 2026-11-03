@@ -119,3 +119,16 @@ body:has(#shell.hidden) .aom-launch{display:none}
 @media(min-width:901px){.aom-overlay[data-tab="memory"] .aom-content{grid-template-columns:1fr}.aom-overlay[data-tab="memory"] .aom-rail{display:none}}
 .aom-memory-share input[type="checkbox"]{width:16px;height:16px;flex:0 0 16px;padding:0;margin:0;accent-color:var(--sys-fg-accent)}.aom-memory-share span{flex:1}.aom-memory-card .aom-action-top strong{font-size:14px;color:var(--os-text-primary)}
 .aom-memory-tools button{padding:8px 12px;border-radius:6px;font:inherit;font-size:12px;cursor:pointer;min-height:36px}.aom-memory-tools button:disabled{opacity:.6;cursor:wait}
+
+/* A native modal makes the background inert and owns focus while open. */
+dialog.aom-overlay{width:100%;height:100%;max-width:none;max-height:none;margin:0;border:0;background:transparent;color:inherit}
+dialog.aom-overlay::backdrop{background:transparent}
+.aom-quick h2{font-size:14px;font-weight:750;line-height:1.35;margin:0 0 12px;color:var(--sys-fg-primary)}
+@media(max-width:600px){
+ .aom-header{flex-wrap:wrap;gap:8px;align-items:flex-start}
+ .aom-brand{width:100%}
+ .aom-header-actions{width:100%;justify-content:flex-end}
+ .aom-level{margin-right:auto}
+ .aom-icon{min-width:44px;min-height:44px}
+ .aom-tabs button{min-height:44px}
+}

@@ -4,7 +4,7 @@ import {client as db} from './supabase-client.mjs';
 import { STATUSES, todayVN, weekRange, canonicalWeeks, uniqueItems, currentSnapshot, periodItems, explicitDate, dailyEvidence } from "./model.mjs";
 import { buildWeekAnalytics, filterAnalysisRecords, STATUS_META } from "./analytics.mjs";
 import { renderAnalyticsSummary, renderAnalyticsPanels, axisLabel } from "./analytics-view.mjs";
-import { icon, filterRecords, statementParts, searchText } from "./experience.mjs";
+import { icon, filterRecords, statementParts, searchText, canAutoRefresh } from "./experience.mjs";
 import { SOURCE, BLUEPRINT, CAPACITY } from "./goals.js";
 import { PROJECT_URL, PUBLISHABLE_KEY } from "./config.js";
 import {buildGanttModel,filterGanttTasks,ganttCsv,quarterRange} from './gantt.mjs';
@@ -418,7 +418,7 @@ function commandResults(){const query=$('#command-input').value.trim();const scr
  const matches=screens.filter(([,name])=>!query||searchText(name).includes(searchText(query)));
  const records=filterRecords(periodItems(notionWeeks,selectedYear),query);
  $('#command-results').innerHTML=(matches.length?'<div class="command-group-title">Mở màn hình</div>'+matches.map(([view,name,glyph])=>'<button class="command-result" data-view="'+view+'">'+icon(glyph)+'<span>'+safe(name)+'</span>'+icon('arrow')+'</button>').join(''):'')+(records.length?'<div class="command-group-title">Ghi nhận trong năm '+selectedYear+'</div>'+records.map(i=>'<button class="command-result result-record" data-detail="'+safe(detailKey(i))+'">'+icon('note')+'<span>'+safe(i.text)+'<small>'+safe(pName(i.pillar))+' · '+dtext(i.week_start)+'</small></span>'+icon('chevron')+'</button>').join(''):'')+(!matches.length&&!records.length?'<div class="empty-state small"><p>Không tìm thấy kết quả phù hợp.</p></div>':'');}
-function openCommand(){if(!user)return;if($('#command-dialog').open){$('#command-input').focus();return;}$('#command-input').value='';commandResults();$('#command-dialog').showModal();$('#command-input').focus();}
+function openCommand(){if(!user||document.querySelector('dialog[open]:not(#command-dialog)'))return;if($('#command-dialog').open){$('#command-input').focus();return;}$('#command-input').value='';commandResults();$('#command-dialog').showModal();$('#command-input').focus();}
 document.addEventListener('keydown',e=>{
  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCommand();return;}
  if($('#command-dialog').open&&['ArrowDown','ArrowUp','Enter'].includes(e.key)){
@@ -495,8 +495,9 @@ db.auth.onAuthStateChange((event,session)=>{
 
 document.addEventListener("change",e=>{if(e.target.id==='progress-checkpoint'||e.target.id==='progress-compare'){const id=e.target.id;if(id==='progress-checkpoint'){progressState.checkpointId=e.target.value;progressState.compareId=null;}else progressState.compareId=e.target.value;render();$('#'+id)?.focus();return;}if(['gantt-axis','gantt-status','gantt-kind'].includes(e.target.id)){const controlId=e.target.id;ganttState[controlId.replace('gantt-','')]=e.target.value;render();$('#'+controlId)?.focus();return;}if(e.target.id==="mobile-view"){navigateWorkspace('personal',e.target.value);return;}if(e.target.id==="week-select"){window._weekStart=e.target.value;window._selectedDay=null;render();return;}if(e.target.id==="life-date"){if(!e.target.value.startsWith(String(selectedYear))){toast('Chọn năm ở thanh trên để xem dữ liệu năm khác.');render();return;}window._lifeDay=e.target.value;render();return;}if(e.target.id==="os-year"){selectedYear=Number(e.target.value)===2027?2027:2026;localStorage.setItem("henry-os-year",selectedYear);window._notionPeriod=monthNow();window._annualQuarter=undefined;ganttState.quarter=null;ganttState.axis='all';progressState.checkpointId=null;progressState.compareId=null;ganttState.collapsed=[];ganttState.expanded=[];window._weekStart=null;window._lifeDay=null;yearPlan=null;settings=null;refresh();return;}if(e.target.id==="notion-mode"){window._notionMode=e.target.value;render();}if(e.target.id==="notion-period"&&/^\d{4}-\d{2}$/.test(e.target.value)){if(!e.target.value.startsWith(String(selectedYear))){toast("Chọn năm ở thanh trên để chuyển toàn bộ workspace.");e.target.value=window._notionPeriod||monthNow();return;}window._notionPeriod=e.target.value;render();}});
 
-setInterval(()=>{if(user&&workspace==='personal'&&!document.hidden&&!loadingData&&['overview','life','business','notion','gantt','progress','calendar'].includes(currentView)&&!document.querySelector('.cal-dialog[open]')&&!document.activeElement?.matches('input,textarea,select'))void refresh(true);},60000);
-document.addEventListener('visibilitychange',()=>{if(user&&workspace==='personal'&&!document.hidden&&!loadingData&&!document.activeElement?.matches('input,textarea,select'))void refresh();});
+function canRefreshInBackground(){return canAutoRefresh({hasUser:Boolean(user),workspace,view:currentView,hidden:document.hidden,loading:loadingData,editing:document.activeElement?.matches('input,textarea,select,[contenteditable="true"]'),modalOpen:Boolean(document.querySelector('dialog[open]'))});}
+setInterval(()=>{if(canRefreshInBackground())void refresh(true);},60000);
+document.addEventListener('visibilitychange',()=>{if(canRefreshInBackground())void refresh(true);});
 document.querySelectorAll('[data-icon]').forEach(el=>{el.innerHTML=icon(el.dataset.icon);});
 
 setInterval(()=>{if(user&&!document.hidden)void gateway.refreshMetadata();},60000);
