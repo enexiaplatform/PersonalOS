@@ -90,3 +90,8 @@ body[data-workspace=home] .shell{grid-template-columns:minmax(0,1fr)}body[data-w
 
 /* Route focus announces the main region without outlining the whole canvas. */
 .main:focus{outline:none}
+
+/* One icon slot and text edge for every local navigation state. */
+.sidebar .nav-item>[data-icon]{display:grid;place-items:center;width:var(--ref-icon-20);height:var(--ref-icon-20);flex:0 0 var(--ref-icon-20)}
+.sidebar .nav-item>[data-icon]>.icon{width:var(--sys-icon-size);height:var(--sys-icon-size)}
+.sidebar .nav-item>.nc-nav-label{min-width:0;flex:1}
