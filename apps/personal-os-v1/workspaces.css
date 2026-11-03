@@ -23,3 +23,5 @@ body[data-workspace=enexia] .main>.topbar,body[data-workspace=enexia] .main>.foo
 body[data-workspace=enexia] .shell{grid-template-columns:minmax(0,1fr)}
 body[data-workspace=enexia] #view-content{display:none}
 body[data-workspace=enexia] .shell>.main{margin:0;align-self:start}
+
+.workspace-native{display:block;height:calc(100dvh - var(--workspace-bar));overflow:auto;contain:layout paint;isolation:isolate}.workspace-native[hidden]{display:none}
