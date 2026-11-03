@@ -13,13 +13,13 @@ export function withExecutiveTheme(html,module){
  return html.replace(/<body\b/i,'<body data-executive-module="'+module+'"');
 }
 export function createWorkspaceGateway({db,getUser,container,onMetadata}){
- const frames=new Map(),prepared=new Map(),reading=new Map(),bootSnapshots=new Map(),cleanups=new Map();let generation=0,metadata={},metadataTask=null;
+ const frames=new Map(),prepared=new Map(),reading=new Map(),bootSnapshots=new Map(),recent=new Map(),cleanups=new Map();let generation=0,metadata={},metadataTask=null;
  const valid=module=>['servicebio','ventures','enexia'].includes(module);
- function readSource(module){
+ function readSource(module,allowRecent=false){
   if(!valid(module))return Promise.reject(Error('Module không hợp lệ'));
   const owner=getUser()?.id,stamp=generation;if(!owner)return Promise.reject(Error('Cần đăng nhập'));
-  const key=owner+':'+module;if(reading.has(key))return reading.get(key);
-  const task=(async()=>{const query=module==='enexia'?db.from('personal_os_enexia_snapshots').select('payload,source_updated_at').eq('owner_id',owner):db.from('personal_os_module_snapshots').select('payload,source_updated_at,mirrored_at').eq('owner_id',owner).eq('module',module);const {data,error}=await query.maybeSingle();if(error)throw error;if(generation!==stamp||getUser()?.id!==owner)throw Error('Phiên đã thay đổi');if(!data)throw Error('Chưa có bản dữ liệu cho tài khoản này');return data.payload;})();
+  const key=owner+':'+module;const cached=recent.get(key);if(allowRecent&&cached&&Date.now()-cached.at<30000)return Promise.resolve(cached.value);if(reading.has(key))return reading.get(key);
+  const task=(async()=>{const query=module==='enexia'?db.from('personal_os_enexia_snapshots').select('payload,source_updated_at').eq('owner_id',owner):db.from('personal_os_module_snapshots').select('payload,source_updated_at,mirrored_at').eq('owner_id',owner).eq('module',module);const {data,error}=await query.maybeSingle();if(error)throw error;if(generation!==stamp||getUser()?.id!==owner)throw Error('Phiên đã thay đổi');if(!data)throw Error('Chưa có bản dữ liệu cho tài khoản này');recent.set(key,{value:data.payload,at:Date.now()});return data.payload;})();
   reading.set(key,task);void task.finally(()=>{if(reading.get(key)===task)reading.delete(key);}).catch(()=>{});return task;
  }
  async function read(module){const boot=bootSnapshots.get(module);if(boot&&boot.owner===getUser()?.id){bootSnapshots.delete(module);return boot.task;}return readSource(module);}
@@ -39,7 +39,7 @@ export function createWorkspaceGateway({db,getUser,container,onMetadata}){
   if(!valid(module)){container.hidden=true;return;}container.hidden=false;if(frames.has(module))return;
   const owner=getUser()?.id,stamp=generation;if(!owner)return;
   const frame=document.createElement('iframe');frame.title=MODULES[module].name+' · Không gian làm việc';frame.className='workspace-frame';frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-downloads allow-popups allow-popups-to-escape-sandbox');frame.referrerPolicy='no-referrer';frames.set(module,frame);container.append(frame);frame.srcdoc='<link rel="stylesheet" href="/tokens.css"><body><p role="status">Đang mở '+MODULES[module].name+'…</p></body>';
-  const htmlTask=preload(module),snapshotTask=readSource(module);bootSnapshots.set(module,{owner,task:snapshotTask});void snapshotTask.catch(()=>{});
+  const htmlTask=preload(module),snapshotTask=readSource(module,true);bootSnapshots.set(module,{owner,task:snapshotTask});void snapshotTask.catch(()=>{});
   try{const html=await htmlTask;if(stamp!==generation||getUser()?.id!==owner)return;
    const nativePayload=html.match(/<script id="henry-native-module" type="application\/json">([\s\S]*?)<\/script>/)?.[1];
    if(nativePayload){
@@ -51,6 +51,6 @@ export function createWorkspaceGateway({db,getUser,container,onMetadata}){
     const cleanup=await window.PersonalOSNativeModules[module](root);if(stamp!==generation||getUser()?.id!==owner){cleanup();host.remove();return;}cleanups.set(module,cleanup);
    }else frame.srcdoc=html;}catch(e){if(stamp!==generation||getUser()?.id!==owner)return;frames.get(module)?.remove();frames.delete(module);bootSnapshots.delete(module);const notice=document.createElement('div');notice.className='module-error';notice.textContent='Chưa mở được '+MODULES[module].name+'. '+e.message;const retry=document.createElement('button');retry.textContent='Thử lại';retry.onclick=()=>{notice.remove();void open(module)};notice.append(retry);container.append(notice);}
  }
- function clear(){generation++;for(const cleanup of cleanups.values())cleanup();cleanups.clear();for(const frame of frames.values())frame.remove();frames.clear();prepared.clear();reading.clear();bootSnapshots.clear();metadataTask=null;metadata={};container.replaceChildren();container.hidden=true;}
- return {open,read,preload,refreshMetadata,clear};
+ function clear(){generation++;for(const cleanup of cleanups.values())cleanup();cleanups.clear();for(const frame of frames.values())frame.remove();frames.clear();prepared.clear();reading.clear();recent.clear();bootSnapshots.clear();metadataTask=null;metadata={};container.replaceChildren();container.hidden=true;}
+ return {open,read,preload,prepareData:module=>readSource(module,true),refreshMetadata,clear};
 }
