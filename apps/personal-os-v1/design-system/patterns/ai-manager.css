@@ -19,7 +19,7 @@ dialog::backdrop{background:var(--sys-bg-scrim)}
 .auth-intro>small{display:none}
 .auth-logo{color:var(--os-ink)}
 .auth-card{width:min(420px,calc(100% - 48px));padding:36px;background:var(--os-surface-1);border:1px solid var(--os-line);border-radius:var(--sys-radius-surface);box-shadow:var(--os-shadow-floating)}
-.auth-card h2{font-size:26px}
+.auth-card h1{font-size:26px}
 .auth-card input{min-height:44px;background:var(--os-surface-2);border-color:var(--os-line-strong)}
 .auth-card .btn.primary{min-height:44px}
 .aom-launch{border-radius:10px;background:var(--os-gradient-primary);border:1px solid var(--sys-border-default);color:var(--sys-fg-primary);padding:12px 16px;font:700 12px var(--os-font);box-shadow:var(--os-shadow-card)}
@@ -41,3 +41,15 @@ dialog::backdrop{background:var(--sys-bg-scrim)}
 .aom-quick-card strong,.aom-action h4,.aom-brief h2,.aom-rail h3{color:var(--os-ink)}
 .aom-quick-card small,.aom-evidence,.aom-rail-footer{color:var(--os-muted)}
 .aom-backdrop{background:var(--sys-bg-scrim);backdrop-filter:none}
+
+/* Authentication controls remain readable with autofill and touch keyboards. */
+.password-field{position:relative;display:block}
+.auth-card .password-field input{width:100%;padding-right:72px}
+.password-toggle{position:absolute;inset:2px 2px 2px auto;min-width:60px;padding:0 12px;border:0;border-radius:var(--sys-radius-control);background:transparent;color:var(--sys-fg-accent);font:inherit}
+.password-toggle:hover{background:var(--sys-bg-surface-hover)}
+.auth-card #login-button{background:var(--sys-action-primary-bg);border-color:var(--sys-action-primary-bg);color:var(--sys-action-primary-fg)}
+.auth-card #login-button:hover{background:var(--sys-action-primary-hover)}
+.auth-card .auth-actions button{min-height:44px}
+.auth-message:not(:empty){padding:12px;border-radius:var(--sys-radius-control);background:var(--sys-bg-inset);color:var(--sys-fg-secondary)}
+
+.auth-card .link:hover,.auth-card .link:focus-visible{color:var(--sys-fg-primary)}

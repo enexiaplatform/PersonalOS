@@ -87,3 +87,6 @@ body[data-workspace=home] .home-space-nav{display:block}
 :root{--shell-gutter:24px}@media(max-width:1100px){:root{--shell-gutter:20px}}@media(max-width:760px){:root{--shell-gutter:16px}}
 
 body[data-workspace=home] .shell{grid-template-columns:minmax(0,1fr)}body[data-workspace=home] .shell>.sidebar{display:none}
+
+/* Route focus announces the main region without outlining the whole canvas. */
+.main:focus{outline:none}

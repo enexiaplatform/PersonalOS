@@ -17,3 +17,21 @@ test('calendar agenda retains complete task titles, filters explicit days, and s
  click('data-cal-display','board');assert.match(container.innerHTML,/<div hidden class="cal-agenda"/);assert.match(container.innerHTML,/<div  class="cal-scroll"/);assert.equal(writes,0);
  cal.clear();
 });
+
+test('leaving calendar cancels late reads without replacing the destination screen',async()=>{
+ let finish;const pending=new Promise(resolve=>finish=resolve);
+ const container={isConnected:true,innerHTML:'',replaceChildren(){}};
+ const db={from(){return {select(){return this},eq(){return this},order(){return this},limit(){return pending}}}};
+ const cal=createCalendar({db,getUser:()=>({id:'owner'}),getWeeks:()=>[],container});
+ const loading=cal.mount();cal.suspend();container.innerHTML='<h1>Review</h1>';
+ finish({data:[]});await loading;
+ assert.equal(container.innerHTML,'<h1>Review</h1>');assert.equal(container.onclick,null);
+ await cal.mount();assert.match(container.innerHTML,/Lịch công việc/);
+});
+test('calendar rejected requests show an error and remain usable',async()=>{
+ const container={isConnected:true,innerHTML:'',replaceChildren(){}};
+ const db={from(){return {select(){return this},eq(){return this},order(){return this},limit(){return Promise.reject(new Error('Connection lost'))}}}};
+ const cal=createCalendar({db,getUser:()=>({id:'owner'}),getWeeks:()=>[],container});
+ await cal.mount();assert.match(container.innerHTML,/Connection lost/);assert.doesNotMatch(container.innerHTML,/Đang đọc dữ liệu/);
+ assert.equal(typeof container.onclick,'function');cal.clear();
+});

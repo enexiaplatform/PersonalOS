@@ -18,3 +18,6 @@ document.addEventListener('click',e=>{
  if(e.target.closest('[data-focus-start]')){focus.toggle();timer();}
  if(e.target.closest('[data-focus-reset]')){focus.reset();timer();}
 });
+
+const passwordToggle=document.querySelector('#toggle-password');
+passwordToggle?.addEventListener('click',()=>{const input=document.querySelector('#password');const visible=input.type==='password';input.type=visible?'text':'password';passwordToggle.textContent=visible?'Ẩn':'Hiện';passwordToggle.setAttribute('aria-pressed',String(visible));passwordToggle.setAttribute('aria-label',visible?'Ẩn mật khẩu':'Hiện mật khẩu');});

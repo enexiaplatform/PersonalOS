@@ -14,3 +14,9 @@
 /* Fill the visible board while retaining a minimum time scale for horizontal zoom. */
 .gp-grid{width:max(100%,calc(var(--label-width) + var(--min-time-width)));min-width:calc(var(--label-width) + var(--min-time-width))}.gp-row{grid-template-columns:var(--label-width) minmax(0,1fr)}
 @media(min-width:951px){.main:has(.gantt-pro){max-width:none;padding-left:24px;padding-right:24px}.gantt-pro .gp-heading{padding:13px 0 10px}.gantt-pro .gp-heading h1{font-size:29px}.gantt-pro .gp-heading p{margin-top:3px}.gantt-pro .gp-summary{padding:12px 18px;gap:20px}.gantt-pro .gp-quarter-title b{font-size:22px}.gantt-pro .gp-quarter-title b span{font-size:18px}.gantt-pro .gp-toolbar{margin:10px 0 6px}.gantt-pro .gp-view-options{margin-bottom:6px}.gantt-pro .gp-scroll{height:clamp(480px,calc(100dvh - 310px),1100px);max-height:none}}
+
+/* Native buttons retain their role within the timeline's table cells. */
+.gp-cell-action{display:flex;align-items:center;gap:inherit;width:100%;min-height:44px;padding:0;border:0;background:transparent;color:inherit;font:inherit;text-align:left}
+.gp-task-label>.gp-cell-action{display:block}
+.gp-cell-action:focus-visible{outline-offset:-2px}
+.gp-group-row .gp-cell-action>.icon{width:14px;height:14px}

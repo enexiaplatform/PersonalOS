@@ -4,7 +4,7 @@ import {client as db} from './supabase-client.mjs';
 import { STATUSES, todayVN, weekRange, canonicalWeeks, uniqueItems, currentSnapshot, periodItems, explicitDate, dailyEvidence } from "./model.mjs";
 import { buildWeekAnalytics, filterAnalysisRecords, STATUS_META } from "./analytics.mjs";
 import { renderAnalyticsSummary, renderAnalyticsPanels, axisLabel } from "./analytics-view.mjs";
-import { icon, filterRecords, statementParts } from "./experience.mjs";
+import { icon, filterRecords, statementParts, searchText } from "./experience.mjs";
 import { SOURCE, BLUEPRINT, CAPACITY } from "./goals.js";
 import { PROJECT_URL, PUBLISHABLE_KEY } from "./config.js";
 import {buildGanttModel,filterGanttTasks,ganttCsv,quarterRange} from './gantt.mjs';
@@ -24,16 +24,16 @@ let selectedYear=Number(localStorage.getItem("henry-os-year"))===2027?2027:2026;
 let progressSnapshots=[],progressError='';
 let yearPlan=null,loadingData=false,loadError="",refreshSequence=0;
 let notionWeeks=[];
-let user=null,entries=[],metrics=[],settings=null,currentView="overview",busy=false;
+let user=null,entries=[],metrics=[],settings=null,currentView="overview",busy=false,authBusy=false;
 const $=s=>document.querySelector(s);
 const calendarController=createCalendar({db,getUser:()=>user,getWeeks:()=>canonicalWeeks(notionWeeks),container:document.querySelector('#view-content')});
 const detailRegistry=new Map();
 let workspace=parseWorkspaceHash(location.hash).module,moduleMetadata={};
 let lastWorkspace=localStorage.getItem('henry-last-workspace')||'personal';
 const gateway=createWorkspaceGateway({db,getUser:()=>user,container:document.querySelector('#module-deck'),onMetadata:data=>{moduleMetadata=data;if(workspace==='home')render();}});
-function navigateWorkspace(module,view){if(workspace===module&&(module!=='personal'||!view||view===currentView))return;for(const id of ['detail-dialog','command-dialog']){const dialog=document.getElementById(id);if(dialog?.open)dialog.close();}workspace=module;document.body.dataset.workspace=module;if(module==='personal'){currentView=view||currentView||'overview';}if(Object.hasOwn(MODULES,module)){lastWorkspace=module;localStorage.setItem('henry-last-workspace',module);}const hash=module==='personal'?'personal/'+currentView:module;history.replaceState(null,'','#'+hash);render();if(module==='home')void gateway.refreshMetadata();window.scrollTo(0,0);}
+function navigateWorkspace(module,view,recordHistory=true){if(workspace===module&&(module!=='personal'||!view||view===currentView)){const command=document.querySelector('#command-dialog');if(command?.open)command.close();return;}for(const id of ['detail-dialog','command-dialog']){const dialog=document.getElementById(id);if(dialog?.open)dialog.close();}workspace=module;document.body.dataset.workspace=module;if(module==='personal'){currentView=view||currentView||'overview';}if(Object.hasOwn(MODULES,module)){lastWorkspace=module;localStorage.setItem('henry-last-workspace',module);}const hash=module==='personal'?'personal/'+currentView:module;if(recordHistory)history.pushState(null,'','#'+hash);render();if(module==='home')void gateway.refreshMetadata();window.scrollTo(0,0);document.querySelector('#main')?.focus({preventScroll:true});}
 document.addEventListener('click',e=>{const homeTask=e.target.closest('[data-home-task]');if(homeTask){const start=selectedWeek()?.week_start;navigateWorkspace('personal','calendar');calendarController.inspect(homeTask.dataset.homeTask,start);return;}const target=e.target.closest('[data-workspace]');if(target?.tagName==='BUTTON')navigateWorkspace(target.dataset.workspace,target.dataset.workspaceView);});
-window.addEventListener('hashchange',()=>{const route=parseWorkspaceHash(location.hash);navigateWorkspace(route.module,route.view);});
+window.addEventListener('hashchange',()=>{const route=parseWorkspaceHash(location.hash);navigateWorkspace(route.module,route.view,false);});
 
 let chartRevision="";
 const safe=s=>String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
@@ -191,7 +191,7 @@ function renderOverview(){
  const m=currentAnalytics(),day=window._selectedDay&&window._selectedDay>=w.week_start&&window._selectedDay<=w.week_end?window._selectedDay:dateNow()>=w.week_start&&dateNow()<=w.week_end?dateNow():w.week_start;
  const revision=[w.page_id,w.synced_at,selectedYear].join('|');
  const animated=chartRevision!==revision;chartRevision=revision;
- const rail='<div class="day-tabs week-rail" role="group" aria-label="Chọn ngày">'+m.days.map((d,n)=>'<button class="day-tab '+(day===d.date?'selected':'')+'" data-day="'+d.date+'" aria-label="'+['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'][n]+' '+d.date.slice(8)+'/'+d.date.slice(5,7)+'" aria-pressed="'+(day===d.date)+'"><span>'+['T2','T3','T4','T5','T6','T7','CN'][n]+'</span><b>'+d.date.slice(8)+'/'+d.date.slice(5,7)+'</b></button>').join('')+'</div>';
+ const rail='<div class="day-tabs week-rail" role="group" aria-label="Chọn ngày">'+m.days.map((d,n)=>'<button class="day-tab '+(day===d.date?'selected':'')+'" data-day="'+d.date+'" aria-label="'+['T2','T3','T4','T5','T6','T7','CN'][n]+' '+d.date.slice(8)+'/'+d.date.slice(5,7)+'" aria-pressed="'+(day===d.date)+'"><span>'+['T2','T3','T4','T5','T6','T7','CN'][n]+'</span> <b>'+d.date.slice(8)+'/'+d.date.slice(5,7)+'</b></button>').join('')+'</div>';
  const priorities=m.priorities.map((i,n)=>{const parts=statementParts(i.text);return '<button class="priority-row" data-detail="'+safe(detailKey(i))+'"><span class="priority-number">0'+(n+1)+'</span><span class="priority-copy"><strong>'+safe(parts.title)+'</strong><small>'+safe(parts.detail||pName(i.pillar))+'</small></span>'+statusPill(i)+icon('chevron')+'</button>';}).join('');
  return '<div class="analytics-workspace" data-chart-motion="'+(animated?'on':'off')+'"><section class="week-heading"><div><h1>Tuần của tôi</h1><p>'+dtext(w.week_start)+' — '+dtext(w.week_end)+'</p></div><div class="heading-actions"><button class="btn" data-view="calendar">'+icon('calendar')+'Mở lịch</button>'+weekPicker()+'<a class="btn primary" href="'+safe(notionUrl(w.source_url))+'" target="_blank" rel="noopener noreferrer">Mở Notion '+icon('arrow')+'</a></div></section>'+dataBanner(w)+renderAnalyticsSummary(m,rail)+(priorities?'<section class="week-priorities"><div class="panel-heading"><h3>Ưu tiên trong tuần</h3><button class="text-button" data-analysis="priorities">Xem toàn bộ '+icon('arrow')+'</button></div>'+priorities+'</section>':'')+renderAnalyticsPanels(m,dateNow())+'<details class="source-planner-details"><summary><span>'+icon('calendar')+'Kế hoạch & quyết định từ nguồn</span><small>'+m.priorities.length+' ưu tiên · '+m.stops.length+' mục để sau</small>'+icon('chevron')+'</summary><div class="planner-detail-grid"><section class="panel"><div class="panel-heading"><h3>Ưu tiên trong tuần</h3><button class="text-button" data-analysis="priorities">Xem toàn bộ</button></div>'+priorities+'</section><section class="panel"><div class="panel-heading"><h3>Để sau tuần này</h3></div>'+m.stops.map(i=>'<button class="parked-row" data-detail="'+safe(detailKey(i))+'">'+icon('note')+'<span>'+safe(i.text)+'</span>'+icon('chevron')+'</button>').join('')+'</section></div></details></div>';
 }
@@ -320,6 +320,7 @@ document.addEventListener('keydown',e=>{if(!['Enter',' '].includes(e.key)||e.tar
 
 function render(){
  if(!user)return;
+ if(workspace!=='personal'||currentView!=='calendar')calendarController.suspend();
  document.body.dataset.workspace=workspace;
  const crumb=document.querySelector('.breadcrumb>span:first-child');if(crumb)crumb.textContent=workspace==='home'?'Personal Platform':MODULES[workspace]?.name||'Personal Platform';
  const focusButton=document.querySelector("#toggle-focus");if(focusButton){focusButton.onclick=()=>{const on=document.body.classList.toggle("focus-mode");focusButton.setAttribute("aria-pressed",String(on));focusButton.textContent=on?"↙ Thu gọn":"⤢ Mở rộng";};}
@@ -337,14 +338,19 @@ function render(){
  document.querySelectorAll("#nav [data-view]").forEach(b=>{const active=b.dataset.view===currentView||b.dataset.view==='review'&&['notion','weekly','monthly','evidence','decision'].includes(currentView);b.classList.toggle('active',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
  const fn={calendar:()=>'',progress:renderProgressTab,gantt:renderGantt,life:renderLife,business:renderBusiness,review:renderReviewHub,notion:renderNotion,blueprint:renderBlueprint,overview:renderOverview,weekly:renderWeekly,monthly:renderMonthly,evidence:renderEvidence,decision:renderDecision,settings:renderSettings}[currentView]||renderOverview;
  detailRegistry.clear();
- $("#view-content").innerHTML=fn();
+ const content=fn();
+ // Each route has a page heading; sections follow it without skipping levels.
+ $("#view-content").innerHTML=(currentView!=='calendar'&&!content.includes('<h1')?'<section class="page-intro"><h1>'+safe($("#page-title").textContent)+'</h1></section>':'')+content.replaceAll('<h3','<h2').replaceAll('</h3>','</h2>');
  if(currentView==='calendar')void calendarController.mount();
  if(currentView==='gantt'&&ganttScrollState&&previousGanttKey===$('.gantt-pro')?.dataset?.ganttKey&&$('#gantt-scroll')){$('#gantt-scroll').scrollLeft=ganttScrollState.x;$('#gantt-scroll').scrollTop=ganttScrollState.y;}
 
 }
 async function signIn(mode){
  const email=$("#email").value.trim(),password=$("#password").value;
- if(!email){$("#auth-message").textContent="Nhập email để tiếp tục";return;}
+ if(authBusy)return;
+ if(!$("#email").reportValidity())return;
+ if(mode!=="reset"&&!$("#password").reportValidity())return;
+ authBusy=true;const controls=[...document.querySelectorAll("#auth button")];controls.forEach(b=>b.disabled=true);$("#auth-form").setAttribute("aria-busy","true");
  $("#auth-message").textContent="Đang xử lý...";
  try{
  let r;
@@ -354,6 +360,7 @@ async function signIn(mode){
  if(r.error)throw r.error;
  $("#auth-message").textContent=mode==="signup"?"Kiểm tra email để xác thực tài khoản (nếu được yêu cầu).":mode==="reset"?"Đã gửi email khôi phục (nếu tài khoản tồn tại).":"Đăng nhập thành công.";
  }catch(e){$("#auth-message").textContent=e.message||"Đăng nhập thất bại";}
+ finally{authBusy=false;controls.forEach(b=>b.disabled=false);$("#auth-form").removeAttribute("aria-busy");}
 }
 async function addMetrics(month,form){
  const values=[
@@ -407,8 +414,8 @@ function inspectSourceWeek(start){
 function openDetail(key){const i=detailRegistry.get(key);if(!i){toast('Nguồn đã thay đổi. Hãy mở lại ghi nhận.');return;}
  $('#detail-content').innerHTML='<div class="detail-kind">'+statusPill(i)+'</div><h2 id="detail-title">'+safe({must_win:'Ưu tiên trong tuần',risk:'Điểm cần gỡ',stop:'Để sau tuần này',activity:'Ghi nhận hoạt động',outcome:'Kết quả ghi nhận'}[i.kind]||'Chi tiết ghi nhận')+'</h2><p class="detail-body">'+safe(i.text)+'</p><dl class="detail-metadata"><div><dt>Trục</dt><dd>'+safe(pName(i.pillar))+'</dd></div><div><dt>Ngày thực hiện</dt><dd>'+safe(explicitDate(i)?dtext(i.occurred_on):'Chưa có ngày cụ thể từ nguồn')+'</dd></div><div><dt>Tuần</dt><dd>'+safe(dtext(i.week_start))+'</dd></div></dl><div class="detail-context"><b>Bối cảnh từ nguồn</b><p>'+safe(i.context||'Chưa có thêm bối cảnh.')+'</p></div><a class="btn primary" href="'+safe(notionUrl(i.source_url))+'" target="_blank" rel="noopener noreferrer">Mở nguồn Notion '+icon('arrow')+'</a><p class="info detail-footnote">Nội dung được giữ theo nguồn. Xem chi tiết không thay đổi kế hoạch hoặc trạng thái công việc.</p>';
  if($('#command-dialog').open)$('#command-dialog').close();if(!$('#detail-dialog').open)$('#detail-dialog').showModal();}
-function commandResults(){const query=$('#command-input').value.trim();const screens=[['overview','Tuần của tôi','calendar'],['gantt','Gantt Pro','gantt'],['progress','Bản đồ tiến bộ','radar'],['life','Nhịp sống','sun'],['business','Business cá nhân','bag'],['blueprint','Mục tiêu '+selectedYear,'target'],['review','Review & bằng chứng','review'],['settings','Nguồn & cài đặt','settings']];
- const matches=screens.filter(([,name])=>!query||name.toLocaleLowerCase('vi').includes(query.toLocaleLowerCase('vi')));
+function commandResults(){const query=$('#command-input').value.trim();const screens=[['overview','Tổng quan tuần','calendar'],['calendar','Công việc theo ngày','calendar'],['gantt','Gantt Pro','gantt'],['progress','Bản đồ tiến bộ','radar'],['life','Nhịp sống','sun'],['business','Business cá nhân','bag'],['blueprint','Mục tiêu '+selectedYear,'target'],['review','Review & bằng chứng','review'],['settings','Nguồn & cài đặt','settings']];
+ const matches=screens.filter(([,name])=>!query||searchText(name).includes(searchText(query)));
  const records=filterRecords(periodItems(notionWeeks,selectedYear),query);
  $('#command-results').innerHTML=(matches.length?'<div class="command-group-title">Mở màn hình</div>'+matches.map(([view,name,glyph])=>'<button class="command-result" data-view="'+view+'">'+icon(glyph)+'<span>'+safe(name)+'</span>'+icon('arrow')+'</button>').join(''):'')+(records.length?'<div class="command-group-title">Ghi nhận trong năm '+selectedYear+'</div>'+records.map(i=>'<button class="command-result result-record" data-detail="'+safe(detailKey(i))+'">'+icon('note')+'<span>'+safe(i.text)+'<small>'+safe(pName(i.pillar))+' · '+dtext(i.week_start)+'</small></span>'+icon('chevron')+'</button>').join(''):'')+(!matches.length&&!records.length?'<div class="empty-state small"><p>Không tìm thấy kết quả phù hợp.</p></div>':'');}
 function openCommand(){if(!user)return;if($('#command-dialog').open){$('#command-input').focus();return;}$('#command-input').value='';commandResults();$('#command-dialog').showModal();$('#command-input').focus();}
@@ -442,7 +449,7 @@ document.addEventListener("click",async e=>{
  const aq=e.target.closest("[data-annual-quarter]");if(aq){window._annualQuarter=Number(aq.dataset.annualQuarter);render();return;}
  const mt=e.target.closest("[data-review-month]");if(mt){window._notionPeriod=mt.dataset.reviewMonth;window._notionMode='month';currentView='notion';render();return;}
  const qt=e.target.closest("[data-quarter]");if(qt){window._blueprintQuarter=Number(qt.dataset.quarter);render();return;}
- const nav=e.target.closest("[data-view]");if(nav){if(workspace!=='personal'){if($('#command-dialog').open)$('#command-dialog').close();navigateWorkspace('personal',nav.dataset.view);return;}if(currentView===nav.dataset.view&&!$('#command-dialog').open)return;if($("#command-dialog").open)$("#command-dialog").close();currentView=nav.dataset.view;render();window.scrollTo(0,0);return;}
+ const nav=e.target.closest("[data-view]");if(nav){if(workspace!=='personal'){if($('#command-dialog').open)$('#command-dialog').close();navigateWorkspace('personal',nav.dataset.view);return;}navigateWorkspace('personal',nav.dataset.view);return;}
  const del=e.target.closest("[data-delete]");if(del){
  if(!confirm("Xóa bản ghi này? Thao tác không thể hoàn tác."))return;
  const {error}=await db.from("personal_os_entries").delete().eq("id",del.dataset.delete).eq("owner_id",user.id);
@@ -486,7 +493,7 @@ db.auth.onAuthStateChange((event,session)=>{
 });
 (async()=>{const {data,error}=await db.auth.getSession();if(error)notifyError(error);user=data?.session?.user||null;stateLogin(Boolean(user));if(user){currentView=parseWorkspaceHash(location.hash).view||"overview";void refresh();void gateway.refreshMetadata();}})();
 
-document.addEventListener("change",e=>{if(e.target.id==='progress-checkpoint'||e.target.id==='progress-compare'){const id=e.target.id;if(id==='progress-checkpoint'){progressState.checkpointId=e.target.value;progressState.compareId=null;}else progressState.compareId=e.target.value;render();$('#'+id)?.focus();return;}if(['gantt-axis','gantt-status','gantt-kind'].includes(e.target.id)){const controlId=e.target.id;ganttState[controlId.replace('gantt-','')]=e.target.value;render();$('#'+controlId)?.focus();return;}if(e.target.id==="mobile-view"){currentView=e.target.value;render();window.scrollTo(0,0);return;}if(e.target.id==="week-select"){window._weekStart=e.target.value;window._selectedDay=null;render();return;}if(e.target.id==="life-date"){if(!e.target.value.startsWith(String(selectedYear))){toast('Chọn năm ở thanh trên để xem dữ liệu năm khác.');render();return;}window._lifeDay=e.target.value;render();return;}if(e.target.id==="os-year"){selectedYear=Number(e.target.value)===2027?2027:2026;localStorage.setItem("henry-os-year",selectedYear);window._notionPeriod=monthNow();window._annualQuarter=undefined;ganttState.quarter=null;ganttState.axis='all';progressState.checkpointId=null;progressState.compareId=null;ganttState.collapsed=[];ganttState.expanded=[];window._weekStart=null;window._lifeDay=null;yearPlan=null;settings=null;refresh();return;}if(e.target.id==="notion-mode"){window._notionMode=e.target.value;render();}if(e.target.id==="notion-period"&&/^\d{4}-\d{2}$/.test(e.target.value)){if(!e.target.value.startsWith(String(selectedYear))){toast("Chọn năm ở thanh trên để chuyển toàn bộ workspace.");e.target.value=window._notionPeriod||monthNow();return;}window._notionPeriod=e.target.value;render();}});
+document.addEventListener("change",e=>{if(e.target.id==='progress-checkpoint'||e.target.id==='progress-compare'){const id=e.target.id;if(id==='progress-checkpoint'){progressState.checkpointId=e.target.value;progressState.compareId=null;}else progressState.compareId=e.target.value;render();$('#'+id)?.focus();return;}if(['gantt-axis','gantt-status','gantt-kind'].includes(e.target.id)){const controlId=e.target.id;ganttState[controlId.replace('gantt-','')]=e.target.value;render();$('#'+controlId)?.focus();return;}if(e.target.id==="mobile-view"){navigateWorkspace('personal',e.target.value);return;}if(e.target.id==="week-select"){window._weekStart=e.target.value;window._selectedDay=null;render();return;}if(e.target.id==="life-date"){if(!e.target.value.startsWith(String(selectedYear))){toast('Chọn năm ở thanh trên để xem dữ liệu năm khác.');render();return;}window._lifeDay=e.target.value;render();return;}if(e.target.id==="os-year"){selectedYear=Number(e.target.value)===2027?2027:2026;localStorage.setItem("henry-os-year",selectedYear);window._notionPeriod=monthNow();window._annualQuarter=undefined;ganttState.quarter=null;ganttState.axis='all';progressState.checkpointId=null;progressState.compareId=null;ganttState.collapsed=[];ganttState.expanded=[];window._weekStart=null;window._lifeDay=null;yearPlan=null;settings=null;refresh();return;}if(e.target.id==="notion-mode"){window._notionMode=e.target.value;render();}if(e.target.id==="notion-period"&&/^\d{4}-\d{2}$/.test(e.target.value)){if(!e.target.value.startsWith(String(selectedYear))){toast("Chọn năm ở thanh trên để chuyển toàn bộ workspace.");e.target.value=window._notionPeriod||monthNow();return;}window._notionPeriod=e.target.value;render();}});
 
 setInterval(()=>{if(user&&workspace==='personal'&&!document.hidden&&!loadingData&&['overview','life','business','notion','gantt','progress','calendar'].includes(currentView)&&!document.querySelector('.cal-dialog[open]')&&!document.activeElement?.matches('input,textarea,select'))void refresh(true);},60000);
 document.addEventListener('visibilitychange',()=>{if(user&&workspace==='personal'&&!document.hidden&&!loadingData&&!document.activeElement?.matches('input,textarea,select'))void refresh();});
