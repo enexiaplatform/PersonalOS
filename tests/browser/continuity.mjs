@@ -38,7 +38,7 @@ try{
  const launch=page.locator('.aom-launch');
  await launch.click();
  assert.equal(await page.locator('dialog.aom-overlay').evaluate(el=>el.matches(':modal')),true);
- await page.locator('#nav [data-view=overview]').evaluate(el=>el.focus());
+ await page.locator('#nav [data-view=calendar]').evaluate(el=>el.focus());
  assert.equal(await page.evaluate(()=>Boolean(document.activeElement.closest('.aom-overlay'))),true);
  await page.keyboard.press('Control+k');
  assert.equal(await page.locator('#command-dialog').evaluate(el=>el.open),false);

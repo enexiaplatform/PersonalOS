@@ -95,3 +95,10 @@ body[data-workspace=home] .shell{grid-template-columns:minmax(0,1fr)}body[data-w
 .sidebar .nav-item>[data-icon]{display:grid;place-items:center;width:var(--ref-icon-20);height:var(--ref-icon-20);flex:0 0 var(--ref-icon-20)}
 .sidebar .nav-item>[data-icon]>.icon{width:var(--sys-icon-size);height:var(--sys-icon-size)}
 .sidebar .nav-item>.nc-nav-label{min-width:0;flex:1}
+
+/* Daily planning and weekly analysis share one navigation destination. */
+.planning-switch{display:flex;gap:var(--ref-space-4);width:fit-content;max-width:100%;margin-bottom:var(--ref-space-20);padding:var(--ref-space-4);border:1px solid var(--sys-border-default);border-radius:var(--sys-radius-control);background:var(--sys-bg-inset)}
+.planning-switch button{display:flex;align-items:center;justify-content:center;gap:var(--ref-space-8);min-height:44px;padding:var(--ref-space-8) var(--ref-space-12);border:1px solid transparent;border-radius:var(--sys-radius-control);background:transparent;color:var(--sys-fg-secondary);font:inherit;font-size:var(--sys-font-label)}
+.planning-switch button[aria-pressed=true]{background:var(--sys-bg-surface-raised);border-color:var(--sys-border-default);color:var(--sys-fg-primary);font-weight:var(--sys-weight-strong)}
+.planning-switch button:hover{background:var(--sys-bg-surface-hover)}
+@media(max-width:760px){.planning-switch{width:100%}.planning-switch button{flex:1;min-width:0}}
