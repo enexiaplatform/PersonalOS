@@ -33,3 +33,33 @@ aside #side button { gap: var(--ref-space-8); }
 @media (max-width: 480px) {
   .filters { grid-template-columns: 1fr; }
 }
+
+.enexia-toolbar { margin-bottom: var(--ref-space-12); }
+.enexia-toolbar .actions { margin-inline-start: auto; }
+.heading h1 { margin-block: 0 var(--ref-space-12); }
+.enexia-summary {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  background: var(--sys-bg-surface);
+  border: 1px solid var(--sys-border-default);
+  border-radius: var(--sys-radius-surface);
+  margin-block: var(--ref-space-12) var(--ref-space-20);
+}
+.enexia-summary div { padding: var(--sys-space-panel); }
+.enexia-summary div + div { border-inline-start: 1px solid var(--sys-border-subtle); }
+.enexia-summary b { display: block; font-size: var(--sys-font-value); line-height: var(--sys-leading-tight); font-variant-numeric: tabular-nums; }
+.enexia-summary span { color: var(--sys-fg-secondary); font-size: var(--sys-font-label); }
+.enexia-overview { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(260px, 1fr); gap: var(--sys-space-gap); align-items: start; }
+.enexia-overview > section { min-width: 0; }
+.enexia-overview .data-table th { text-align: start; }
+.enexia-overview .data-table td:last-child { min-width: 18ch; }
+.enexia-notes { margin-top: var(--ref-space-20); color: var(--sys-fg-secondary); }
+.enexia-notes summary { cursor: pointer; padding-block: var(--ref-space-8); }
+@media (max-width: 1100px) {
+  .enexia-overview { grid-template-columns: minmax(0,1fr); }
+}
+@media (max-width: 600px) {
+  .enexia-summary { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .enexia-summary div:nth-child(n+3) { border-top: 1px solid var(--sys-border-subtle); }
+  .enexia-summary div:nth-child(3) { border-inline-start: 0; }
+}

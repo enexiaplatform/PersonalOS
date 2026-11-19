@@ -14,7 +14,6 @@ export function renderWorkspaceHome({escape:s,metadata={},weekCount=null,last='p
     <span class="platform-space-icon">${icon(icons[id])}</span>
     <span class="platform-space-copy">
       <strong id="space-${id}">${module.name}</strong>
-      <span class="platform-space-description">${module.description}</span>
       <span class="platform-space-sections">${module.sections}</span>
     </span>
     <span class="platform-space-open">${icon('arrow')}</span>
@@ -23,7 +22,7 @@ export function renderWorkspaceHome({escape:s,metadata={},weekCount=null,last='p
  }).join('');
  return `<section class="platform-home">
    <header class="platform-heading">
-     <div><h1>Không gian làm việc</h1><p>Mở không gian để tiếp tục công việc.</p></div>
+     <h1>Không gian làm việc</h1>
      ${recent?`<button class="ui-button ui-button--secondary platform-resume" type="button" data-workspace="${last}">Tiếp tục với ${recent.name} ${icon('arrow')}</button>`:''}
    </header>
    <nav class="platform-spaces" aria-label="Các không gian làm việc">${cards}</nav>
