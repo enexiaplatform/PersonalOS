@@ -11,18 +11,21 @@ dialog::backdrop{background:var(--sys-bg-scrim)}
 .cal-dialog input,.cal-dialog select{min-height:42px;font-size:14px}
 .cal-dialog p,.cal-dialog label{color:var(--os-muted)}
 .toast{background:var(--os-surface-3);color:var(--os-ink);border:1px solid var(--os-line-strong)}
-.auth-shell{background:var(--os-bg-main);grid-template-columns:1fr 1fr}
-.auth-intro{background:linear-gradient(0deg,var(--sys-bg-surface),var(--sys-feedback-success-bg)),url('../../assets/nocturne-mountains.svg') center/cover;padding:48px 60px;color:var(--os-ink)}
-.auth-intro h1{font:700 36px/1.3 var(--os-font);color:var(--os-ink)}
-.auth-intro p,.auth-intro small{color:var(--sys-fg-primary)}
-.auth-intro:after{display:none}
-.auth-intro>small{display:none}
-.auth-logo{color:var(--os-ink)}
-.auth-card{width:min(420px,calc(100% - 48px));padding:36px;background:var(--os-surface-1);border:1px solid var(--os-line);border-radius:var(--sys-radius-surface);box-shadow:var(--os-shadow-floating)}
-.auth-card h1{font-size:26px}
-.auth-card input{min-height:44px;background:var(--os-surface-2);border-color:var(--os-line-strong)}
-.auth-card .btn.primary{min-height:44px}
-.aom-launch{border-radius:10px;background:var(--os-gradient-primary);border:1px solid var(--sys-border-default);color:var(--sys-fg-primary);padding:12px 16px;font:700 12px var(--os-font);box-shadow:var(--os-shadow-card)}
+.aom-launch {
+ display: inline-flex;
+ align-items: center;
+ gap: var(--ref-space-8);
+ min-height: var(--ref-control-44);
+ border-radius: var(--sys-radius-control);
+ background: var(--sys-bg-surface-raised);
+ border: 1px solid var(--sys-border-accent);
+ color: var(--sys-fg-accent);
+ padding: 0 var(--ref-space-12);
+ font: var(--sys-weight-strong) var(--ref-font-size-13) var(--sys-font-family);
+ box-shadow: var(--sys-elevation-floating);
+}
+.aom-launch:hover { background: var(--sys-bg-accent); }
+.aom-launch svg, .aom-logo svg { width: var(--ref-icon-20); height: var(--ref-icon-20); }
 .aom-shell{background:var(--os-bg-main);color:var(--os-ink);font-family:var(--os-font);border:1px solid var(--os-line-strong);border-radius:var(--sys-radius-surface);box-shadow:var(--os-shadow-floating)}
 .aom-header{background:var(--os-surface-1);border-color:var(--os-line);color:var(--os-ink)}
 .aom-brand h2{font-size:20px;color:var(--os-ink)}
@@ -30,7 +33,7 @@ dialog::backdrop{background:var(--sys-bg-scrim)}
 .aom-logo{background:var(--os-primary-muted);color:var(--os-violet)}
 .aom-tabs{background:var(--os-surface-1);border-color:var(--os-line)}
 .aom-tabs button{color:var(--os-muted)}
-.aom-tabs button.active,.aom-tabs button[aria-selected=true]{background:var(--os-primary-muted);color:var(--os-violet)}
+.aom-tabs button[aria-selected=true]{border-bottom-color:var(--sys-border-accent);color:var(--sys-fg-accent);font-weight:var(--sys-weight-strong)}
 .aom-rail{background:var(--os-surface-1);border-color:var(--os-line)}
 .aom-composer{background:var(--os-surface-1);border-color:var(--os-line)}
 .aom-composer textarea{background:var(--os-bg-main);color:var(--os-ink);border:1px solid var(--os-line-strong);border-radius:10px;font-size:14px}
@@ -53,3 +56,12 @@ dialog::backdrop{background:var(--sys-bg-scrim)}
 .auth-message:not(:empty){padding:12px;border-radius:var(--sys-radius-control);background:var(--sys-bg-inset);color:var(--sys-fg-secondary)}
 
 .auth-card .link:hover,.auth-card .link:focus-visible{color:var(--sys-fg-primary)}
+
+@media (max-width: 480px) {
+ .aom-launch {
+  width: var(--ref-control-44);
+  justify-content: center;
+  padding: 0;
+ }
+ .aom-launch > span { display: none; }
+}

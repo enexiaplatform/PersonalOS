@@ -5,6 +5,17 @@ const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const browser=await chromium.launch({args:['--no-sandbox']});const context=await browser.newContext({viewport:{width:1440,height:1000}});const page=await context.newPage();const base=process.env.BASE_URL||'http://127.0.0.1:4173';const errors=[];page.on('pageerror',e=>errors.push(e.message));
 const go=async(section,component)=>{await page.goto(base+'/design-system.html#'+section);await page.locator('#preview-component').waitFor();if(component)await page.selectOption('#preview-component',component);};
 try{
+ await page.goto(base+'/design-system.html#tokens');
+ await page.locator('#token-query').fill('--cmp-input-height');
+ await page.selectOption('#token-tier','component');
+ assert.equal(await page.locator('#token-results li button').count(),1);
+ assert.match(await page.locator('#token-results').innerText(),/40px/);
+ await page.selectOption('#token-mode','compact');
+ assert.match(await page.locator('#token-results').innerText(),/32px/);
+ await page.selectOption('#token-mode','compact-touch');
+ assert.match(await page.locator('#token-results').innerText(),/44px/);
+ await page.locator('#token-query').fill('no-such-token');
+ assert.match(await page.locator('#token-results').innerText(),/Không tìm thấy/);
  await go('buttons','Button');const preview=page.locator('#live-preview .ui-button');assert.equal(await preview.evaluate(e=>e.offsetHeight),40);await page.selectOption('#lab-density','compact');assert.equal(await preview.evaluate(e=>e.offsetHeight),32);await page.selectOption('#lab-density','normal');await page.selectOption('#preview-size','lg');assert.equal(await preview.evaluate(e=>e.offsetHeight),44);await page.selectOption('#preview-state','disabled');assert(await preview.isDisabled());await page.selectOption('#preview-state','loading');await preview.focus();await page.keyboard.press('Enter');assert.equal(await page.locator('.ui-toast').count(),0);
  await page.evaluate(async()=>{const {enhanceControls}=await import('./design-system/ui.mjs');const root=document.createElement('div');root.innerHTML='<button class="secondary">Secondary</button><button class="primary">Primary</button><button class="ghost">Ghost</button>';enhanceControls(root);if(root.querySelector('.secondary').classList.contains('ui-button--primary'))throw Error('Secondary promoted to primary');if(!root.querySelector('.primary').classList.contains('ui-button--primary'))throw Error('Primary lost variant');if(!root.querySelector('.ghost').classList.contains('ui-button--ghost'))throw Error('Ghost lost variant');});
  await go('forms','Input');await page.selectOption('#preview-variant','Error');assert.equal(await page.locator('#live-preview input').getAttribute('aria-invalid'),'true');assert.match(await page.locator('#live-preview .ui-error').innerText(),/Vui lòng/);await page.selectOption('#preview-variant','Disabled');assert(await page.locator('#live-preview input').isDisabled());await page.selectOption('#preview-variant','Read-only');assert(await page.locator('#live-preview input').evaluate(e=>e.readOnly));
@@ -19,5 +30,5 @@ try{
  await page.selectOption('#preview-component','Tooltip');await page.locator('#live-preview button').focus();assert.equal(await page.locator('[role=tooltip]').count(),1);await page.keyboard.press('Escape');assert.equal(await page.locator('[role=tooltip]').count(),0);
  await go('data','Data Table');await page.locator('#live-preview [data-table-filter]').fill('Research');assert.equal(await page.locator('#live-preview tbody tr').count(),2);await page.locator('#live-preview [data-table-filter]').fill('');await page.locator('#live-preview [data-table-sort]').click();assert.equal(await page.locator('#live-preview th').first().getAttribute('aria-sort'),'ascending');await page.locator('#live-preview [data-table-filter]').fill('missing');assert.match(await page.locator('#live-preview tbody').innerText(),/No matching/);
  await go('forms');const form=page.locator('[data-lab-form]:visible').first();await form.locator('input[name=title]').fill('Synthetic draft');await form.locator('input[type=checkbox]').check();await form.locator('button[type=submit]').click();assert.match(await form.locator('[data-form-result]').innerText(),/hợp lệ/);
- assert.deepEqual(errors,[]);console.log('PASS: density, sizes, busy/disabled, checkbox, switch, combobox, roving tabs, dialog focus containment/return, drawer, context menu, tooltip, filter/sort, form.');
+ assert.deepEqual(errors,[]);console.log('PASS: token registry, density, sizes, busy/disabled, checkbox, switch, combobox, roving tabs, dialog focus containment/return, drawer, context menu, tooltip, filter/sort, form.');
 }finally{await browser.close();}

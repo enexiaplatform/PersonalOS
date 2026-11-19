@@ -11,7 +11,7 @@ overlay.setAttribute('aria-labelledby','aom-title');
 overlay.innerHTML=[
 '<div class="aom-backdrop" data-close></div>',
 '<section class="aom-shell">',
-'<header class="aom-header"><div class="aom-brand"><span class="aom-logo">✦</span><div><h2 id="aom-title">AI Manager</h2><p>Personal OS · Powered by Manus</p></div></div>',
+'<header class="aom-header"><div class="aom-brand"><span class="aom-logo">'+icon('spark')+'</span><div><h2 id="aom-title">AI Manager</h2><p>Personal OS · Powered by Manus</p></div></div>',
 '<div class="aom-header-actions"><span class="aom-level">● Autonomous · Level B</span><button class="aom-icon" data-refresh title="Kiểm tra nguồn" aria-label="Kiểm tra nguồn">⟳</button><button class="aom-icon" data-close title="Đóng" aria-label="Đóng">×</button></div></header>',
 '<nav class="aom-tabs" role="tablist" aria-label="AI Manager"><button data-tab="overview" role="tab">Tổng quan</button><button data-tab="actions" role="tab">Hành động <span id="aom-count"></span></button><button data-tab="history" role="tab">Lịch sử</button><button data-tab="memory" role="tab">Bộ nhớ</button><button data-tab="settings" role="tab">Quyền & dữ liệu</button></nav>',
 '<div class="aom-content"><div class="aom-main"><div class="aom-source" id="aom-source"></div><div class="aom-body" id="aom-body" aria-live="polite"></div></div>',
@@ -21,8 +21,11 @@ overlay.innerHTML=[
 '<div class="aom-compose-input"><label class="sr-only" for="aom-question">Hỏi AI Manager</label><textarea id="aom-question" maxlength="1600" rows="2" required placeholder="Hỏi về tiến độ, việc cần ưu tiên hoặc cách tối ưu tuần…"></textarea><button class="aom-primary" id="aom-submit" type="submit">Phân tích</button></div>',
 '<div class="aom-compose-foot"><span>Ctrl/⌘ + Enter để gửi</span><button type="button" data-tab="settings">Quyền dữ liệu</button></div></form></section>'
 ].join('');
-const launch=make('button','aom-launch','AI Manager');launch.type='button';
+const launch=make('button','aom-launch');
+launch.type='button';
+launch.innerHTML=icon('spark')+'<span>AI Manager</span>';
 launch.setAttribute('aria-label','Mở AI Manager');
+launch.title='Mở AI Manager';
 document.body.append(overlay,launch);
 const $=q=>overlay.querySelector(q),body=$('#aom-body'),list=$('#aom-rail-list'),box=$('#aom-question');
 let returnFocus=null;
@@ -34,7 +37,7 @@ document.addEventListener('click',e=>{const trigger=e.target.closest('[data-open
 overlay.querySelectorAll('[data-close]').forEach(x=>x.addEventListener('click',close));
 overlay.querySelectorAll('[data-tab]').forEach(x=>x.addEventListener('click',()=>{state.tab=x.dataset.tab;draw();$('.aom-main').scrollTop=0;if(state.tab==='memory')void loadMemory();}));
 $('[data-refresh]').addEventListener('click',()=>void load(true));
-document.addEventListener('keydown',e=>{if(!state.open)return;if(e.key==='Escape')close();if(e.key==='Tab'){const nodes=[...overlay.querySelectorAll('button,input,textarea,select,a[href],[tabindex="0"]')].filter(n=>!n.disabled&&n.getClientRects().length);const first=nodes[0],last=nodes.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}}});
+document.addEventListener('keydown',e=>{if(!state.open)return;if(e.key==='Tab'){const nodes=[...overlay.querySelectorAll('button,input,textarea,select,a[href],[tabindex="0"]')].filter(n=>!n.disabled&&n.getClientRects().length);const first=nodes[0],last=nodes.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}}});
 window.addEventListener('hashchange',()=>{if(state.open){draw();if(state.tab==='memory')void loadMemory();}});
 async function api(method,op,fields={}){
  const {data:{session}}=await sb.auth.getSession();

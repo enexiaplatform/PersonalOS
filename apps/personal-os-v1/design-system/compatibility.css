@@ -25,9 +25,9 @@
   --os-text-secondary: var(--sys-fg-secondary);
   --os-text-muted: var(--sys-fg-tertiary);
   --os-text-disabled: var(--sys-fg-disabled);
-  --os-radius-sm: var(--ref-radius-8);
-  --os-radius-md: var(--ref-radius-12);
-  --os-radius-lg: var(--ref-radius-16);
+  --os-radius-sm: var(--sys-radius-control);
+  --os-radius-md: var(--sys-radius-surface);
+  --os-radius-lg: var(--sys-radius-overlay);
   --os-radius-xl: var(--ref-radius-20);
   --os-space-1: var(--ref-space-4);
   --os-space-2: var(--ref-space-4);
@@ -53,7 +53,8 @@
   --os-radius: var(--sys-radius-surface);
   --os-control: var(--sys-control-height);
   --os-shadow: var(--os-shadow-card);
-  --workspace-bar: 56px;
+  --workspace-bar: var(--sys-shell-bar-height);
+  --shell-gutter: var(--sys-shell-gutter);
   --font: var(--os-font);
   --bg: var(--os-bg-main);
   --paper: var(--os-surface-1);

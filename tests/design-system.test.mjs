@@ -1,4 +1,4 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {readFile,readdir} from 'node:fs/promises';import {fileURLToPath} from 'node:url';import {bundleCSS} from '../scripts/export-design-system.mjs';import {kpi,button,taskRow,attributes} from '../apps/personal-os-v1/design-system/ui.mjs';import {catalog} from '../apps/personal-os-v1/design-system/catalog.mjs';
+import test from 'node:test';import assert from 'node:assert/strict';import {readFile,readdir} from 'node:fs/promises';import {fileURLToPath} from 'node:url';import {bundleCSS} from '../scripts/export-design-system.mjs';import {generateTokenMap} from '../scripts/generate-token-map.mjs';import {kpi,button,taskRow,attributes} from '../apps/personal-os-v1/design-system/ui.mjs';import {catalog} from '../apps/personal-os-v1/design-system/catalog.mjs';
 const app=fileURLToPath(new URL('../apps/personal-os-v1/',import.meta.url));
 const css=await bundleCSS(app+'tokens.css');const tokens=Object.fromEntries([...css.matchAll(/(--[\w-]+)\s*:\s*([^;{}]+);/g)].map(([,key,value])=>[key,value.trim()]));
 function resolveToken(key,stack=[]){assert(!stack.includes(key),'Token cycle '+key);assert(key in tokens,'Missing '+key);return tokens[key].replace(/var\((--[\w-]+)\)/g,(_,name)=>resolveToken(name,[...stack,key]));}
@@ -10,3 +10,30 @@ test('New component recipes contain no literal colors; theme decisions live in f
 test('Missing KPI is unavailable, actual zero is retained, and display-only KPIs are not buttons',()=>{assert.match(kpi({label:'Coverage'}),/^<article[^>]*data-tone="unavailable"/);assert.match(kpi({label:'Coverage'}),/ui-kpi__value">—</);assert.match(kpi({label:'Records',value:0}),/ui-kpi__value">0</);assert.match(kpi({label:'Records',value:1,attrs:{'data-workspace':'personal'}}),/^<button/);});
 test('Renderer escapes content, blocks event attributes, and emits one correct submit type',()=>{assert(!attributes({onclick:'alert(1)'}));assert(!kpi({label:'<img src=x>',value:'<script>'}).includes('<script>'));assert.match(taskRow({title:'<unsafe>',domain:'Test'}),/&lt;unsafe&gt;/);const html=button({label:'Save',attrs:{type:'submit'}});assert.equal((html.match(/type=/g)||[]).length,1);assert.match(html,/type="submit"/);});
 test('Every required component has anatomy, variants, state, interaction and token contracts',()=>{assert.equal(catalog.length,26);for(const c of catalog){assert(c.anatomy.includes('→'),c.id);assert(c.variants.length&&c.states.length&&c.tokens.length,c.id);assert(c.behavior.length>50,c.id);for(const token of c.tokens)assert(token in tokens,token);}});
+
+test('Published registry matches the entire foundation, including aliases and responsive modes',async()=>{
+ const manifest=JSON.parse(await readFile(app+'design-system/token-map.json','utf8'));
+ assert.deepEqual(manifest,await generateTokenMap());
+ assert.deepEqual(Object.keys(manifest.tokens).sort(),Object.keys(tokens).sort());
+ assert.equal(manifest.tokens['--cmp-input-height'].resolved,'40px');
+ assert.equal(manifest.tokens['--cmp-input-height'].variants.compact,'32px');
+ assert.equal(manifest.tokens['--cmp-input-height'].variants['compact-touch'],'44px');
+ assert.equal(manifest.tokens['--workspace-bar'].variants.phone,'104px');
+ assert.equal(manifest.tokens['--sys-motion-fast'].variants['reduced-motion'],'1ms');
+ for(const html of ['index.html','design-system.html']){
+  const content=await readFile(app+html,'utf8');
+  assert(content.includes('name="theme-color" content="'+manifest.tokens['--sys-bg-canvas'].resolved+'"'),html);
+ }
+});
+
+test('Runtime color and token references use the shared foundation',async()=>{
+ const files=(await readdir(app,{recursive:true})).filter(name=>/\.(css|mjs|js|html)$/.test(name));
+ for(const path of files){
+  const source=await readFile(app+path,'utf8');
+  const runtime=source.replace(/<meta name="theme-color" content="#[\da-f]{6}">/g,'');
+  if(path!=='design-system/primitives.css')assert(!/#[\da-f]{3,8}\b|rgba?\([\d.]/i.test(runtime),path);
+  for(const [,name] of source.matchAll(/var\((--(?:ref|sys|cmp|os)-[\w-]+)\s*[,)]/g)){
+   assert(Object.hasOwn(tokens,name),path+': unknown '+name);
+  }
+ }
+});

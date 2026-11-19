@@ -29,6 +29,14 @@ Overlays use a labelled native `.ui-dialog`; open with `data-ui-dialog="id"` and
 
 `data-state` is a visual inspection API. Product code uses actual native/ARIA state. Loading placeholders have `aria-busy` and an accessible loading label; empty/error states explain the absent source and a real next step. Never show laboratory fixtures in product routes.
 
+## Token registry
+
+The reference values, semantic roles, component contracts and compatibility aliases are authored in the four foundation stylesheets. `node scripts/generate-token-map.mjs` regenerates `token-map.json`. Run `node scripts/generate-token-map.mjs --check` to verify the published catalog matches CSS.
+
+Open `design-system.html#tokens` to filter by tier and inspect the raw declaration beside the resolved value. The mode selector includes normal, compact, touch, compact touch, tablet, phone and reduced motion. The JSON includes each media override and the resolved values for affected tokens.
+
+Status series describe evidence states across charts. Workspace and categorical series support recognition in the calendar, objectives and Enexia. Components use semantic or component roles for reusable intent. A renderer may reference named series variables when it owns chart data or SVG geometry.
+
 ## Isolated workspaces
 
 Run `node scripts/export-design-system.mjs /absolute/native/app/henry-design-system.css` from the repository root. This recursively bundles the exact public token/recipe imports, rewrites the self-hosted font path and fails on import cycles. The generated CSS is committed in each private source repository. Its provider imports a matching copy of `ui.mjs` and `experience.mjs`, mounted after the native UI renders; source readers and React controllers remain native.

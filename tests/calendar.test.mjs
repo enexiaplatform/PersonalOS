@@ -6,7 +6,7 @@ test('groups, filtering and week boundaries are stable',()=>{assert.equal(groupO
 import {createCalendar} from '../apps/personal-os-v1/calendar.mjs';
 test('calendar agenda retains complete task titles, filters explicit days, and switches week mode without writing',async()=>{
  const start=monday(),title='A complete task title <keep> with enough text to read';
- const container={isConnected:true,innerHTML:'',replaceChildren(){}};
+ const container={isConnected:true,innerHTML:'',querySelector(){return null},replaceChildren(){}};
  let writes=0;const result={data:[{week_start:start,synced_at:'2026-11-01T00:00:00Z',tasks:[{id:'a',title,group:'Servicebio',date:start,status:'plan'},{id:'b',title:'Undated only',group:'Enexia',date:null,status:'doing'}]}]};
  const db={from(table){const chain={select(){return this},eq(){return this},order(){return this},limit(){return Promise.resolve(table==='personal_os_calendar_weeks'?result:{data:[]})}};return chain},rpc(){writes++}};
  const cal=createCalendar({db,getUser:()=>({id:'owner'}),getWeeks:()=>[],container});await cal.mount();
@@ -14,13 +14,13 @@ test('calendar agenda retains complete task titles, filters explicit days, and s
  const click=(attribute,value)=>container.onclick({target:{closest:selector=>selector===`[${attribute}]`?{dataset:{[attribute.replace('data-','').replace(/-([a-z])/g,(_,c)=>c.toUpperCase())]:value}}:null}});
  click('data-cal-focus','undated');let agenda=container.innerHTML.split('class="cal-agenda"')[1].split('class="cal-scroll"')[0];
  assert.match(agenda,/Undated only/);assert.doesNotMatch(agenda,/A complete task title/);
- click('data-cal-display','board');assert.match(container.innerHTML,/<div hidden class="cal-agenda"/);assert.match(container.innerHTML,/<div  class="cal-scroll"/);assert.equal(writes,0);
+ click('data-cal-display','board');assert.doesNotMatch(container.innerHTML,/class="cal-agenda"/);assert.match(container.innerHTML,/class="cal-scroll"/);assert.equal(writes,0);
  cal.clear();
 });
 
 test('leaving calendar cancels late reads without replacing the destination screen',async()=>{
  let finish;const pending=new Promise(resolve=>finish=resolve);
- const container={isConnected:true,innerHTML:'',replaceChildren(){}};
+ const container={isConnected:true,innerHTML:'',querySelector(){return null},replaceChildren(){}};
  const db={from(){return {select(){return this},eq(){return this},order(){return this},limit(){return pending}}}};
  const cal=createCalendar({db,getUser:()=>({id:'owner'}),getWeeks:()=>[],container});
  const loading=cal.mount();cal.suspend();container.innerHTML='<h1>Review</h1>';
@@ -29,7 +29,7 @@ test('leaving calendar cancels late reads without replacing the destination scre
  await cal.mount();assert.match(container.innerHTML,/Lịch công việc/);
 });
 test('calendar rejected requests show an error and remain usable',async()=>{
- const container={isConnected:true,innerHTML:'',replaceChildren(){}};
+ const container={isConnected:true,innerHTML:'',querySelector(){return null},replaceChildren(){}};
  const db={from(){return {select(){return this},eq(){return this},order(){return this},limit(){return Promise.reject(new Error('Connection lost'))}}}};
  const cal=createCalendar({db,getUser:()=>({id:'owner'}),getWeeks:()=>[],container});
  await cal.mount();assert.match(container.innerHTML,/Connection lost/);assert.doesNotMatch(container.innerHTML,/Đang đọc dữ liệu/);

@@ -5,3 +5,31 @@
 .ecosystem-map-scroll{max-width:100%;overflow:auto}
 .ecosystem-map-scroll .map{display:block;min-width:920px;min-height:0;max-height:none;height:auto;aspect-ratio:920/430}
 @media(max-width:720px){.filters input,.filters select,.mobile-select{font-size:16px}}
+
+/* Use the same solid work surfaces and selection states inside the embedded module. */
+aside #side button[aria-current=page],
+aside #side button.active {
+  color: var(--sys-domain-enexia);
+  box-shadow: inset 2px 0 var(--sys-domain-enexia);
+}
+.enexia-empty {
+  padding: var(--sys-space-panel);
+  border: 1px solid var(--sys-border-default);
+  border-radius: var(--sys-radius-surface);
+  background: var(--sys-bg-surface);
+}
+.enexia-empty h1 { font-size: var(--sys-font-heading); margin: 0; }
+.enexia-empty p { color: var(--sys-fg-secondary); margin: var(--ref-space-8) 0 0; }
+
+.filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(150px, 240px);
+  align-items: end;
+  gap: var(--ref-space-12);
+}
+.filters label { display: grid; gap: var(--ref-space-4); min-width: 0; }
+.filters input, .filters select { width: 100%; min-width: 0; }
+aside #side button { gap: var(--ref-space-8); }
+@media (max-width: 480px) {
+  .filters { grid-template-columns: 1fr; }
+}

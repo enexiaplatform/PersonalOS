@@ -2,13 +2,13 @@
 :root, [data-theme="nocturne"] {
   --sys-canvas-image: var(--ref-canvas-image);
   --sys-canvas-tint: var(--ref-canvas-tint);
-  --sys-bg-canvas: var(--ref-neutral-900);
+  --sys-bg-canvas: var(--ref-neutral-925);
   --sys-bg-sidebar: var(--ref-neutral-900);
   --sys-bg-surface: var(--ref-neutral-850);
   --sys-bg-surface-raised: var(--ref-neutral-800);
-  --sys-bg-surface-hover: var(--ref-neutral-800);
+  --sys-bg-surface-hover: var(--ref-neutral-750);
   --sys-bg-surface-pressed: var(--ref-neutral-700);
-  --sys-bg-inset: var(--ref-neutral-925);
+  --sys-bg-inset: var(--ref-neutral-950);
   --sys-bg-accent: var(--ref-violet-950);
   --sys-fg-primary: var(--ref-neutral-50);
   --sys-fg-secondary: var(--ref-neutral-200);
@@ -37,10 +37,36 @@
   --sys-feedback-warning-bg: var(--ref-warning-950);
   --sys-feedback-danger-bg: var(--ref-danger-950);
   --sys-feedback-info-bg: var(--ref-blue-950);
+  --sys-action-secondary-bg: var(--sys-bg-surface-raised);
+  --sys-action-secondary-hover: var(--sys-bg-surface-hover);
+  --sys-action-secondary-pressed: var(--sys-bg-surface-pressed);
+  --sys-action-secondary-fg: var(--sys-fg-primary);
+  --sys-action-disabled-bg: var(--sys-bg-surface-raised);
+  --sys-action-disabled-fg: var(--sys-fg-disabled);
+  --sys-action-disabled-border: var(--sys-border-subtle);
+  --sys-action-neutral-border: var(--sys-border-interactive);
   --sys-domain-personal: var(--ref-violet-300);
   --sys-domain-servicebio: var(--ref-jade-300);
   --sys-domain-ventures: var(--ref-bronze-300);
   --sys-domain-enexia: var(--ref-blue-300);
+  --sys-series-fulltime: var(--ref-danger-300);
+  --sys-series-fulltime-bg: var(--ref-danger-950);
+  --sys-series-servicebio: var(--ref-jade-300);
+  --sys-series-servicebio-bg: var(--ref-jade-950);
+  --sys-series-ventures: var(--ref-bronze-300);
+  --sys-series-ventures-bg: var(--ref-bronze-950);
+  --sys-series-enexia: var(--ref-blue-300);
+  --sys-series-enexia-bg: var(--ref-blue-950);
+  --sys-series-language: var(--ref-violet-300);
+  --sys-series-language-bg: var(--ref-violet-950);
+  --sys-series-neutral: var(--ref-neutral-300);
+  --sys-series-neutral-bg: var(--ref-neutral-850);
+  --sys-series-positive: var(--ref-success-300);
+  --sys-series-positive-bg: var(--ref-success-950);
+  --sys-series-info: var(--ref-cyan-300);
+  --sys-series-info-bg: var(--ref-cyan-950);
+  --sys-series-attention: var(--ref-warning-300);
+  --sys-series-attention-bg: var(--ref-warning-950);
   --sys-radar-level-4-bg: var(--ref-jade-950);
   --sys-radar-level-3-bg: var(--ref-bronze-950);
   --sys-radar-level-2-bg: var(--ref-warning-950);
@@ -57,6 +83,10 @@
   --sys-font-label: var(--ref-font-size-12);
   --sys-font-meta: var(--ref-font-size-11);
   --sys-font-heading: var(--ref-font-size-28);
+  --sys-font-display: var(--ref-font-size-36);
+  --sys-font-page: var(--ref-font-size-26);
+  --sys-font-section: var(--ref-font-size-20);
+  --sys-font-control: var(--ref-font-size-13);
   --sys-font-title: var(--ref-font-size-16);
   --sys-font-value: var(--ref-font-size-32);
   --sys-weight-regular: var(--ref-weight-regular);
@@ -77,12 +107,20 @@
   --sys-radius-control: var(--ref-radius-8);
   --sys-radius-surface: var(--ref-radius-12);
   --sys-radius-overlay: var(--ref-radius-16);
+  --sys-radius-badge: var(--ref-radius-4);
+  --sys-radius-pill: var(--ref-radius-pill);
   --sys-border-width: var(--ref-border-width);
   --sys-focus-width: var(--ref-focus-width);
+  --sys-focus-offset: var(--ref-focus-offset);
   --sys-container-content: var(--ref-container-content);
   --sys-container-wide: var(--ref-container-wide);
   --sys-container-dialog: var(--ref-container-dialog);
   --sys-container-sidebar: var(--ref-container-sidebar);
+  --sys-shell-gutter: var(--ref-space-24);
+  --sys-shell-bar-height: var(--ref-shell-bar);
+  --sys-shell-toolbar-height: var(--ref-shell-bar);
+  --sys-shell-sidebar-width: var(--ref-shell-sidebar);
+  --sys-shell-sidebar-compact-width: var(--ref-shell-sidebar-compact);
   --sys-control-height: var(--ref-control-40);
   --sys-control-height-sm: var(--ref-control-32);
   --sys-control-height-lg: var(--ref-control-44);
@@ -98,7 +136,29 @@
   --sys-z-dropdown: var(--ref-z-dropdown);
   --sys-z-overlay: var(--ref-z-overlay);
   --sys-z-modal: var(--ref-z-modal);
+  --sys-z-shell: var(--ref-z-shell);
   --sys-z-toast: var(--ref-z-toast);
 }
 [data-density="compact"] { --sys-control-height: var(--ref-control-32); --sys-space-control-y: var(--ref-space-6); --sys-space-panel: var(--ref-space-16); --sys-space-gap: var(--ref-space-12); --sys-space-row: var(--ref-space-8); }
 @media (pointer: coarse), (max-width: 600px) { :root, [data-density="compact"] { --sys-control-height: var(--ref-control-44); --sys-control-height-sm: var(--ref-control-44); } }
+@media (max-width: 1100px) {
+  :root {
+    --sys-shell-sidebar-width: var(--ref-shell-sidebar-tablet);
+    --sys-shell-gutter: var(--ref-space-20);
+  }
+}
+@media (max-width: 760px) {
+  :root {
+    --sys-shell-bar-height: var(--ref-shell-bar-mobile);
+    --sys-shell-gutter: var(--ref-space-16);
+    --sys-font-page: var(--ref-font-size-24);
+    --sys-font-display: var(--ref-font-size-28);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --sys-motion-fast: var(--ref-duration-reduced);
+    --sys-motion-normal: var(--ref-duration-reduced);
+    --sys-motion-slow: var(--ref-duration-reduced);
+  }
+}

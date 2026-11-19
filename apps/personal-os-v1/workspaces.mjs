@@ -3,8 +3,31 @@ export const MODULES=Object.freeze({personal:{name:'Personal OS',eyebrow:'01 / L
 export function parseWorkspaceHash(hash){const [module,view]=hash.replace(/^#/,'').split('/');return module==='personal'?{module,view:/^(overview|calendar|gantt|progress|life|business|blueprint|review|notion|weekly|monthly|evidence|decision|settings)$/.test(view)?view:'calendar'}:Object.hasOwn(MODULES,module)?{module,view:view||null}:{module:'home',view:null};}
 export function artwork(name){let shapes='';if(name==='personal'){for(let i=0;i<7;i++)shapes+=`<ellipse cx="220" cy="184" rx="${45+i*24}" ry="${15+i*10}"/><path d="M${220+i*19} ${184-i*14}v${-48-i*8}"/><circle cx="${220+i*19}" cy="${136-i*22}" r="4"/>`;shapes+='<ellipse class="solid" cx="220" cy="184" rx="38" ry="13"/>';}else if(name==='servicebio'){for(let i=0;i<3;i++){const x=108+i*105,y=178-i*43;shapes+=`<path class="pane" d="M${x} ${y-45}l78 38-78 40-78-40z"/><path d="M${x} ${y-45}v-61m-78 99v54l78 40 78-40v-54"/><circle cx="${x}" cy="${y-106}" r="5"/><path d="M${x-12} ${y-11}h24m-12-12v24"/>`;}}else if(name==='enexia'){shapes='<path d="M100 110L220 70L340 110L340 220L220 260L100 220Z"/><path d="M100 110L220 180L340 110M220 180V260M220 70V180"/><circle class="solid" cx="220" cy="180" r="15"/><circle cx="100" cy="110" r="9"/><circle cx="340" cy="110" r="9"/><circle cx="220" cy="70" r="9"/><circle cx="220" cy="260" r="9"/>';}else{for(let i=0;i<3;i++){const y=211-i*60;shapes+=`<path class="pane" d="M60 ${y}l235-104 95 45-235 104z"/><path d="M295 ${y-104}v-55m-140 159v-55"/><path class="solid" d="M${158+i*54} ${y-21}v-30l20-10 20 10v30l-20 10z"/>`;}}return `<svg class="portal-art" viewBox="0 0 440 300" aria-hidden="true"><g>${shapes}</g></svg>`;}
 export function renderWorkspaceHome({escape:s,metadata={},weekCount=null,last='personal'}={}){
- const icons={personal:'calendar',servicebio:'target',ventures:'bag',enexia:'gantt'};
- return `<section class="platform-home"><header class="platform-heading"><h1>Không gian làm việc</h1><p>Chọn không gian để tiếp tục công việc.</p></header><nav class="platform-spaces" aria-label="Các không gian làm việc">${Object.entries(MODULES).map(([id,module])=>{const stamp=metadata[id]?.source_updated_at;const source=id==='personal'?(weekCount===null?'Đang đọc nguồn kế hoạch':weekCount+' bản ghi tuần'):stamp?'Nguồn · '+s(new Date(stamp).toLocaleDateString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh'})):'Chưa đọc được thời điểm nguồn';return `<button type="button" class="portal portal-${id} ui-card platform-space" data-workspace="${id}"><span class="platform-space-icon">${icon(icons[id])}</span><strong>${module.name}</strong><p>${module.description}</p><span class="platform-space-sections">${module.sections}</span><span class="platform-space-source">${source}</span><span class="platform-space-open">Mở không gian ${icon('arrow')}</span></button>`;}).join('')}</nav>${Object.hasOwn(MODULES,last)?`<div class="platform-resume"><span>Không gian gần nhất · ${MODULES[last].name}</span><button class="ui-button ui-button--secondary" type="button" data-workspace="${last}">Tiếp tục ${icon('arrow')}</button></div>`:''}</section>`;
+ const icons={personal:'calendar',servicebio:'target',ventures:'bag',enexia:'layers'};
+ const recent=Object.hasOwn(MODULES,last)?MODULES[last]:null;
+ const cards=Object.entries(MODULES).map(([id,module])=>{
+  const stamp=metadata[id]?.source_updated_at;
+  const source=id==='personal'
+   ? weekCount===null?'Đang đọc nguồn kế hoạch':weekCount?weekCount+' bản ghi tuần':'Chưa có bản ghi tuần'
+   : stamp?'Nguồn cập nhật '+s(new Date(stamp).toLocaleDateString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh'})):'Chưa đọc được thời điểm cập nhật';
+  return `<button type="button" class="ui-card platform-space platform-space--${id}" data-workspace="${id}" aria-labelledby="space-${id}">
+    <span class="platform-space-icon">${icon(icons[id])}</span>
+    <span class="platform-space-copy">
+      <strong id="space-${id}">${module.name}</strong>
+      <span class="platform-space-description">${module.description}</span>
+      <span class="platform-space-sections">${module.sections}</span>
+    </span>
+    <span class="platform-space-open">${icon('arrow')}</span>
+    <span class="platform-space-source">${icon(id==='personal'?'note':'clock')} ${source}</span>
+  </button>`;
+ }).join('');
+ return `<section class="platform-home">
+   <header class="platform-heading">
+     <div><h1>Không gian làm việc</h1><p>Mở không gian để tiếp tục công việc.</p></div>
+     ${recent?`<button class="ui-button ui-button--secondary platform-resume" type="button" data-workspace="${last}">Tiếp tục với ${recent.name} ${icon('arrow')}</button>`:''}
+   </header>
+   <nav class="platform-spaces" aria-label="Các không gian làm việc">${cards}</nav>
+ </section>`;
 }
 export function withExecutiveTheme(html,module){
  if(!['servicebio','ventures','enexia'].includes(module))return html;
@@ -13,7 +36,7 @@ export function withExecutiveTheme(html,module){
  return html.replace(/<body\b/i,'<body data-executive-module="'+module+'"');
 }
 export function createWorkspaceGateway({db,getUser,container,onMetadata}){
- const frames=new Map(),prepared=new Map(),reading=new Map(),bootSnapshots=new Map(),recent=new Map(),cleanups=new Map();let generation=0,metadata={},metadataTask=null;
+ const frames=new Map(),prepared=new Map(),reading=new Map(),bootSnapshots=new Map(),recent=new Map(),cleanups=new Map();let generation=0,metadata={},metadataTask=null,activeModule=null;
  const valid=module=>['servicebio','ventures','enexia'].includes(module);
  function readSource(module,allowRecent=false){
   if(!valid(module))return Promise.reject(Error('Module không hợp lệ'));
@@ -35,6 +58,7 @@ export function createWorkspaceGateway({db,getUser,container,onMetadata}){
   prepared.set(key,task);void task.catch(()=>{if(prepared.get(key)===task)prepared.delete(key);});return task;
  }
  async function open(module){
+  activeModule=module;
   container.querySelectorAll?.('.module-error').forEach(n=>n.remove());for(const [key,frame]of frames)frame.hidden=key!==module;
   if(!valid(module)){container.hidden=true;return;}container.hidden=false;if(frames.has(module))return;
   const owner=getUser()?.id,stamp=generation;if(!owner)return;
@@ -49,8 +73,22 @@ export function createWorkspaceGateway({db,getUser,container,onMetadata}){
     frame.replaceWith(host);frames.set(module,host);
     if(!window.PersonalOSNativeModules?.[module]){const script=document.createElement('script');script.textContent=bundle.js;document.head.append(script);script.remove();}
     const cleanup=await window.PersonalOSNativeModules[module](root);if(stamp!==generation||getUser()?.id!==owner){cleanup();host.remove();return;}cleanups.set(module,cleanup);
-   }else frame.srcdoc=html;}catch(e){if(stamp!==generation||getUser()?.id!==owner)return;frames.get(module)?.remove();frames.delete(module);bootSnapshots.delete(module);const notice=document.createElement('div');notice.className='module-error';notice.textContent='Chưa mở được '+MODULES[module].name+'. '+e.message;const retry=document.createElement('button');retry.textContent='Thử lại';retry.onclick=()=>{notice.remove();void open(module)};notice.append(retry);container.append(notice);}
+   }else frame.srcdoc=html;}catch(e){if(stamp!==generation||getUser()?.id!==owner)return;frames.get(module)?.remove();frames.delete(module);bootSnapshots.delete(module);if(activeModule!==module)return;
+   const notice=document.createElement('section');
+   notice.className='module-error ui-card';
+   const title=document.createElement('h1');
+   title.textContent='Chưa mở được '+MODULES[module].name;
+   const explanation=document.createElement('p');
+   explanation.setAttribute('role','status');
+   explanation.textContent=e.message;
+   const retry=document.createElement('button');
+   retry.type='button';
+   retry.className='ui-button ui-button--secondary';
+   retry.textContent='Thử lại';
+   retry.onclick=()=>{void open(module);};
+   notice.append(title,explanation,retry);
+   container.append(notice);}
  }
- function clear(){generation++;for(const cleanup of cleanups.values())cleanup();cleanups.clear();for(const frame of frames.values())frame.remove();frames.clear();prepared.clear();reading.clear();recent.clear();bootSnapshots.clear();metadataTask=null;metadata={};container.replaceChildren();container.hidden=true;}
+ function clear(){generation++;activeModule=null;for(const cleanup of cleanups.values())cleanup();cleanups.clear();for(const frame of frames.values())frame.remove();frames.clear();prepared.clear();reading.clear();recent.clear();bootSnapshots.clear();metadataTask=null;metadata={};container.replaceChildren();container.hidden=true;}
  return {open,read,preload,prepareData:module=>readSource(module,true),refreshMetadata,clear};
 }

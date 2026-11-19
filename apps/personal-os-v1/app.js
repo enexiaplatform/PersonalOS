@@ -12,13 +12,13 @@ import {renderGanttSurface,renderGanttTimeline,renderGanttAgenda} from './gantt-
 import {buildProgressModel,validLevel as validProgressLevel,LEVELS as PROGRESS_LEVELS,checkpointLabel,progressDelta} from './progress.mjs';
 import {renderProgress,renderRadarCard,facetDimensions} from './progress-view.mjs';
 const PILLARS=[
-["career","Sự nghiệp & lãnh đạo","◈","#dcebf8"],
-["education","Học tập & năng lực","✦","#ebe4f9"],
-["entrepreneurship","Business cá nhân","◇","#fff0dc"],
-["finance","Tài chính cá nhân","▤","#e2f3e7"],
-["health","Sức khỏe & năng lượng","♥","#ffe9e6"],
-["relationships","Quan hệ & gia đình","♧","#f5e5f1"],
-["growth","Phát triển & sáng tạo","✳","#fff2d7"]];
+["career","Sự nghiệp & lãnh đạo","◈","var(--sys-series-enexia-bg)"],
+["education","Học tập & năng lực","✦","var(--sys-series-language-bg)"],
+["entrepreneurship","Business cá nhân","◇","var(--sys-series-ventures-bg)"],
+["finance","Tài chính cá nhân","▤","var(--sys-series-positive-bg)"],
+["health","Sức khỏe & năng lượng","♥","var(--sys-series-fulltime-bg)"],
+["relationships","Quan hệ & gia đình","♧","var(--sys-series-neutral-bg)"],
+["growth","Phát triển & sáng tạo","✳","var(--sys-series-attention-bg)"]];
 const viewNames={calendar:"Công việc theo ngày",progress:"Bản đồ tiến bộ",gantt:"Gantt Pro",life:"Nhịp sống",business:"Business cá nhân",review:"Review & bằng chứng",notion:"Dữ liệu từ Notion",blueprint:"Mục tiêu năm",overview:"Tổng quan tuần",weekly:"Review tuần",monthly:"Review tháng",evidence:"Bằng chứng",decision:"Nhật ký quyết định",settings:"Nguồn & cài đặt"};
 let selectedYear=Number(localStorage.getItem("henry-os-year"))===2027?2027:2026;
 let progressSnapshots=[],progressError='';
@@ -30,7 +30,7 @@ const calendarController=createCalendar({db,getUser:()=>user,getWeeks:()=>canoni
 const detailRegistry=new Map();
 let workspace=parseWorkspaceHash(location.hash).module,moduleMetadata={};
 let lastWorkspace=localStorage.getItem('henry-last-workspace')||'personal';
-const gateway=createWorkspaceGateway({db,getUser:()=>user,container:document.querySelector('#module-deck'),onMetadata:data=>{moduleMetadata=data;if(workspace==='home')render();}});
+const gateway=createWorkspaceGateway({db,getUser:()=>user,container:document.querySelector('#module-deck'),onMetadata:data=>{moduleMetadata=data;if(workspace==='home'&&!$('#view-content')?.contains(document.activeElement))render();}});
 function navigateWorkspace(module,view,recordHistory=true){if(workspace===module&&(module!=='personal'||!view||view===currentView)){const command=document.querySelector('#command-dialog');if(command?.open)command.close();return;}for(const id of ['detail-dialog','command-dialog']){const dialog=document.getElementById(id);if(dialog?.open)dialog.close();}workspace=module;document.body.dataset.workspace=module;if(module==='personal'){currentView=view||currentView||'calendar';}if(Object.hasOwn(MODULES,module)){lastWorkspace=module;localStorage.setItem('henry-last-workspace',module);}const hash=module==='personal'?'personal/'+currentView:module;if(recordHistory)history.pushState(null,'','#'+hash);render();if(module==='home')void gateway.refreshMetadata();window.scrollTo(0,0);document.querySelector('#main')?.focus({preventScroll:true});}
 document.addEventListener('click',e=>{const homeTask=e.target.closest('[data-home-task]');if(homeTask){const start=selectedWeek()?.week_start;navigateWorkspace('personal','calendar');calendarController.inspect(homeTask.dataset.homeTask,start);return;}const target=e.target.closest('[data-workspace]');if(target?.tagName==='BUTTON')navigateWorkspace(target.dataset.workspace,target.dataset.workspaceView);});
 window.addEventListener('hashchange',()=>{const route=parseWorkspaceHash(location.hash);navigateWorkspace(route.module,route.view,false);});
@@ -110,7 +110,7 @@ function renderBlueprint(){
  const recent=items("evidence");
  const pillars=BLUEPRINT.map(b=>{
    const evidence=recent.filter(x=>x.pillar===b.id).length;
-   return '<details class="goal-card" style="--pillar:'+['#477e86','#8d78a3','#b39255','#65875c','#b57564','#aa7d91','#9d905b'][BLUEPRINT.indexOf(b)]+';--tint:'+PILLARS.find(p=>p[0]===b.id)?.[3]+'" '+(b.id==="career"||b.id==="education"?'open':'')+'><summary><span class="goal-icon" aria-hidden="true">'+(PILLARS.find(p=>p[0]===b.id)?.[2]||'◇')+'</span><span><strong>'+safe(b.name)+'</strong><small>'+safe(b.priority)+'</small></span><span class="goal-count">'+evidence+' evidence</span></summary>'+
+   return '<details class="goal-card" style="--pillar:'+({career:'var(--sys-series-enexia)',education:'var(--sys-series-language)',entrepreneurship:'var(--sys-series-ventures)',finance:'var(--sys-series-positive)',health:'var(--sys-series-fulltime)',relationships:'var(--sys-series-neutral)',growth:'var(--sys-series-attention)'})[b.id]+';--tint:'+PILLARS.find(p=>p[0]===b.id)?.[3]+'" '+(b.id==="career"||b.id==="education"?'open':'')+'><summary><span class="goal-icon" aria-hidden="true">'+(PILLARS.find(p=>p[0]===b.id)?.[2]||'◇')+'</span><span><strong>'+safe(b.name)+'</strong><small>'+safe(b.priority)+'</small></span><span class="goal-count">'+evidence+' evidence</span></summary>'+
    '<div class="goal-detail"><div class="goal-north">'+safe(b.north)+'</div><p>'+safe(b.objective)+'</p><div class="goal-mini-title">KEY RESULTS · MỤC TIÊU THAM CHIẾU</div><ul>'+b.krs.map(k=>'<li>'+safe(k)+'</li>').join('')+'</ul><div class="goal-mini-title">CAM KẾT TRONG QUÝ</div><div class="quarter-detail">'+safe(b.q[q])+'</div><div class="goal-mini-title">CHỈ SỐ THEO DÕI</div><div class="metric-chips">'+b.metrics.map(m=>'<span title="'+safe(m[2])+'">'+safe(m[0])+'</span>').join('')+'</div><button class="btn soft small" data-view="evidence">Ghi nhận bằng chứng ↗</button></div></details>';
  }).join('');
  return '<div class="hero"><div><h3>Mục tiêu 2027</h3></div><div class="hero-stamp"><b>07</b><small>Life pillars</small></div></div>'+
@@ -154,7 +154,7 @@ function renderNotion(){
 function notionUrl(value){try{const u=new URL(value);return u.protocol==='https:'&&['app.notion.com','www.notion.so','notion.so'].includes(u.hostname)?u.href:'#';}catch{return '#';}}
 
 const YEAR_AXES=[['career','Sự nghiệp'],['business','Business cá nhân'],['freelance','Freelance'],['education','Học tập'],['health','Sức khỏe & thể thao'],['finance','Tài chính'],['growth','Đời sống & sáng tạo'],['relationships','Quan hệ & gia đình']];
-const yearPillars=()=>selectedYear===2026?YEAR_AXES.map(([id,name],i)=>[id,name,['◈','◇','↗','✦','♥','▤','✳','♧'][i],['#dcebf8','#fff0dc','#ffe8d6','#ebe4f9','#ffe9e6','#e2f3e7','#fff2d7','#f5e5f1'][i]]):PILLARS;
+const yearPillars=()=>selectedYear===2026?YEAR_AXES.map(([id,name],i)=>[id,name,['◈','◇','↗','✦','♥','▤','✳','♧'][i],['var(--sys-series-enexia-bg)','var(--sys-series-ventures-bg)','var(--sys-series-info-bg)','var(--sys-series-language-bg)','var(--sys-series-fulltime-bg)','var(--sys-series-positive-bg)','var(--sys-series-attention-bg)','var(--sys-series-neutral-bg)'][i]]):PILLARS;
 const sourceForYear=()=>selectedYear===2026?yearPlan?.source_url||'':SOURCE.url;
 const normalizePillar=id=>selectedYear===2026&&id==='entrepreneurship'?'business':id;
 function annualEvidence(axis,quarter){
@@ -323,11 +323,13 @@ function render(){
  if(workspace!=='personal'||currentView!=='calendar')calendarController.suspend();
  document.body.dataset.workspace=workspace;
  const planning=['calendar','overview'].includes(currentView);
+ const reviewChild=['notion','weekly','monthly','evidence','decision'].includes(currentView);
  $('#planning-switch').hidden=workspace!=='personal'||!planning;
  document.querySelectorAll('#planning-switch [data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===currentView)));
  const crumb=document.querySelector('.breadcrumb>span:first-child');if(crumb)crumb.textContent=workspace==='home'?'Personal Platform':MODULES[workspace]?.name||'Personal Platform';
- const focusButton=document.querySelector("#toggle-focus");if(focusButton){focusButton.onclick=()=>{const on=document.body.classList.toggle("focus-mode");focusButton.setAttribute("aria-pressed",String(on));focusButton.textContent=on?"↙ Thu gọn":"⤢ Mở rộng";};}
- document.querySelectorAll('.workspace-bar [data-workspace]').forEach(b=>{const active=b.dataset.workspace===workspace;b.classList.toggle('selected',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+ const focusButton=$('#toggle-focus');
+ focusButton.onclick=()=>setFocusMode(!document.body.classList.contains('focus-mode'));
+ document.querySelectorAll('.workspace-bar nav [data-workspace]').forEach(b=>{const active=b.dataset.workspace===workspace;b.classList.toggle('selected',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
  void gateway.open(workspace);
  if(workspace!=='personal'){$('#view-content').innerHTML=workspace==='home'?renderWorkspaceHome({escape:safe,metadata:moduleMetadata,weekCount:loadingData?null:notionWeeks.length,last:lastWorkspace}):'';$('#page-title').textContent=MODULES[workspace]?.name||'Không gian';return;}
  history.replaceState(null,'','#personal/'+currentView);
@@ -336,14 +338,17 @@ function render(){
  $("#page-title").textContent=planning?"Lịch & tổng quan":currentView==='blueprint'?"Mục tiêu "+selectedYear:viewNames[currentView]||"Personal OS";
  $('#os-year').value=String(selectedYear);
  if($('.year-picker'))$('.year-picker').style.display=currentView==='calendar'?'none':'';
- if($('#mobile-view'))$('#mobile-view').value=['notion','weekly','monthly','evidence','decision'].includes(currentView)?'review':planning?'calendar':currentView;
+ if($('#mobile-view'))$('#mobile-view').value=reviewChild?'review':planning?'calendar':currentView;
  $('#blueprint-label').textContent='Mục tiêu '+selectedYear;
- document.querySelectorAll("#nav [data-view]").forEach(b=>{const active=b.dataset.view===currentView||b.dataset.view==='calendar'&&planning||b.dataset.view==='review'&&['notion','weekly','monthly','evidence','decision'].includes(currentView);b.classList.toggle('active',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+ document.querySelectorAll("#nav [data-view]").forEach(b=>{const active=b.dataset.view===currentView||b.dataset.view==='calendar'&&planning||b.dataset.view==='review'&&reviewChild;b.classList.toggle('active',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
  const fn={calendar:()=>'',progress:renderProgressTab,gantt:renderGantt,life:renderLife,business:renderBusiness,review:renderReviewHub,notion:renderNotion,blueprint:renderBlueprint,overview:renderOverview,weekly:renderWeekly,monthly:renderMonthly,evidence:renderEvidence,decision:renderDecision,settings:renderSettings}[currentView]||renderOverview;
  detailRegistry.clear();
  const content=fn();
  // Each route has a page heading; sections follow it without skipping levels.
- $("#view-content").innerHTML=(currentView!=='calendar'&&!content.includes('<h1')?'<section class="page-intro"><h1>'+safe($("#page-title").textContent)+'</h1></section>':'')+content.replaceAll('<h3','<h2').replaceAll('</h3>','</h2>');
+ const back=reviewChild
+  ? '<button type="button" class="review-back" data-view="review">'+icon('back')+'Review & bằng chứng</button>'
+  : '';
+ $("#view-content").innerHTML=back+(currentView!=='calendar'&&!content.includes('<h1')?'<section class="page-intro"><h1>'+safe($("#page-title").textContent)+'</h1></section>':'')+content.replaceAll('<h3','<h2').replaceAll('</h3>','</h2>');
  if(currentView==='calendar')void calendarController.mount();
  if(currentView==='gantt'&&ganttScrollState&&previousGanttKey===$('.gantt-pro')?.dataset?.ganttKey&&$('#gantt-scroll')){$('#gantt-scroll').scrollLeft=ganttScrollState.x;$('#gantt-scroll').scrollTop=ganttScrollState.y;}
 
@@ -354,7 +359,8 @@ async function signIn(mode){
  if(!$("#email").reportValidity())return;
  if(mode!=="reset"&&!$("#password").reportValidity())return;
  authBusy=true;const controls=[...document.querySelectorAll("#auth button")];controls.forEach(b=>b.disabled=true);$("#auth-form").setAttribute("aria-busy","true");
- $("#auth-message").textContent="Đang xử lý...";
+ $("#auth-message").dataset.state="pending";
+ $("#auth-message").textContent="Đang xử lý…";
  try{
  let r;
  if(mode==="signup"){r=await db.auth.signUp({email,password});}
@@ -362,7 +368,7 @@ async function signIn(mode){
  else{r=await db.auth.signInWithPassword({email,password});}
  if(r.error)throw r.error;
  $("#auth-message").textContent=mode==="signup"?"Kiểm tra email để xác thực tài khoản (nếu được yêu cầu).":mode==="reset"?"Đã gửi email khôi phục (nếu tài khoản tồn tại).":"Đăng nhập thành công.";
- }catch(e){$("#auth-message").textContent=e.message||"Đăng nhập thất bại";}
+ }catch(e){$("#auth-message").dataset.state="error";$("#auth-message").textContent=e.message||"Đăng nhập thất bại";}
  finally{authBusy=false;controls.forEach(b=>b.disabled=false);$("#auth-form").removeAttribute("aria-busy");}
 }
 async function addMetrics(month,form){
@@ -486,8 +492,15 @@ $("#signup-button").addEventListener("click",()=>signIn("signup"));
 $("#reset-button").addEventListener("click",()=>signIn("reset"));
 async function logout(){calendarController.clear();gateway.clear();await db.auth.signOut();user=null;entries=[];metrics=[];notionWeeks=[];yearPlan=null;progressSnapshots=[];progressError='';detailRegistry.clear();stateLogin(false);}
 $("#logout-button").addEventListener("click",logout);
-$("#workspace-logout").addEventListener("click",logout);
-$("#mobile-logout").addEventListener("click",logout);
+$("#workspace-logout").addEventListener("click",()=>{
+ $('#workspace-account').hidePopover();
+ void logout();
+});
+$('.shell-skip').addEventListener('click',event=>{
+ event.preventDefault();
+ $('#main').focus();
+});
+
 // Keep the auth callback synchronous: authenticated queries must run after
 // Supabase releases its auth lock, otherwise getSession and data loads can deadlock.
 db.auth.onAuthStateChange((event,session)=>{
@@ -505,7 +518,17 @@ document.querySelectorAll('[data-icon]').forEach(el=>{el.innerHTML=icon(el.datas
 
 setInterval(()=>{if(user&&!document.hidden)void gateway.refreshMetadata();},60000);
 
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!document.querySelector("dialog[open]")){document.body.classList.remove("focus-mode");const b=document.getElementById("toggle-focus");if(b){b.setAttribute("aria-pressed","false");b.textContent="⤢ Mở rộng";}}});
+function setFocusMode(on){
+ document.body.classList.toggle('focus-mode',on);
+ const button=$('#toggle-focus');
+ button.setAttribute('aria-pressed',String(on));
+ button.setAttribute('aria-label',on?'Thu gọn vùng làm việc':'Mở rộng vùng làm việc');
+ button.title=button.getAttribute('aria-label');
+ $('[data-focus-label]').textContent=on?'Thu gọn':'Mở rộng';
+}
+document.addEventListener('keydown',e=>{
+ if(e.key==='Escape'&&!document.querySelector('dialog[open], #workspace-account:popover-open'))setFocusMode(false);
+});
 
 for(const event of ['pointerover','focusin'])document.addEventListener(event,e=>{const target=e.target.closest('button[data-workspace]');if(target&&user)void gateway.preload(target.dataset.workspace).catch(()=>{});});
 

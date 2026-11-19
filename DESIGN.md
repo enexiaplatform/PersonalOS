@@ -2,62 +2,62 @@
 name: Henry OS — Nocturne Command
 description: A three-tier midnight system for truthful work, evidence and decisions
 colors:
-  bg-canvas: "#101827"
-  bg-sidebar: "#101827"
-  bg-surface: "#192438"
-  bg-surface-raised: "#223149"
-  bg-surface-hover: "#223149"
-  bg-surface-pressed: "#34455f"
-  bg-inset: "#0b1220"
-  bg-accent: "#1a1530"
-  fg-primary: "#f0f4ff"
-  fg-secondary: "#bdcce0"
-  fg-tertiary: "#a5b6ce"
-  fg-disabled: "#6e82a0"
-  fg-inverse: "#080d18"
-  fg-accent: "#b59eff"
-  border-subtle: "#223149"
-  border-default: "#34455f"
-  border-interactive: "#6e82a0"
-  border-accent: "#9175f3"
-  action-primary-bg: "#6442ca"
+  bg-canvas: "#0f1728"
+  bg-sidebar: "#141d32"
+  bg-surface: "#1c2640"
+  bg-surface-raised: "#26324f"
+  bg-surface-hover: "#303d5e"
+  bg-surface-pressed: "#3b496b"
+  bg-inset: "#0a101e"
+  bg-accent: "#21183b"
+  fg-primary: "#f2f4ff"
+  fg-secondary: "#c5cee8"
+  fg-tertiary: "#a9b5d3"
+  fg-disabled: "#7384a8"
+  fg-inverse: "#0a101e"
+  fg-accent: "#c0a4ff"
+  border-subtle: "#26324f"
+  border-default: "#3b496b"
+  border-interactive: "#7384a8"
+  border-accent: "#9875ed"
+  action-primary-bg: "#6842bd"
   action-primary-fg: "#ffffff"
-  action-primary-hover: "#7456e8"
-  action-primary-pressed: "#50359f"
+  action-primary-hover: "#7953d4"
+  action-primary-pressed: "#54339f"
   action-danger-bg: "#a02c4a"
   action-danger-fg: "#ffffff"
   action-danger-hover: "#bf3656"
   action-danger-pressed: "#7e2440"
-  focus-ring: "#5ad5ea"
+  focus-ring: "#70def2"
   feedback-success: "#65deb0"
   feedback-warning: "#ffca6d"
   feedback-danger: "#ff8fa2"
-  feedback-info: "#7dcbff"
+  feedback-info: "#8ecaff"
   feedback-success-bg: "#0c2925"
   feedback-warning-bg: "#302419"
   feedback-danger-bg: "#331a28"
   feedback-info-bg: "#102137"
-  domain-personal: "#b59eff"
-  domain-servicebio: "#63ddc3"
-  domain-ventures: "#efbd82"
-  domain-enexia: "#7dcbff"
+  domain-personal: "#c0a4ff"
+  domain-servicebio: "#69e1c1"
+  domain-ventures: "#f1bb83"
+  domain-enexia: "#8ecaff"
   radar-level-4-bg: "#0c2726"
   radar-level-3-bg: "#2b211b"
   radar-level-2-bg: "#302419"
   radar-level-1-bg: "#331a28"
-  chart-plan: "#a996ff"
-  chart-doing: "#59bdf2"
-  chart-reported: "#42c9e8"
+  chart-plan: "#aa8bf6"
+  chart-doing: "#69b2f6"
+  chart-reported: "#4bcde4"
   chart-verified: "#38d9a9"
   chart-blocked: "#ff6878"
-  chart-unknown: "#8fa2be"
+  chart-unknown: "#929fc0"
 typography:
   headline:
     fontFamily: "\"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
     fontSize: "28px"
     fontWeight: 700
-    lineHeight: 1.25
-    letterSpacing: "-.02em"
+    lineHeight: 1.23
+    letterSpacing: "-.027em"
   title:
     fontFamily: "\"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
     fontSize: "16px"
@@ -82,8 +82,8 @@ typography:
     fontFamily: "\"Henry Noto Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
     fontSize: "32px"
     fontWeight: 700
-    lineHeight: 1.25
-    letterSpacing: "-.02em"
+    lineHeight: 1.23
+    letterSpacing: "-.027em"
 rounded:
   control: "8px"
   surface: "12px"
@@ -159,7 +159,7 @@ The implemented foundation has three explicit tiers: reference primitives (`--re
 - Shared normal, compact and touch control contracts
 - Real product components and Laboratory share recipes and renderers
 
-Frontmatter records the resolved default Nocturne values; CSS remains the implementation source. `tokens.css` imports primitives, semantics, component tokens, compatibility, typography and elevation in that order. `executive.css` is a host-pattern import manifest; `design-system/components.css` supplies shared recipes after host/legacy geometry. The production system and `apps/personal-os-v1/design-system.html` Laboratory consume the same foundation. No unavailable reference image is claimed as a fidelity check.
+CSS is the source for every token. Frontmatter summarizes the default visual roles. The build script generates the full JSON registry from CSS, including responsive, compact, touch and reduced-motion overrides. `tokens.css` imports primitives, semantics, component tokens, compatibility, typography and elevation in that order. `executive.css` is a host-pattern import manifest; `design-system/components.css` supplies shared recipes after host/legacy geometry. The production system and `apps/personal-os-v1/design-system.html` Laboratory consume the same foundation. No unavailable reference image is claimed as a fidelity check.
 
 ## Colors
 
@@ -193,15 +193,15 @@ The primitive scale spans (11–36px). Shared headline is the semantic default; 
 
 Shared spacing comes from the source reference scale. Normal density uses (40px) controls, (20px) card padding, (16px) gaps and (12px) row spacing. Compact density changes control height to (32px), panel padding to (16px), gap to (12px), row spacing to (8px) and vertical control padding to (6px). Small/medium/large button contracts are (32/40/44px). Coarse pointers or widths at or below (600px) promote normal and small control targets to (44px), including compact density.
 
-Semantic container contracts are content (1280px), wide (1600px), dialog (480px) and sidebar (248px). These are shared available sizes, not a claim that every existing host shell uses them: the app shell retains a (232px) rail, collapsible to (72px), a (56px) global bar and a flexible main region with (24px) horizontal padding. The local toolbar is (64px). At (1100px) the normal host rail becomes (208px); at (760px) the global bar wraps to (104px), main padding becomes (16px), and Personal OS uses full-width local navigation selection.
+Semantic container contracts are content (1280px), wide (1600px), dialog (480px) and sidebar (248px). These are shared available sizes, not a claim that every existing host shell uses them: the app shell retains a (232px) rail, collapsible to (72px), a (56px) global bar and a flexible main region with (24px) horizontal padding. The local toolbar is (56px). At (1100px) the normal host rail becomes (208px); at (760px) the global bar wraps to (104px), main padding becomes (16px), and the Personal OS route selector moves into the local toolbar.
 
 Home retains a compact decorative mountain hero, four source-backed KPI cards, today tasks and weekly priorities, group status distribution, goal/source context, dated observations and contextual utilities. Shared `kpi` and `taskRow` renderers are used by actual home and Laboratory. The right utility rail moves below working content at narrower desktop widths and can collapse; dense analytical views retain available width. Date matrices/tables scroll within their regions rather than overflowing the document. Home composition does not become a universal three-column page template.
 
-The Laboratory has 11 sections: Color foundations, Typography, Spacing, Elevation, Buttons, Form controls, Navigation, Feedback, Data display, Charts and Product patterns. It exposes actual variants, meaningful states, sizes, density, anatomy, token contracts and code, using explicitly synthetic fixtures.
+The Laboratory includes a searchable token registry, four foundation sections and seven component sections. The registry includes reference values, semantic roles, component contracts and compatibility aliases. It shows resolved values for normal, compact, touch, tablet, phone and reduced motion. Component examples use synthetic fixtures and the same recipes as the app.
 
 ## Elevation & Depth
 
-Matte surfaces and borders establish default separation. Shared cards are flat at rest. Raised, floating and overlay elevation correspond to the exact source shadows in the sidecar; dialogs use the overlay surface/shadow contract and scrim. Decorative twilight artwork is limited to the home/auth identity context and is not a static image of functional UI. Earlier compatibility names containing “gradient” now resolve to semantic solid values and are not permission to restore gradient controls.
+Matte surfaces and borders establish default separation. Shared cards are flat at rest. Raised, floating and overlay elevation correspond to the exact source shadows in the sidecar; dialogs use the overlay surface/shadow contract and scrim. Decorative twilight artwork appears in the workspace launcher and sign-in panel. Earlier compatibility names containing “gradient” now resolve to semantic solid values and are not permission to restore gradient controls.
 
 **The Flat Working Surface Rule.** Use tonal layers and boundaries for work; reserve stronger elevation for floating content and overlays.
 
@@ -268,12 +268,14 @@ Scoped verification records 79 Node tests; the shared browser interaction suite;
 
 ## Cosmic canvas
 
-The user-approved brighter appearance uses a generated blue/violet nebula wallpaper, compressed to WebP, behind opaque raised content surfaces. `--sys-canvas-image` and `--sys-canvas-tint` own the image and tint; `patterns/canvas.css` owns display. Canvas/sidebar use neutral-900, surfaces neutral-850 and raised surfaces neutral-800. Text, charts and inputs keep solid backgrounds. Native builds consume the same recipes and publish the same image; protected embedded modules use the shared public wallpaper asset.
+The blue/violet nebula is a WebP asset used in the workspace launcher and sign-in artwork. `--sys-canvas-image` and `--sys-canvas-tint` own the asset and tint. `patterns/arrival.css` places the artwork, and `patterns/canvas.css` sets the solid workspace background. The canvas uses neutral-925, the sidebar uses neutral-900, cards use neutral-850 and raised surfaces use neutral-800. Hover uses neutral-750 for a visible change across raised controls.
 
 ## Platform and workspace boundaries
 
-The shell and browser page are named **Personal Platform**. `#home` is a module launcher for Personal OS, Servicebio, Ventures and Enexia; it does not render personal weekly KPIs, tasks, timeline or briefing. `#personal` retains its existing weekly landing and all existing subroutes. Legacy home/personal body background shorthands no longer reset the shared cosmic canvas. Internal asset filenames, authentication storage keys and data-source identifiers remain compatible.
+The shell and browser page are named **Personal Platform**. `#home` is a module launcher for Personal OS, Servicebio, Ventures and Enexia; it does not render personal weekly KPIs, tasks, timeline or briefing. `#personal` retains its existing weekly landing and all existing subroutes. The launcher groups each destination’s identity, feature summary and source freshness. The retained workspace shortcut returns to the last selected workspace. Internal asset filenames, authentication storage keys and data-source identifiers remain compatible.
 
 ## Navigation hierarchy and loading
 
 Workspace switching is confined to the platform bar. Personal navigation is grouped into Kế hoạch (weekly summary, day-based tasks, quarterly Gantt), Mục tiêu & đánh giá (annual commitments, evidence rubric), Theo dõi cá nhân (life and personal business logs), and Review & hệ thống (reflection/evidence/decisions, source settings). Mobile uses the same optgroups and preserved route ids. Local headers span the full content edge rather than floating over an inset image rectangle. Module HTML is prepared on intent, decoded once per session, and startup snapshot reads run in parallel; manual readback stays fresh and logout clears pending/cached private work.
+
+The Calendar places week navigation, search and group selection in a shared toolbar. Agenda uses one list grouped by workstream, and the weekly board retains its per-group drill-down. The date rail highlights the current day in Vietnamese local time. Filter updates preserve the input element and its caret. The mobile toolbar combines route selection, quick search and refresh.
